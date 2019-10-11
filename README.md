@@ -73,9 +73,8 @@ Now open your browser to <http://localhost:8080/> and once the video is complete
 | -------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `GIT_URL`                  | `<docker repo on GH>`            | URL of git repository to be cloned and analyzed for visualization.                                          |
 | `LOGO_URL`                 | `<docker logo>`                  | URL of logo to be overlayed in lower right hand corner of video.                                            |
-| `H264_PRESET`              | `medium`                         | h.264 encoding preset. refer to [FFmpeg's wiki][ffmpeg].                                                    |
-| `H264_CRF`                 | `23`                             | The Constant Rate Factor (CRF) is the default quality for h.264 encoding. refer to [FFmpeg's wiki][ffmpeg]. |
-| `H264_LEVEL`               | `5.1`                            | h.264 encoding level. Refer to [FFmpeg's wiki][ffmpeg].                                                     |
+| `H265_PRESET`              | `medium`                         | h.264 encoding preset. refer to [FFmpeg's wiki][ffmpeg].                                                    |
+| `H265_CRF`                 | `28`                             | The Constant Rate Factor (CRF) is the default quality for h.264 encoding. refer to [FFmpeg's wiki][ffmpeg]. |
 | `VIDEO_RESOLUTION`         | `1080p`                          | Output video resolution, options are **2160p, 1440p, 1080p, 720p**                                          |
 | `TEMPLATE`                 | `border`                         | This is the template script that will be run. Options are **border**, and **none**.                         |
 | `GOURCE_TITLE`             | `Software Development`           | Title to be displayed in the lower left hand corner of video.                                               |
