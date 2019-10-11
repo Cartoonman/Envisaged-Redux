@@ -112,7 +112,7 @@ ffmpeg -y -r 60 -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
                          [date_scale]crop=${DATE_CROP},pad=${DATE_PAD}[date];\
                          [key][center]hstack[with_key];\
                          [date][with_key]vstack[with_date]${LOGO_FILTER_GRAPH}${GLOBAL_FILTERS}" ${FILTER_GRAPH_MAP} \
-	-vcodec libx264 -level ${H264_LEVEL} -pix_fmt yuv420p -crf ${H264_CRF} -preset ${H264_PRESET} -bf 0 ./video/output.mp4
+	-vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} ./video/output.mp4
 
 # Remove our temporary files.
 echo "Removing temporary files."

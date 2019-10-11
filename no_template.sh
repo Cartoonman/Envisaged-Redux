@@ -59,20 +59,20 @@ if [[ "${LOGO_FILTER_GRAPH}" != "" ]]; then
 		ffmpeg -y -r 60 -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
 			${LOGO} \
 			-filter_complex "[0:v]${GOURCE_FILTERS}[filtered];[filtered]${LOGO_FILTER_GRAPH}${GLOBAL_FILTERS}" ${FILTER_GRAPH_MAP} \
-			-vcodec libx264 -level ${H264_LEVEL} -pix_fmt yuv420p -crf ${H264_CRF} -preset ${H264_PRESET} -bf 0 ./video/output.mp4
+			-vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} ./video/output.mp4
 	else
 		ffmpeg -y -r 60 -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
 			${LOGO} \
 			-filter_complex "[0:v]${LOGO_FILTER_GRAPH}${GLOBAL_FILTERS}" ${FILTER_GRAPH_MAP} \
-			-vcodec libx264 -level ${H264_LEVEL} -pix_fmt yuv420p -crf ${H264_CRF} -preset ${H264_PRESET} -bf 0 ./video/output.mp4
+			-vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} ./video/output.mp4
 	fi
 elif [[ "${GOURCE_FILTERS}" != "" ]]; then
 	ffmpeg -y -r 60 -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
 		-filter_complex "${GOURCE_FILTERS}${GLOBAL_FILTERS}" ${FILTER_GRAPH_MAP} \
-		-vcodec libx264 -level ${H264_LEVEL} -pix_fmt yuv420p -crf ${H264_CRF} -preset ${H264_PRESET} -bf 0 ./video/output.mp4
+		-vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} ./video/output.mp4
 else
 	ffmpeg -y -r 60 -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
-		-vcodec libx264 -level ${H264_LEVEL} -pix_fmt yuv420p -crf ${H264_CRF} -preset ${H264_PRESET} -bf 0 ./video/output.mp4
+		-vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} ./video/output.mp4
 fi
 
 # Remove our temporary files.
