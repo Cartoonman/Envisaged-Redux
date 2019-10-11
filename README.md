@@ -1,6 +1,6 @@
-# Envisaged - Dockerized Gource Visualizations
+# Envisaged-Redux - Dockerized Gource Visualizations
 
-[![Docker Automated build](https://img.shields.io/docker/automated/utensils/envisaged.svg)](https://hub.docker.com/r/utensils/envisaged/) [![Docker Pulls](https://img.shields.io/docker/pulls/utensils/envisaged.svg)](https://hub.docker.com/r/utensils/envisaged/) [![Docker Stars](https://img.shields.io/docker/stars/utensils/envisaged.svg)](https://hub.docker.com/r/utensils/envisaged/) [![](https://images.microbadger.com/badges/image/utensils/envisaged.svg)](https://microbadger.com/images/utensils/envisaged "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/utensils/envisaged.svg)](https://microbadger.com/images/utensils/envisaged "Get your own version badge on microbadger.com")
+A fork of James Brink's excellent Envisaged docker container.
 
 Built on top of [`utensils/opengl:stable`][utensils/opengl] (Alpine 3.10). **No GPU is required**, this will run on any machine, such as a standard EC2 instance or any other VPS.  
 
@@ -16,17 +16,6 @@ Envisaged uses "template" scripts to generate specific looks, such as the one in
 
 
 This container is configurable through environment variables listed below. The generated video is delivered via HTTP.
-
-## Example videos
-
-
-| GitHub Repo                    | YouTube Video                                                                                                                                                                                                                     |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Elixir School][elixir-school] | <a href="http://www.youtube.com/watch?feature=player_embedded&v=twpR-opLrZU" target="_blank"><img src="http://img.youtube.com/vi/twpR-opLrZU/0.jpg" alt="Elixir School Visualization" width="240" height="180" border="10" /></a> |
-| [Kubernetes][kubernetes]       | <a href="http://www.youtube.com/watch?feature=player_embedded&v=UTwxiwF7Zac" target="_blank"><img src="http://img.youtube.com/vi/UTwxiwF7Zac/0.jpg" alt="Kubernetes Visualization" width="240" height="180" border="10" /></a>    |
-| [Elixir Lang][elixir]          | <a href="http://www.youtube.com/watch?feature=player_embedded&v=wl5uuvDK3ao" target="_blank"><img src="http://img.youtube.com/vi/wl5uuvDK3ao/0.jpg" alt="Elixir Lang Visualization" width="240" height="180" border="10" /></a>   |
-
-
 
 
 ## Usage Examples
