@@ -7,7 +7,7 @@ Built on top of [`utensils/opengl:stable`][utensils/opengl] (Alpine 3.10). **No 
 ## About
 
 Painless data visualizations from git history showing a repositories development progression over time.  
-This container combines the awesome [Gource][gource] program with the power of [FFmpeg][ffmpeg_home] and the h.264 codec to bring you high resolution (up to 4k at 60fps) video visualizations.
+This container combines the awesome [Gource][gource] program with the power of [FFmpeg][ffmpeg_home] and the h.265 codec to bring you high resolution (up to 4k at 60fps) video visualizations.
 
 This container is 100% headless, it does this by leveraging [Xvfb][xvfb] combined with the [Mesa 3d Gallium llvmpipe Driver][mesa]. Unlike other docker containers with Gource, this container does not eat up 100's of gigabtyes of disk space, nor does it require an actual GPU to run. The process runs the Gource simulation concurrently with the FFmpeg encoding process using a set of named pipes. There is a slight trade off in performance, but this makes it very easy to run in any environment such as AWS without the need to provision large amounts of storage, or run any cleanup.  
 
@@ -18,22 +18,7 @@ Envisaged uses "template" scripts to generate specific looks, such as the one in
 This container is configurable through environment variables listed below. The generated video is delivered via HTTP.
 
 
-## Usage Examples
-
-Run with the default settings which will create a visualization of the Docker GitHub repository.  
-Notice we are **exposing port 80**, the final video will be served at <http://localhost:8080/>  
-
-The following example will run a visualization on the Kubernetes GitHub repository and include the Kubernetes logo
-in the video.
-
-```shell
-docker run --rm -p 8080:80 --name envisaged \
-       -e GIT_URL=https://github.com/kubernetes/kubernetes.git \
-       -e LOGO_URL=https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.png \
-       -e GOURCE_TITLE="Kubernetes Development" \
-       utensils/envisaged
-```
-
+## Usage Example
 Running a visualization against a local git repo.  
 
 ```
@@ -69,29 +54,46 @@ Now open your browser to <http://localhost:8080/> and once the video is complete
 
 ## Environment Variables
 
-| Variable                   | Default Value                    | Description                                                                                                 |
-| -------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `GIT_URL`                  | `<docker repo on GH>`            | URL of git repository to be cloned and analyzed for visualization.                                          |
-| `LOGO_URL`                 | `<docker logo>`                  | URL of logo to be overlayed in lower right hand corner of video.                                            |
-| `H265_PRESET`              | `medium`                         | h.264 encoding preset. refer to [FFmpeg's wiki][ffmpeg].                                                    |
-| `H265_CRF`                 | `28`                             | The Constant Rate Factor (CRF) is the default quality for h.264 encoding. refer to [FFmpeg's wiki][ffmpeg]. |
-| `VIDEO_RESOLUTION`         | `1080p`                          | Output video resolution, options are **2160p, 1440p, 1080p, 720p**                                          |
-| `TEMPLATE`                 | `border`                         | This is the template script that will be run. Options are **border**, and **none**.                         |
-| `GOURCE_TITLE`             | `Software Development`           | Title to be displayed in the lower left hand corner of video.                                               |
-| `OVERLAY_FONT_COLOR`       | `0f5ca8`                         | Font color to be used on the overlay (Date only).                                                           |
-| `GOURCE_CAMERA_MODE`       | `overview`                       | Camera mode (overview, track).                                                                              |
-| `GOURCE_SECONDS_PER_DAY`   | `0.1`                            | Speed of simulation in seconds per day.                                                                     |
-| `GOURCE_TIME_SCALE`        | `1.5`                            | Change simulation time scale.                                                                               |
-| `GOURCE_USER_SCALE`        | `1.5`                            | Change scale of user avatars.                                                                               |
-| `GOURCE_AUTO_SKIP_SECONDS` | `0.5`                            | Skip to next entry if nothing happens for a number of seconds.                                              |
-| `GOURCE_BACKGROUND_COLOR`  | `000000`                         | Background color in hex.                                                                                    |
-| `GOURCE_TEXT_COLOR`        | `FFFFFF`                         | **Not Implemented.**                                                                                        |
-| `GOURCE_HIDE_ITEMS`        | `usernames,mouse,date,filenames` | Hide one or more display elements                                                                           |
-| `GOURCE_FONT_SIZE`         | `48`                             | **Not Implemented.**                                                                                        |
-| `GOURCE_DIR_DEPTH`         | `3`                              | Draw names of directories down to a specific depth in the tree.                                             |
-| `GOURCE_FILENAME_TIME`     | `2`                              | Duration to keep filenames on screen (>= 2.0).                                                              |
-| `GOURCE_MAX_USER_SPEED`    | `500`                            | Max speed users can travel per second.                                                                      |
-| `INVERT_COLORS`            | `false`                          | Inverts the colors on the visualization.                                                                    |
+| Variable                   | Default Value            | Description                                                                                                                           |
+| -------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `LOGO_URL`                 | ``                       | URL of logo to be overlayed in lower right hand corner of video.                                                                      |
+| `H265_PRESET`              | `medium`                 | h.265 encoding preset. Refer to [FFmpeg's wiki][ffmpeg_h265].                                                                         |
+| `H265_CRF`                 | `21`                     | The Constant Rate Factor (CRF). Refer to [FFmpeg's wiki][ffmpeg_h265].                                                                |
+| `VIDEO_RESOLUTION`         | `1080p`                  | Output video resolution, options are **2160p, 1440p, 1080p, 720p**                                                                    |
+| `FPS`                      | `60`                     | Output video Frames per Second. Supported framerates are 25,30, or 60 only.                                                           |
+| `TEMPLATE`                 | `border`                 | This is the template script that will be run. Options are **border**, and **none**.                                                   |
+| `GOURCE_TITLE`             | `Software Development`   | [--title] Title to be displayed in the lower left hand corner of video.                                                               |
+| `GOURCE_DATE_FONT_COLOR`   | `FFFFFF`                 | [--font-colour] Font Color for Date (for border template)                                                                             |
+| `GOURCE_TITLE_TEXT_COLOR`  | `FFFFFF`                 | [--font-colour] Font color for Title (for border template)                                                                            |
+| `GOURCE_CAMERA_MODE`       | `overview`               | [--camera-mode] Camera mode (overview, track).                                                                                        |
+| `GOURCE_SECONDS_PER_DAY`   | `0.1`                    | [--seconds-per-day] Speed of simulation in seconds per day.                                                                           |
+| `GOURCE_TIME_SCALE`        | `1.0`                    | [--time-scale] Change simulation time scale.                                                                                          |
+| `GOURCE_USER_SCALE`        | `1.0`                    | [--user-scale] Change scale of user avatars.                                                                                          |
+| `GOURCE_AUTO_SKIP_SECONDS` | `3.0`                    | [--auto-skip-seconds] Skip to next entry if nothing happens for a number of seconds.                                                  |
+| `GOURCE_BACKGROUND_COLOR`  | `000000`                 | [--background-colour] Background color in hex.                                                                                        |
+| `GOURCE_HIDE_ITEMS`        | `mouse,date,filenames`   | [--hide] Hide one or more display elements                                                                                            |
+| `GOURCE_FILE_IDLE_TIME`    | `0.0`                    | [--file-idle-time] Time in seconds files remain idle before they are removed or 0 for no limit.                                       |
+| `GOURCE_MAX_FILES`         | `0`                      | [--max-files] Set the maximum number of files or 0 for no limit. Excess files will be discarded.                                      |
+| `GOURCE_MAX_FILE_LAG`      | `5.0`                    | [--max-file-lag] Max time files of a commit can take to appear. Use -1 for no limit.                                                  |
+| `GOURCE_TITLE_FONT_SIZE`   | `48`                     | [--font-size] Font size for title (for border template)                                                                               |
+| `GOURCE_DATE_FONT_SIZE`    | `60`                     | [--font-size] Font size for date (for border template)                                                                                |
+| `GOURCE_DIR_DEPTH`         | `3`                      | [--dir-name-depth] Draw names of directories down to a specific depth in the tree.                                                    |
+| `GOURCE_FILENAME_TIME`     | `2`                      | [--filename-time] Duration to keep filenames on screen (>= 2.0).                                                                      |
+| `GOURCE_MAX_USER_SPEED`    | `500`                    | [--max-user-speed] Max speed users can travel per second.                                                                             |
+| `INVERT_COLORS`            | `false`                  | Inverts the colors on the visualization.                                                                                              |
+| `GLOBAL_FILTERS`           | ``                       | Global FFmpeg filter options.                                                                                                         |
+| `GOURCE_FILTERS`           | ``                       | Gource scene FFmpeg filter options.                                                                                                   |
+| `GOURCE_DATE_FORMAT`       | `%m/%d/%Y %H:%M:%S`      | Date Format (based on strftime format)                                                                                                |
+| `GOURCE_START_DATE`        | ``                       | [--start-date] Start with the first entry after the supplied date and optional time. (see [gource] docs for formats)                  |
+| `GOURCE_STOP_DATE`         | ``                       | [--stop-date] Stop after the last entry prior to the supplied date and optional time. (see [gource] docs for formats)                 |
+| `GOURCE_START_POSITION`    | ``                       | [--start-position] Begin at some position in the log (between 0.0 and 1.0 or 'random').                                               |
+| `GOURCE_STOP_POSITION`     | ``                       | [--stop-position] Stop at some position in the log.                                                                                   |
+| `GOURCE_STOP_AT_TIME`      | ``                       | [--stop-at-time] Stop after a specified number of seconds.                                                                            |
+| `GOURCE_PADDING`           | `1.1`                    | [--padding] Camera view padding (between 0.0-2.0 exclusive)                                                                           |
+| `GOURCE_CAPTION_SIZE`      | `48`                     | [--caption-size] Caption font size.                                                                                                   |
+| `GOURCE_CAPTION_COLOR`     | `FFFFFF`                 | [--caption-colour] Caption color in hex.                                                                                              |
+| `GOURCE_CAPTION_DURATION`  | `5.0`                    | [--caption-duration]  Caption duration in seconds.                                                                                    |
+
 
 [alpine linux image]: https://github.com/gliderlabs/docker-alpine
 
@@ -103,12 +105,8 @@ Now open your browser to <http://localhost:8080/> and once the video is complete
 
 [mesa]: https://www.mesa3d.org/llvmpipe.html
 
-[ffmpeg]: https://trac.ffmpeg.org/wiki/Encode/H.264
+[ffmpeg_h265]: https://trac.ffmpeg.org/wiki/Encode/H.265
 
 [utensils/opengl]: https://github.com/utensils/docker-opengl
 
 [elixir-school]: https://github.com/elixirschool/elixirschool
-
-[kubernetes]: https://github.com/kubernetes/kubernetes
-
-[elixir]: https://elixir-lang.org/

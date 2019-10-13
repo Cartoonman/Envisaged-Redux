@@ -29,6 +29,12 @@ else
 	cat ${FILES} | sort -n > development.log
 fi
 
+# Check for captions
+if [ -f /visualization/captions.txt ]; then
+	echo "Using captions file"
+	export USE_CAPTIONS=1
+fi
+
 # Set proper env variables if we have a logo.
 if [ "${LOGO_URL}" != "" ]; then
 	wget -O ./logo.image ${LOGO_URL}
