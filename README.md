@@ -59,7 +59,7 @@ Now open your browser to <http://localhost:8080/> and once the video is complete
 | `LOGO_URL`                 | ``                       | URL of logo to be overlayed in lower right hand corner of video.                                                                      |
 | `H265_PRESET`              | `medium`                 | h.265 encoding preset. Refer to [FFmpeg's wiki][ffmpeg_h265].                                                                         |
 | `H265_CRF`                 | `21`                     | The Constant Rate Factor (CRF). Refer to [FFmpeg's wiki][ffmpeg_h265].                                                                |
-| `VIDEO_RESOLUTION`         | `1080p`                  | Output video resolution, options are **2160p, 1440p, 1080p, 720p**                                                                    |
+| `VIDEO_RESOLUTION`         | `1080p`                  | Output video resolution, options are **2160p, 1440p, 1080p, 720p, 480p**                                                              |
 | `FPS`                      | `60`                     | Output video Frames per Second. Supported framerates are 25,30, or 60 only.                                                           |
 | `TEMPLATE`                 | `border`                 | This is the template script that will be run. Options are **border**, and **none**.                                                   |
 | `GOURCE_TITLE`             | `Software Development`   | [--title] Title to be displayed in the lower left hand corner of video.                                                               |
@@ -71,7 +71,7 @@ Now open your browser to <http://localhost:8080/> and once the video is complete
 | `GOURCE_USER_SCALE`        | `1.0`                    | [--user-scale] Change scale of user avatars.                                                                                          |
 | `GOURCE_AUTO_SKIP_SECONDS` | `3.0`                    | [--auto-skip-seconds] Skip to next entry if nothing happens for a number of seconds.                                                  |
 | `GOURCE_BACKGROUND_COLOR`  | `000000`                 | [--background-colour] Background color in hex.                                                                                        |
-| `GOURCE_HIDE_ITEMS`        | `mouse,date,filenames`   | [--hide] Hide one or more display elements                                                                                            |
+| `GOURCE_HIDE_ITEMS`        | `mouse,date,filenames`   | [--hide] Hide one or more display elements (border template does not need date)                                                       |
 | `GOURCE_FILE_IDLE_TIME`    | `0.0`                    | [--file-idle-time] Time in seconds files remain idle before they are removed or 0 for no limit.                                       |
 | `GOURCE_MAX_FILES`         | `0`                      | [--max-files] Set the maximum number of files or 0 for no limit. Excess files will be discarded.                                      |
 | `GOURCE_MAX_FILE_LAG`      | `5.0`                    | [--max-file-lag] Max time files of a commit can take to appear. Use -1 for no limit.                                                  |
