@@ -62,6 +62,7 @@ Now open your browser to <http://localhost:8080/> and once the video is complete
 | `VIDEO_RESOLUTION`         | `1080p`                  | Output video resolution, options are **2160p, 1440p, 1080p, 720p, 480p**                                                              |
 | `FPS`                      | `60`                     | Output video Frames per Second. Supported framerates are 25,30, or 60 only.                                                           |
 | `TEMPLATE`                 | `border`                 | This is the template script that will be run. Options are **border**, and **none**.                                                   |
+| `RECURSE_SUBMODULES`       | `0`                      | If set to 1, enables recursing through the repo(s) submodules                                                                       |
 | `GOURCE_TITLE`             | `Software Development`   | [--title] Title to be displayed in the lower left hand corner of video.                                                               |
 | `GOURCE_DATE_FONT_COLOR`   | `FFFFFF`                 | [--font-colour] Font Color for Date (for border template)                                                                             |
 | `GOURCE_TITLE_TEXT_COLOR`  | `FFFFFF`                 | [--font-colour] Font color for Title (for border template)                                                                            |

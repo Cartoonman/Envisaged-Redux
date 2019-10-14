@@ -32,7 +32,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [ "${GIT_REPO}" = "" ]; then
-    echo "Error: --git_repo argument required."
+    echo "Error: --git-repo argument required."
     exit 1
 fi
 

@@ -111,6 +111,7 @@ ENV LOGO_URL="" \
     VIDEO_RESOLUTION="1080p" \
     FPS="60" \
     TEMPLATE="border" \
+    RECURSE_SUBMODULES="0" \
     GOURCE_TITLE="Software Development" \
     GOURCE_USER_IMAGE_DIR="/visualization/avatars" \
     GOURCE_DATE_FONT_COLOR="FFFFFF" \
