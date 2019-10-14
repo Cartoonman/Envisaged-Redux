@@ -91,6 +91,7 @@ RUN set -xe; \
         llvm7-libs \
         python \
         subversion \
+        findutils \
         wget; \
     mkdir -p /visualization/video; \
     mkdir -p /visualization/html; 

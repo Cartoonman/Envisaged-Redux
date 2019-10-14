@@ -1,5 +1,5 @@
 #!/bin/bash
-
+ARGS=""
 while [[ $# -gt 0 ]]; do
     k="$1"
 
@@ -12,16 +12,20 @@ while [[ $# -gt 0 ]]; do
             CAPTION_URI="--mount type=bind,source=$2,target=/visualization/captions.txt,readonly"
             shift
         ;;
-        --title)
-            TITLE="-e GOURCE_TITLE=$2"
-            shift
-        ;;
-        *)
+        -h)
             echo "Args:"
             echo "  --git-repo [absolute_path_to_repo]                Required"
             echo "  --caption-file [absolute_path_to_caption_file]    Optional"
-            echo "  --title [title]                                   Optional"
             exit 1
+        ;;
+        --help)
+            echo "Args:"
+            echo "  --git-repo [absolute_path_to_repo]                Required"
+            echo "  --caption-file [absolute_path_to_caption_file]    Optional"
+            exit 1
+        ;;
+        *)
+            ARGS="${ARGS} $1"
         ;;
     esac
     shift
@@ -37,7 +41,6 @@ docker run --rm \
 --name envisaged-redux \
 -v ${GIT_REPO}:/visualization/git_repo:ro \
 ${CAPTION_URI} \
-${TITLE} \
 -e GOURCE_STOP_AT_TIME="5" \
 -e FPS="25" \
 -e VIDEO_RESOLUTION="480p" \
@@ -45,4 +48,6 @@ ${TITLE} \
 -e H265_CRF="0" \
 -e GOURCE_DATE_FONT_SIZE="35" \
 -e GOURCE_TITLE_FONT_SIZE="25" \
+-e GOURCE_PADDING="1.5" \
+$ARGS \
 envisaged-redux:latest

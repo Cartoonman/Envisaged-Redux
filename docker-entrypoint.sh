@@ -8,25 +8,34 @@ xvfb_pid="$!"
 # possible race condition waiting for Xvfb.
 sleep 5
 
-if [ ! -d /visualization/git_repos ]; then
-	# Clone our git repo for the visualization.
-	if [ ! -d /visualization/git_repo ]; then
-		git clone ${GIT_URL} git_repo
-	fi
-	echo "Using volume mounted git repo"
-	gource --output-custom-log development.log git_repo
-else
-	FILES=
-	for D in /visualization/git_repos/*; do
-    	if [ -d "${D}" ]; then
-			NAME=${D##*/}
-			echo "Using volume mounted git repo $D as ${NAME}"
-        	gource --output-custom-log ${NAME}.log $D
-			sed -i -r "s#(.+)\|#\1|/$NAME#" ${NAME}.log
-        	FILES="$FILES ${NAME}.log"
-    	fi
+# Check if repo exists
+if [ ! -d /visualization/git_repo ]
+then
+	echo "Error: git repo not found: /visualization/git_repo does not exist."
+	exit 1
+fi
+echo "Using volume mounted git repo"
+
+# Check if this is a single or multi repo
+if [ ! -d /visualization/git_repo/.git ]; then
+	# Assume this is a multi-repo setup
+	X=1
+	LOGS=""
+	for DIRECTORY in `find /visualization/git_repo -maxdepth 1 -mindepth 1 -type d -printf '%f\n'`
+	do
+		gource --output-custom-log development${X}.log /visualization/git_repo/${DIRECTORY}
+		sed -i -r "s#(.+)\|#\1|/${DIRECTORY}#" development${X}.log
+		LOGS="${LOGS} development${X}.log"
+		((X++))
 	done
-	cat ${FILES} | sort -n > development.log
+	cat ${LOGS} | sort -n > development.log
+	rm ${LOGS}
+	# Enable settings specifically tailored for multirepo representation
+	export MULTIREPO=1
+else
+	# Assume this is a single-repo setup
+	# Generate a gource log file.
+	gource --output-custom-log development.log /visualization/git_repo
 fi
 
 # Check for captions

@@ -89,6 +89,12 @@ if [ "${USE_CAPTIONS}" = "1" ]; then
 	--caption-duration ${GOURCE_CAPTION_DURATION} "
 fi
 
+# Check if this is multirepo
+if [ "${MULTIREPO}" = "1" ]; then
+	# if something needs to be done, do it here.
+	:
+fi
+
 # Start Gource for visualization.
 echo "Starting Gource for ${GIT_URL}, using title: ${GOURCE_TITLE}"
 gource \
