@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Copyright (c) 2019 Utensils Union
+#
+# SPDX-License-Identifier: MIT
+
 # $IMAGE_NAME var is injected into the build so the tag is correct.
 
 echo "Build hook running"

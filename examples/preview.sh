@@ -1,4 +1,9 @@
 #!/bin/bash
+
+# Copyright (c) 2019 Carl Colena
+#
+# SPDX-License-Identifier: MIT
+
 ARGS=""
 while [[ $# -gt 0 ]]; do
     k="$1"

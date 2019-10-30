@@ -1,6 +1,14 @@
 # Envisaged - Dockerized Gource Visualizations
+
+# Copyright (c) 2019 Carl Colena
+# Copyright (c) 2019 Utensils Union
+# Copyright (c) 2018 James Brink
 #
-# VERSION 0.1.4
+# SPDX-License-Identifier: MIT
+
+
+# Note the below section contains Dockerifle code from:
+# https://github.com/utensils/docker-opengl/
 
 # Mesa3D Software Drivers
 

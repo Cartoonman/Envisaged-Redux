@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Copyright (c) 2019 Carl Colena
+# Copyright (c) 2019 Utensils Union
+#
+# SPDX-License-Identifier: MIT
+
 # Predefined resolutions and settings.
 if [[ "${VIDEO_RESOLUTION}" == "2160p" ]]; then
 	GOURCE_RES="3500x1940"

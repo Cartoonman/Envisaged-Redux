@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Copyright (c) 2019 Carl Colena
+# Copyright (c) 2019 Utensils Union
+#
+# SPDX-License-Identifier: MIT
+
 # Start Xvfb
 echo "Starting Xvfb"
 Xvfb :99 -ac -screen 0 $XVFB_WHD -nolisten tcp &
