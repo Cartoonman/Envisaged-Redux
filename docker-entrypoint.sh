@@ -36,8 +36,9 @@ else
 	# Assume this is a single-repo setup
 	# Generate a gource log file.
 	if [ "${RECURSE_SUBMODULES}" = "1" ]; then
+		# Single repo w/ submods
 		echo "Recursing through submodules."
-		cd /visualization/git_repo && git submodule foreach --recursive '( echo $path; echo "SUBMOD_PATHS+=($path)" >> /visualization/submods.bash )'
+		cd /visualization/git_repo && git submodule foreach --recursive '( echo "SUBMOD_PATHS+=($path)" >> /visualization/submods.bash )'
 		cd /visualization
 		. submods.bash
 		rm submods.bash
@@ -55,6 +56,7 @@ else
 		cat ${LOGS} | sort -n > development.log
 		rm ${LOGS}
 	else
+		# Single repo no submods - simple case.
 		gource --output-custom-log development.log /visualization/git_repo
 	fi
 fi
