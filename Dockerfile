@@ -2,108 +2,10 @@
 
 # Copyright (c) 2019 Carl Colena
 # Copyright (c) 2019 Utensils Union
-# Copyright (c) 2018 James Brink
 #
 # SPDX-License-Identifier: MIT
 
-
-# Note the below section contains Dockerifle code from:
-# https://github.com/utensils/docker-opengl/
-
-# Mesa3D Software Drivers
-
-FROM alpine:3.10 as builder
-
-ENV MESA_VERSION 19.0.8
-
-# Install all needed build deps for Mesa
-RUN set -xe; \
-    apk add --no-cache \
-        autoconf \
-        automake \
-        bison \
-        build-base \
-        expat-dev \
-        flex \
-        gettext \
-        git \
-        glproto \
-        libtool \
-        llvm7 \
-        llvm7-dev \
-        py-mako \
-        xorg-server-dev python-dev \
-        zlib-dev;
-
-# Clone Mesa source repo. (this step caches)
-# Due to ongoing packaging issues we build from git vs tar packages
-# Refer to https://bugs.freedesktop.org/show_bug.cgi?id=107865 
-
-ARG MESA_VERSION
-RUN set -xe; \
-    mkdir -p /var/tmp/build; \
-    cd /var/tmp/build; \
-    git clone https://gitlab.freedesktop.org/mesa/mesa.git; \
-    cd /var/tmp/build/mesa; \
-    git checkout mesa-${MESA_VERSION}; \
-    libtoolize; \
-    autoreconf --install; \
-    ./configure \
-        --enable-glx=gallium-xlib \
-        --with-gallium-drivers=swrast,swr \
-        --disable-dri \
-        --disable-gbm \
-        --disable-egl \
-        --enable-gallium-osmesa \
-        --enable-autotools \
-        --enable-llvm \
-        --with-llvm-prefix=/usr/lib/llvm7/ \
-        --prefix=/usr/local; \
-    make -j$(getconf _NPROCESSORS_ONLN); \
-    make install; \
-    rm -rf /var/tmp/build
-
-# Create fresh image from alpine
-FROM alpine:3.10
-
-# Install runtime dependencies for Mesa
-RUN set -xe; \
-    apk --update add --no-cache \
-        expat \
-        llvm7-libs \
-        xdpyinfo \
-        xvfb;
-
-# Copy the Mesa build & entrypoint script from previous stage
-COPY --from=builder /usr/local /usr/local
-
-# Setup our environment variables.
-ENV GALLIUM_DRIVER="llvmpipe" \
-    LIBGL_ALWAYS_SOFTWARE="1" \
-    LP_NO_RAST="false" \
-    MESA_VERSION="${MESA_VERSION}" \
-    XVFB_WHD="3840x2160x24" \
-    DISPLAY=":99" 
-
-# **************************************************************
-
-# Install all needed runtime dependencies.
-RUN set -xe; \
-    apk --update add --no-cache --virtual .runtime-deps \
-        bash \
-        ffmpeg \
-        git \
-        gource \
-        imagemagick \
-        lighttpd \
-        llvm7-libs \
-        python \
-        subversion \
-        findutils \
-        wget; \
-    mkdir -p /visualization/video; \
-    mkdir -p /visualization/html; 
-
+FROM utensils/opengl:stable
 
 # Copy our assets
 COPY ./docker-entrypoint.sh /usr/local/bin/entrypoint.sh
