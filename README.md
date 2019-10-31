@@ -1,6 +1,6 @@
 # Envisaged-Redux - Dockerized Gource Visualizations
 
-A fork of James Brink's excellent Envisaged docker container.
+A fork of James Brink's excellent [Envisaged][envisaged] docker container.
 
 Built on top of Alpine 3.10. **No GPU is required**, this will run on any machine, such as a standard EC2 instance or any other VPS.  
 
@@ -99,6 +99,8 @@ Now open your browser to <http://localhost:8080/> and once the video is complete
 [alpine linux image]: https://github.com/gliderlabs/docker-alpine
 
 [gource]: https://github.com/acaudwell/Gource
+
+[envisaged]: https://github.com/utensils/Envisaged
 
 [ffmpeg_home]: https://www.ffmpeg.org/
 
