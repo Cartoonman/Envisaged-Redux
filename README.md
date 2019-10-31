@@ -7,50 +7,12 @@ Built on top of Alpine 3.10. **No GPU is required**, this will run on any machin
 ## About
 
 Painless data visualizations from git history showing a repositories development progression over time.  
-This container combines the awesome [Gource][gource] program with the power of [FFmpeg][ffmpeg_home] and the h.265 codec to bring you high resolution (up to 4k at 60fps) video visualizations.
+This container combines the awesome [Gource][gource] program with the power of [FFmpeg][ffmpeg_home] and the H.265 codec to bring you high resolution (up to 4k at 60fps) video visualizations.
 
 This container is 100% headless, it does this by leveraging [Xvfb][xvfb] combined with the [Mesa 3d Gallium llvmpipe Driver][mesa]. Unlike other docker containers with Gource, this container does not eat up 100's of gigabtyes of disk space, nor does it require an actual GPU to run. The process runs the Gource simulation concurrently with the FFmpeg encoding process using a set of named pipes. There is a slight trade off in performance, but this makes it very easy to run in any environment such as AWS without the need to provision large amounts of storage, or run any cleanup.  
 
-Envisaged uses "template" scripts to generate specific looks, such as the one included in this container which is simply called **border** which places a frame around the Gource visualization and isolates the date and key on the outside of this border. If you would like to run the container with normal Gource output, simply pass `-e TEMPLATE=none` and it will use the `no_template.sh` script.
-
-
 
 This container is configurable through environment variables listed below. The generated video is delivered via HTTP.
-
-
-## Usage Example
-Running a visualization against a local git repo.  
-
-```
-docker run --rm -p 8080:80 --name envisaged \
-       -v /path/to/your/repo:/visualization/git_repo:ro \
-       -e GOURCE_TITLE="Your Project Development" \
-       utensils/envisaged
-```
-
-You can also combine multiple repositories into a single rendering by mounting a directory of repository
-directories onto `/visualization/git_repos` (the plural of `visualization/git_repo`).
-
-```
-docker run --rm -p 8080:80 --name envisaged \
-       -v /path/to/your/repos:/visualization/git_repos:ro \
-       -e GOURCE_TITLE="Your Project Development" \
-       utensils/envisaged
-```
-
-Optionally, you can have gource render avatars of the authors by mounting a volume with images of the authors.
-
-```
-docker run --rm -p 8080:80 --name envisaged \
-       -v /path/to/your/repo:/visualization/git_repo:ro \
-       -v /path/to/your/avatars:/visualization/avatars:ro \
-       -e GOURCE_TITLE="Your Project Development" \
-       utensils/envisaged
-```
-
-The avatars in that directory must have filenames that match the author id, e.g. `utensils.gif`, etc.
-
-Now open your browser to <http://localhost:8080/> and once the video is completed you will see the link with the video size.
 
 ## Environment Variables
 
