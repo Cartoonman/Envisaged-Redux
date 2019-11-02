@@ -7,6 +7,24 @@
 
 FROM utensils/opengl:stable
 
+
+RUN set -xe; \
+    apk --update add --no-cache --virtual .runtime-deps \
+        bash \
+        ffmpeg \
+        git \
+        gource \
+        imagemagick \
+        lighttpd \
+        llvm7-libs \
+        python \
+        subversion \
+        findutils \
+        wget; \
+    mkdir -p /visualization/video; \
+    mkdir -p /visualization/html; \
+    mkdir -p /visualization/avatars; 
+
 # Copy our assets
 COPY ./docker-entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY . /visualization/
