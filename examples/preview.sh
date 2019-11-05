@@ -3,6 +3,14 @@
 # Copyright (c) 2019 Carl Colena
 #
 # SPDX-License-Identifier: MIT
+DIR="${BASH_SRC%/*}"
+if [[ ! -d  "$DIR" ]]; then DIR="$PWD"; fi
+
+function print_help {
+    echo "Args:"
+    echo "  --git-repo [absolute_path_to_repo]                Required"
+    echo "  --caption-file [absolute_path_to_caption_file]    Optional"
+}
 
 ARGS=""
 while [[ $# -gt 0 ]]; do
@@ -17,16 +25,16 @@ while [[ $# -gt 0 ]]; do
             CAPTION_URI="--mount type=bind,source=$2,target=/visualization/captions.txt,readonly"
             shift
         ;;
+        --avatars-dir)
+            AVATARS_URI="--mount type=bind,source=$2,target=/visualization/avatars,readonly"
+            shift
+        ;;
         -h)
-            echo "Args:"
-            echo "  --git-repo [absolute_path_to_repo]                Required"
-            echo "  --caption-file [absolute_path_to_caption_file]    Optional"
+            print_help
             exit 1
         ;;
         --help)
-            echo "Args:"
-            echo "  --git-repo [absolute_path_to_repo]                Required"
-            echo "  --caption-file [absolute_path_to_caption_file]    Optional"
+            print_help
             exit 1
         ;;
         *)
@@ -37,8 +45,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [ "${GIT_REPO}" = "" ]; then
-    echo "Error: --git-repo argument required."
-    exit 1
+    echo "No git repo directory specified, using Envisaged-Redux repo..."
+    GIT_REPO=$DIR/../
 fi
 
 docker run --rm \
@@ -46,6 +54,7 @@ docker run --rm \
 --name envisaged-redux \
 -v ${GIT_REPO}:/visualization/git_repo:ro \
 ${CAPTION_URI} \
+${AVATARS_URI} \
 -e GOURCE_STOP_AT_TIME="5" \
 -e FPS="25" \
 -e VIDEO_RESOLUTION="480p" \

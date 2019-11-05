@@ -66,6 +66,11 @@ else
 	fi
 fi
 
+# Check for avatar directory mount.
+if [ -d /visualization/avatars ]; then
+	echo "Using avatars directory"
+	export USE_AVATARS=1
+fi
 
 # Check for captions
 if [ -f /visualization/captions.txt ]; then

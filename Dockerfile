@@ -22,8 +22,7 @@ RUN set -xe; \
         findutils \
         wget; \
     mkdir -p /visualization/video; \
-    mkdir -p /visualization/html; \
-    mkdir -p /visualization/avatars; 
+    mkdir -p /visualization/html; 
 
 # Copy our assets
 COPY ./docker-entrypoint.sh /usr/local/bin/entrypoint.sh
@@ -41,7 +40,6 @@ ENV LOGO_URL="" \
     TEMPLATE="border" \
     RECURSE_SUBMODULES="0" \
     GOURCE_TITLE="Software Development" \
-    GOURCE_USER_IMAGE_DIR="/visualization/avatars" \
     GOURCE_DATE_FONT_COLOR="FFFFFF" \
     GOURCE_TITLE_TEXT_COLOR="FFFFFF" \
     GOURCE_CAMERA_MODE="overview" \

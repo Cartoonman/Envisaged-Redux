@@ -85,6 +85,12 @@ if [ "${GOURCE_STOP_AT_TIME}" != "" ]; then
 	GOURCE_STOP_AT_TIME="--stop-at-time ${GOURCE_STOP_AT_TIME}"
 fi
 
+# Avatars
+if [ "${USE_AVATARS}" = "1" ]; then
+	GOURCE_USER_AVATARS="--user-image-dir /visualization/avatars"
+fi
+
+
 # Captions
 GOURCE_CAPTIONS=""
 if [ "${USE_CAPTIONS}" = "1" ]; then
@@ -109,6 +115,7 @@ gource \
 	${GOURCE_STOP_POSITION} \
 	${GOURCE_STOP_AT_TIME} \
 	${GOURCE_CAPTIONS} \
+	${GOURCE_USER_AVATARS} \
 	--auto-skip-seconds ${GOURCE_AUTO_SKIP_SECONDS} \
 	--seconds-per-day ${GOURCE_SECONDS_PER_DAY} \
 	--user-scale ${GOURCE_USER_SCALE} \
@@ -119,7 +126,6 @@ gource \
 	--title "${GOURCE_TITLE}" \
 	--background-colour ${GOURCE_BACKGROUND_COLOR} \
 	--font-colour ${GOURCE_TITLE_TEXT_COLOR} \
-	--user-image-dir ${GOURCE_USER_IMAGE_DIR} \
 	--camera-mode ${GOURCE_CAMERA_MODE} \
 	--hide ${GOURCE_HIDE_ITEMS} \
 	--font-size ${GOURCE_TITLE_FONT_SIZE} \
