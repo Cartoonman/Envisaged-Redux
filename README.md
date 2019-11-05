@@ -11,10 +11,25 @@ This container combines the awesome [Gource][gource] program with the power of [
 
 This container is 100% headless, it does this by leveraging [Xvfb][xvfb] combined with the [Mesa 3d Gallium llvmpipe Driver][mesa]. Unlike other docker containers with Gource, this container does not eat up 100's of gigabtyes of disk space, nor does it require an actual GPU to run. The process runs the Gource simulation concurrently with the FFmpeg encoding process using a set of named pipes. There is a slight trade off in performance, but this makes it very easy to run in any environment such as AWS without the need to provision large amounts of storage, or run any cleanup.  
 
+## Example Scripts
 
-This container is configurable through environment variables listed below. The generated video is delivered via HTTP.
+Example scripts can be found under `examples/`. 
+* default.sh - Performs a video encoding with all default settings. Provides an extendable baseline script template for custom rendering configs. Note: if git repo is not specified, it will default to using this repo for the visualization.
+* preview.sh - Builds upon default.sh to present an example generating a ~5-10 second snippet using optimized configs for the fastest rendering speed possible. Useful for quickly testing effects changes.
 
-## Environment Variables
+
+## Configuration
+
+This container is configurable through docker runtime args and environment variables listed below. The generated video is delivered via HTTP.
+
+### Docker Runtime Args
+
+| Purpose          | Example                                                                                                     | Description                                                                                                                                     |
+| -----------------| ------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|    
+| Captions         | `--mount type=bind,source=`*/path/on/host/to/captions.txt*`,target=/visualization/captions.txt,readonly"`   | If added, gource will try given captions.txt file to render captions on video. See [gource] docs for supported caption format.                  |
+| Avatars          | `--mount type=bind,source=`*/path/on/host/to/avatars_dir*`,target=/visualization/avatars,readonly"`         | If added, gource will try given avatars directory to render user avatars on video. See [gource] docs for naming rules and supported image types.|
+
+### Environment Variables
 
 | Variable                   | Default Value            | Description                                                                                                                           |
 | -------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
