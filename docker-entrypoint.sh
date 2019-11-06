@@ -78,31 +78,22 @@ if [ -f /visualization/captions.txt ]; then
 	export USE_CAPTIONS=1
 fi
 
-# Set proper env variables if we have a logo.
-if [ "${LOGO_URL}" != "" ]; then
-	wget -O ./logo.image ${LOGO_URL}
-	convert -geometry x160 ./logo.image ./logo.image
-	if [ "$?" = 0 ]; then
-		echo "Using logo from: ${LOGO_URL}"
-		export LOGO=" -i ./logo.image "
-		if [[ "${TEMPLATE}" == "border" ]]; then
-			export LOGO_FILTER_GRAPH=";[with_date][2:v]overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
-			export FILTER_GRAPH_MAP=" -map [with_logo] "
-		else
-			export LOGO_FILTER_GRAPH="[1:v]overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
-			export FILTER_GRAPH_MAP=" -map [with_logo] "
-		fi
+# Check for logo
+if [ -f /visualization/logo.image ]; then
+	set -e
+	convert -geometry x160 /visualization/logo.image /visualization/logo_txfrmed.image
+	set +e
+	echo "Using logo file"
+	export LOGO=" -i ./logo_txfrmed.image "
+	if [[ "${TEMPLATE}" == "border" ]]; then
+		export LOGO_FILTER_GRAPH=";[with_date][2:v]overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
+		export FILTER_GRAPH_MAP=" -map [with_logo] "
 	else
-		if [[ "${TEMPLATE}" == "border" ]]; then
-			echo "Not using a logo."
-			export FILTER_GRAPH_MAP=" -map [with_date] "
-		else
-			export FILTER_GRAPH_MAP=""
-		fi
+		export LOGO_FILTER_GRAPH="[1:v]overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
+		export FILTER_GRAPH_MAP=" -map [with_logo] "
 	fi
 else
 	if [[ "${TEMPLATE}" == "border" ]]; then
-		echo "Not using a logo."
 		export FILTER_GRAPH_MAP=" -map [with_date] "
 	else
 		export FILTER_GRAPH_MAP=""

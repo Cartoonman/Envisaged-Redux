@@ -28,12 +28,12 @@ This container is configurable through docker runtime args and environment varia
 | -----------------| ------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|    
 | Captions         | `--mount type=bind,source=`*/path/on/host/to/captions.txt*`,target=/visualization/captions.txt,readonly"`   | If added, gource will try given captions.txt file to render captions on video. See [gource] docs for supported caption format.                  |
 | Avatars          | `--mount type=bind,source=`*/path/on/host/to/avatars_dir*`,target=/visualization/avatars,readonly"`         | If added, gource will try given avatars directory to render user avatars on video. See [gource] docs for naming rules and supported image types.|
+| Logo             | `--mount type=bind,source=`*/path/on/host/to/image.png*`,target=/visualization/logo.image,readonly"`        | If added, gource will try given logo image file to render the logo in the lower right hand corner of the video.                                 |
 
 ### Environment Variables
 
 | Variable                   | Default Value            | Description                                                                                                                           |
 | -------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
-| LOGO_URL                   |                          | URL of logo to be overlayed in lower right hand corner of video.                                                                      |
 | H265_PRESET                | medium                   | h.265 encoding preset. Refer to [FFmpeg's wiki][ffmpeg_h265].                                                                         |
 | H265_CRF                   | 21                       | The Constant Rate Factor (CRF). Refer to [FFmpeg's wiki][ffmpeg_h265].                                                                |
 | VIDEO_RESOLUTION           | 1080p                    | Output video resolution, options are **2160p, 1440p, 1080p, 720p, 480p**                                                              |
@@ -73,6 +73,17 @@ This container is configurable through docker runtime args and environment varia
 | GOURCE_CAPTION_DURATION    | 5.0                      | [--caption-duration]  Caption duration in seconds.                                                                                    |
 
 
+## Troubleshooting
+
+* If you receive this error:
+    ~~~
+    convert: no decode delegate for this image format `IMAGE' @ error/constitute.c/ReadImage/556.
+    convert: no images defined `/visualization/logo_txfrmed.image' @ error/convert.c/ConvertImageCommand/3273.
+    ~~~
+    This means the image logo passed into the docker container is not compatible with the image converter onboard. Try using another format or image.
+
+
+
 [alpine linux image]: https://github.com/gliderlabs/docker-alpine
 
 [gource]: https://github.com/acaudwell/Gource
@@ -90,3 +101,5 @@ This container is configurable through docker runtime args and environment varia
 [utensils/opengl]: https://github.com/utensils/docker-opengl
 
 [elixir-school]: https://github.com/elixirschool/elixirschool
+
+

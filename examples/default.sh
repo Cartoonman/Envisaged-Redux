@@ -8,8 +8,12 @@ if [[ ! -d  "$DIR" ]]; then DIR="$PWD"; fi
 
 function print_help {
     echo "Args:"
-    echo "  --git-repo [absolute_path_to_repo]                Required"
-    echo "  --caption-file [absolute_path_to_caption_file]    Optional"
+    echo "  --git-repo     [absolute/path/to/repo]              Required"
+    echo "  --caption-file [absolute/path/to/caption_file]      Optional"
+    echo "  --avatars-dir  [absolute/path/to/avatars_dir]       Optional"
+    echo "  --logo-file    [absolute/path/to/logo_image]        Optional"
+    echo "  Other args will be passed through to docker run command.    "
+    echo "  e.g. -e H265_CRF=\"0\" "
 }
 
 ARGS=""
@@ -27,6 +31,10 @@ while [[ $# -gt 0 ]]; do
         ;;
         --avatars-dir)
             AVATARS_URI="--mount type=bind,source=$2,target=/visualization/avatars,readonly"
+            shift
+        ;;
+        --logo-file)
+            LOGO_URI="--mount type=bind,source=$2,target=/visualization/logo.image,readonly"
             shift
         ;;
         -h)
@@ -55,5 +63,6 @@ docker run --rm \
 -v ${GIT_REPO}:/visualization/git_repo:ro \
 ${CAPTION_URI} \
 ${AVATARS_URI} \
+${LOGO_URI} \
 $ARGS \
 envisaged-redux:latest
