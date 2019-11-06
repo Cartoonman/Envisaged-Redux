@@ -25,10 +25,11 @@ This container is configurable through docker runtime args and environment varia
 ### Docker Runtime Args
 
 | Purpose          | Example                                                                                                     | Description                                                                                                                                     |
-| -----------------| ------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|    
-| Captions         | `--mount type=bind,source=`*/path/on/host/to/captions.txt*`,target=/visualization/captions.txt,readonly"`   | If added, gource will try given captions.txt file to render captions on video. See [gource] docs for supported caption format.                  |
-| Avatars          | `--mount type=bind,source=`*/path/on/host/to/avatars_dir*`,target=/visualization/avatars,readonly"`         | If added, gource will try given avatars directory to render user avatars on video. See [gource] docs for naming rules and supported image types.|
-| Logo             | `--mount type=bind,source=`*/path/on/host/to/image.png*`,target=/visualization/logo.image,readonly"`        | If added, gource will try given logo image file to render the logo in the lower right hand corner of the video.                                 |
+| -----------------| ------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| Repo(s)          | `-v `*/path/on/host/to/git_repo(s)_dir*`:/visualization/git_repo:ro`| Required. Mounts the path to a single git repo, or a directory of multiple git repos for multi-repo visualizations. (Recommended for multi-repo: add *root* to GOURCE_HIDE_ITEMS list argument to visually separate multiple repos.) |
+| Captions         | `--mount type=bind,source=`*/path/on/host/to/captions.txt*`,target=/visualization/captions.txt,readonly"`   | Optional. Gource will try given captions.txt file to render captions on video. See [gource] docs for supported caption format.                  |
+| Avatars          | `--mount type=bind,source=`*/path/on/host/to/avatars_dir*`,target=/visualization/avatars,readonly"`         | Optional. Gource will try given avatars directory to render user avatars on video. See [gource] docs for naming rules and supported image types.|
+| Logo             | `--mount type=bind,source=`*/path/on/host/to/image.png*`,target=/visualization/logo.image,readonly"`        | Optional. Gource will try given logo image file to render the logo in the lower right hand corner of the video.                                 |
 
 ### Environment Variables
 

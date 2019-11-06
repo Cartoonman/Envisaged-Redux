@@ -8,12 +8,23 @@ if [[ ! -d  "$DIR" ]]; then DIR="$PWD"; fi
 
 function print_help {
     echo "Args:"
-    echo "  --git-repo     [absolute/path/to/repo]              Required"
+    echo "  --git-repo-dir [absolute/path/to/repo(s)_dir]       Required"
+    echo "          The git repo (or directory of git repos) you want gource"
+    echo "          to render."
+    echo ""
     echo "  --caption-file [absolute/path/to/caption_file]      Optional"
+    echo "          The path to a caption file to be used by gource for displaying"
+    echo "          captions during the video at predefined timestamps."
+    echo ""
     echo "  --avatars-dir  [absolute/path/to/avatars_dir]       Optional"
+    echo "          A directory of images with filenames matching that of "
+    echo "          users in the git history."
+    echo ""
     echo "  --logo-file    [absolute/path/to/logo_image]        Optional"
+    echo "          A logo image file to be rendered in the video."
+    echo ""
     echo "  Other args will be passed through to docker run command.    "
-    echo "  e.g. -e H265_CRF=\"0\" "
+    echo "          e.g. -e H265_CRF=\"0\" "
 }
 
 ARGS=""
@@ -21,8 +32,8 @@ while [[ $# -gt 0 ]]; do
     k="$1"
 
     case $k in 
-        --git-repo)
-            GIT_REPO=$2
+        --git-repo-dir)
+            GIT_REPO_DIR=$2
             shift
         ;;
         --caption-file)
@@ -52,15 +63,15 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
-if [ "${GIT_REPO}" = "" ]; then
+if [ "${GIT_REPO_DIR}" = "" ]; then
     echo "No git repo directory specified, using Envisaged-Redux repo..."
-    GIT_REPO=$DIR/../
+    GIT_REPO_DIR=$DIR/../
 fi
 
 docker run --rm \
 -p 8080:80 \
 --name envisaged-redux \
--v ${GIT_REPO}:/visualization/git_repo:ro \
+-v ${GIT_REPO_DIR}:/visualization/git_repo:ro \
 ${CAPTION_URI} \
 ${AVATARS_URI} \
 ${LOGO_URI} \
