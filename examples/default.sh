@@ -68,9 +68,8 @@ if [ "${GIT_REPO_DIR}" = "" ]; then
     GIT_REPO_DIR=$DIR/../
 fi
 
-docker run --rm \
+docker run --rm -i -t \
 -p 8080:80 \
---name envisaged-redux \
 -v ${GIT_REPO_DIR}:/visualization/git_repo:ro \
 ${CAPTION_URI} \
 ${AVATARS_URI} \
