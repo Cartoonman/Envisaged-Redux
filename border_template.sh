@@ -5,6 +5,13 @@
 #
 # SPDX-License-Identifier: MIT
 
+COLOR_RED='\033[0;31m'
+COLOR_MAGENTA='\033[0;95m'
+COLOR_CYAN='\033[0;96m'
+COLOR_GREEN='\033[0;92m'
+COLOR_YELLOW='\033[0;93m'
+NO_COLOR='\033[0m'
+
 # Predefined resolutions and settings.
 if [[ "${VIDEO_RESOLUTION}" == "2160p" ]]; then
 	GOURCE_RES="3500x1940"
@@ -107,7 +114,7 @@ if [ "${MULTIREPO}" = "1" ]; then
 fi
 
 # Start Gource for visualization.
-echo "Starting Gource for ${GIT_URL}, using title: ${GOURCE_TITLE}"
+echo -e "${COLOR_GREEN}Starting Gource, using title: ${GOURCE_TITLE}${NO_COLOR}"
 gource \
 	${GOURCE_START_DATE} \
 	${GOURCE_STOP_DATE} \
@@ -143,7 +150,7 @@ gource \
 	-o - >./tmp/gource.pipe &
 
 # Start Gource for the overlay elements.
-echo "Starting Gource for overlay components"
+echo -e "${COLOR_GREEN}Starting Gource for overlay components${NO_COLOR}"
 gource \
 	${GOURCE_START_DATE} \
 	${GOURCE_STOP_DATE} \
@@ -174,7 +181,7 @@ gource \
 	-o - >./tmp/overlay.pipe &
 
 # Start ffmpeg to merge the two video outputs.
-echo "Combining videos."
+echo -e "${COLOR_GREEN}Combining videos pipes and rendering...${NO_COLOR}"
 mkdir -p ./video
 ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
 	-y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/overlay.pipe \
@@ -189,7 +196,7 @@ ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
 	-vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} ./video/output.mp4
 
 # Remove our temporary files.
-echo "Removing temporary files."
+echo -e "${COLOR_YELLOW}Removing temporary files.${NO_COLOR}"
 rm -rf ./tmp
 
 # Update html and link new video.
