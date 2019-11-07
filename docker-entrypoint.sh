@@ -59,7 +59,10 @@ if [ ! -d /visualization/git_repo/.git ]; then
 				set +e
 				if [ "${path}" != "" ]; then
 					sed -i -r "s#(.+)\|#\1|/${DIRECTORY}/${path}#" development${X}.log
+				else
+					sed -i -r "s#(.+)\|#\1|/${DIRECTORY}#" development${X}.log
 				fi
+
 				LOGS="${LOGS} development${X}.log"
 			done
 		else
