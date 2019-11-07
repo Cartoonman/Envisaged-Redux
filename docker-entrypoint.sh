@@ -19,7 +19,6 @@ then
 	echo "Error: git repo not found: /visualization/git_repo does not exist."
 	exit 1
 fi
-echo "Using volume mounted git repo"
 
 # Check if this is a single or multi repo
 if [ ! -d /visualization/git_repo/.git ]; then
@@ -28,10 +27,29 @@ if [ ! -d /visualization/git_repo/.git ]; then
 	LOGS=""
 	for DIRECTORY in `find /visualization/git_repo -maxdepth 1 -mindepth 1 -type d -printf '%f\n'`
 	do
-		((X++))
-		gource --output-custom-log development${X}.log /visualization/git_repo/${DIRECTORY}
-		sed -i -r "s#(.+)\|#\1|/${DIRECTORY}#" development${X}.log
-		LOGS="${LOGS} development${X}.log"
+		if [ "${RECURSE_SUBMODULES}" = "1" ]; then
+			echo "Recursing through submodules in ${DIRECTORY}"
+			cd /visualization/git_repo/${DIRECTORY} && git submodule foreach --recursive '( echo "SUBMOD_PATHS+=($displaypath)" >> /visualization/submods.bash )'
+			cd /visualization
+			. submods.bash
+			rm submods.bash
+			SUBMOD_PATHS+=('') # include parent of course
+			for path in "${SUBMOD_PATHS[@]}"; do
+				echo $path
+				((X++))
+				gource --output-custom-log development${X}.log /visualization/git_repo/${DIRECTORY}/${path}
+				if [ "${path}" != "" ]; then
+					sed -i -r "s#(.+)\|#\1|/${DIRECTORY}/${path}#" development${X}.log
+				fi
+				LOGS="${LOGS} development${X}.log"
+			done
+			SUBMOD_PATHS=()
+		else
+			((X++))
+			gource --output-custom-log development${X}.log /visualization/git_repo/${DIRECTORY}
+			sed -i -r "s#(.+)\|#\1|/${DIRECTORY}#" development${X}.log
+			LOGS="${LOGS} development${X}.log"
+		fi
 	done
 	cat ${LOGS} | sort -n > development.log
 	rm ${LOGS}
