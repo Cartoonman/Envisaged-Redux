@@ -5,8 +5,24 @@
 #
 # SPDX-License-Identifier: MIT
 
+FROM alpine:3.10 as gource-nightly-builder
+
+RUN apk add --update --no-cache --virtual .build-deps alpine-sdk git sdl2-dev sdl2_image-dev pcre-dev freetype-dev glew-dev glm-dev boost-dev libpng-dev tinyxml-dev autoconf automake \
+&& git clone https://github.com/acaudwell/Gource.git \
+&& cd Gource \
+&& ./autogen.sh \
+&& ./configure \
+&& make -j`nproc` \
+&& make install \
+&& cd / \
+&& rm -rf Gource \
+&& apk del .build-deps
+
+
 FROM utensils/opengl:stable
 
+COPY --from=gource-nightly-builder /usr/local/bin/gource /usr/local/bin/gource_nightly
+COPY --from=gource-nightly-builder /usr/local/share/gource /usr/local/share/gource
 
 RUN set -xe; \
     apk --update add --no-cache --virtual .runtime-deps \
