@@ -5,12 +5,9 @@
 #
 # SPDX-License-Identifier: MIT
 
-COLOR_RED='\033[0;31m'
-COLOR_MAGENTA='\033[0;95m'
-COLOR_CYAN='\033[0;96m'
-COLOR_GREEN='\033[0;92m'
-COLOR_YELLOW='\033[0;93m'
-NO_COLOR='\033[0m'
+DIR="${BASH_SRC%/*}"
+if [[ ! -d  "$DIR" ]]; then DIR="$PWD"; fi
+. "$DIR/common.bash"
 
 # Predefined resolutions and settings.
 if [[ "${VIDEO_RESOLUTION}" == "2160p" ]]; then

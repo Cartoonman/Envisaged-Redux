@@ -5,12 +5,10 @@
 #
 # SPDX-License-Identifier: MIT
 
-COLOR_RED='\e[31m'
-COLOR_MAGENTA='\e[95m'
-COLOR_CYAN='\e[96m'
-COLOR_GREEN='\e[92m'
-COLOR_YELLOW='\e[93m'
-NO_COLOR='\e[0m'
+DIR="${BASH_SRC%/*}"
+if [[ ! -d  "$DIR" ]]; then DIR="$PWD"; fi
+. "$DIR/common.bash"
+
 
 # Start Xvfb
 echo -e "${COLOR_YELLOW}Starting Xvfb...${NO_COLOR}"
