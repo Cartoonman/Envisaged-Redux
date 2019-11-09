@@ -111,7 +111,7 @@ if [ "${MULTIREPO}" = "1" ]; then
 fi
 
 # Start Gource for visualization.
-echo -e "${COLOR_GREEN}Starting Gource, using title: ${GOURCE_TITLE}${NO_COLOR}"
+log_notice "Starting Gource primary with title: ${GOURCE_TITLE}"
 gource \
 	${GOURCE_START_DATE} \
 	${GOURCE_STOP_DATE} \
@@ -145,9 +145,10 @@ gource \
 	./development.log \
 	-r ${FPS} \
 	-o - >./tmp/gource.pipe &
+log_success "Gource primary started."
 
 # Start Gource for the overlay elements.
-echo -e "${COLOR_GREEN}Starting Gource for overlay components${NO_COLOR}"
+log_notice "Starting Gource secondary for overlay components"
 gource \
 	${GOURCE_START_DATE} \
 	${GOURCE_STOP_DATE} \
@@ -177,8 +178,10 @@ gource \
 	-r ${FPS} \
 	-o - >./tmp/overlay.pipe &
 
+log_success "Gource secondary started."
+
 # Start ffmpeg to merge the two video outputs.
-echo -e "${COLOR_GREEN}Combining videos pipes and rendering...${NO_COLOR}"
+log_notice "Combining videos pipes and rendering..."
 mkdir -p ./video
 ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
 	-y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/overlay.pipe \
@@ -192,8 +195,9 @@ ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
                          [date][with_key]vstack[with_date]${LOGO_FILTER_GRAPH}${GLOBAL_FILTERS}" ${FILTER_GRAPH_MAP} \
 	-vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} ./video/output.mp4
 
+log_success "FFmpeg video render completed!"
 # Remove our temporary files.
-echo -e "${COLOR_YELLOW}Removing temporary files.${NO_COLOR}"
+log_notice "Removing temporary files."
 rm -rf ./tmp
 
 # Update html and link new video.
