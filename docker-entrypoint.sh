@@ -9,17 +9,20 @@ DIR="${BASH_SRC%/*}"
 if [[ ! -d  "${DIR}" ]]; then DIR="${PWD}"; fi
 . "${DIR}/common.bash"
 
+# Print Banner
+print_intro
+
 # Start Xvfb
 log_notice "Starting Xvfb..."
 Xvfb :99 -ac -screen 0 $XVFB_WHD -nocursor -noreset -nolisten tcp &
 xvfb_pid="${!}"
-RET_CODE=9999
+RET_CODE=1
 WATCH_START=${SECONDS}
-while [ ${RET_CODE} -ne 0 ] && [ $(( ${SECONDS} - ${WATCH_START} )) -le 60 ]; do
+while [ ${RET_CODE} -ne 0 ] && [ $(( ${SECONDS} - ${WATCH_START} )) -le ${XVFB_TIMEOUT} ]; do
         xdpyinfo -display :99 &> /dev/null
         RET_CODE=${?}
 done
-if [ $(( ${SECONDS} - ${WATCH_START} )) -gt 60 ]; then
+if [ $(( ${SECONDS} - ${WATCH_START} )) -gt ${XVFB_TIMEOUT} ]; then
 	log_error "Timeout: Xvfb failed to start properly. Exiting."
 	exit 1
 fi
@@ -36,8 +39,8 @@ fi
 if [ ! -d /visualization/git_repo/.git ]; then
 	# Assume this is a multi-repo setup
 	log_info "Detected potential multi-repo input. Assuming this is a multi-repo directory."
-	X=0
-	Y=0
+	T_COUNT=0
+	S_COUNT=0
 	LOGS=""
 	for DIRECTORY in `find /visualization/git_repo -maxdepth 1 -mindepth 1 -type d -printf '%f\n'`
 	do
@@ -59,29 +62,29 @@ if [ ! -d /visualization/git_repo/.git ]; then
 			fi
 			SUBMOD_PATHS+=('') # include parent of course
 			for SUBMOD_PATH in "${SUBMOD_PATHS[@]}"; do
-				((X++))
+				((++T_COUNT))
 				set -e
-				gource --output-custom-log development${X}.log /visualization/git_repo/${DIRECTORY}/${SUBMOD_PATH}
+				gource --output-custom-log development${T_COUNT}.log /visualization/git_repo/${DIRECTORY}/${SUBMOD_PATH}
 				set +e
 				if [ "${SUBMOD_PATH}" != "" ]; then
-					sed -i -r "s#(.+)\|#\1|/${DIRECTORY}/${SUBMOD_PATH}#" development${X}.log
-					((Y++))
+					sed -i -r "s#(.+)\|#\1|/${DIRECTORY}/${SUBMOD_PATH}#" development${T_COUNT}.log
+					((S_COUNT++))
 				else
-					sed -i -r "s#(.+)\|#\1|/${DIRECTORY}#" development${X}.log
+					sed -i -r "s#(.+)\|#\1|/${DIRECTORY}#" development${T_COUNT}.log
 				fi
 
-				LOGS="${LOGS} development${X}.log"
+				LOGS="${LOGS} development${T_COUNT}.log"
 			done
 		else
-			((X++))
+			((++T_COUNT))
 			set -e
-			gource --output-custom-log development${X}.log /visualization/git_repo/${DIRECTORY}
+			gource --output-custom-log development${T_COUNT}.log /visualization/git_repo/${DIRECTORY}
 			set +e
-			sed -i -r "s#(.+)\|#\1|/${DIRECTORY}#" development${X}.log
-			LOGS="${LOGS} development${X}.log"
+			sed -i -r "s#(.+)\|#\1|/${DIRECTORY}#" development${T_COUNT}.log
+			LOGS="${LOGS} development${T_COUNT}.log"
 		fi
 	done
-	log_success "Processed $(($X-$Y)) repos and $Y submodules."
+	log_success "Processed $(($T_COUNT-$S_COUNT)) repos and ${S_COUNT} submodules."
 	cat ${LOGS} | sort -n > development.log
 	rm ${LOGS}
 	# Enable settings specifically tailored for multirepo representation
@@ -89,7 +92,7 @@ if [ ! -d /visualization/git_repo/.git ]; then
 else
 	# Assume this is a single-repo setup
 	log_info "Detected single-repo input."
-	Y=0
+	S_COUNT=0
 	if [ "${RECURSE_SUBMODULES}" = "true" ]; then
 		log_info "Recursing through submodules."
 		SUBMOD_PATHS=()
@@ -104,16 +107,16 @@ else
 		LOGS=""
 		SUBMOD_PATHS+=('') # include parent of course
 		for SUBMOD_PATH in "${SUBMOD_PATHS[@]}"; do
-			((Y++))
+			((++S_COUNT))
 			set -e
-			gource --output-custom-log development${Y}.log /visualization/git_repo/${SUBMOD_PATH}
+			gource --output-custom-log development${S_COUNT}.log /visualization/git_repo/${SUBMOD_PATH}
 			set +e
 			if [ "${SUBMOD_PATH}" != "" ]; then
-				sed -i -r "s#(.+)\|#\1|/${SUBMOD_PATH}#" development${Y}.log
+				sed -i -r "s#(.+)\|#\1|/${SUBMOD_PATH}#" development${S_COUNT}.log
 			fi
-			LOGS="${LOGS} development${Y}.log"
+			LOGS="${LOGS} development${S_COUNT}.log"
 		done
-		((--Y))
+		((--S_COUNT)) # Account for repo itself
 		cat ${LOGS} | sort -n > development.log
 		rm ${LOGS}
 	else
@@ -122,7 +125,7 @@ else
 		gource --output-custom-log development.log /visualization/git_repo
 		set +e
 	fi
-	log_success "Processed 1 repo and $Y submodules."
+	log_success "Processed 1 repo and ${S_COUNT} submodules."
 fi
 log_info "Git Logs Parsed."
 
@@ -144,7 +147,7 @@ if [ -f /visualization/logo.image ]; then
 	set -e
 	convert -geometry x160 /visualization/logo.image /visualization/logo_txfrmed.image
 	set +e
-	log_info "Success. Using logo file"
+	log_success "Success. Using logo file"
 	export LOGO=" -i ./logo_txfrmed.image "
 	if [[ "${TEMPLATE}" == "border" ]]; then
 		export LOGO_FILTER_GRAPH=";[with_date][2:v]overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
