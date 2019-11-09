@@ -41,7 +41,6 @@ RUN set -xe; \
     mkdir -p /visualization/html; 
 
 # Copy our assets
-COPY ./docker-entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY . /visualization/
 
 WORKDIR /visualization
@@ -91,4 +90,4 @@ ENV H265_PRESET="medium" \
 # Expose port 80 to serve mp4 video over HTTP
 EXPOSE 80
 
-CMD ["/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["/visualization/docker-entrypoint.sh"]
