@@ -48,8 +48,7 @@ WORKDIR /visualization
 
 # Set our default environment variables.
 
-ENV LOGO_URL="" \ 
-    H265_PRESET="medium" \
+ENV H265_PRESET="medium" \
     H265_CRF="21" \
     VIDEO_RESOLUTION="1080p" \
     FPS="60" \
