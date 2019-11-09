@@ -45,6 +45,19 @@ COPY . /visualization/
 
 WORKDIR /visualization
 
+
+# Labels and metadata.
+ARG VCS_REF
+ARG BUILD_DATE
+LABEL maintainer="Carl Colena, carl.colena@gmail.com" \
+      org.label-schema.build-date="${BUILD_DATE}" \
+      org.label-schema.decription="Envisaged Redux - Dockerized Gource Visualizations, Reborn" \
+      org.label-schema.name="Envisaged Redux" \
+      org.label-schema.schema-version="0.1.0" \
+      org.label-schema.vcs-ref="${VCS_REF}" \
+      org.label-schema.vcs-url="https://github.com/Cartoonman/Envisaged-Redux" \
+      org.label-schema.version="0.1.4"
+
 # Set our default environment variables.
 
 ENV H265_PRESET="medium" \
