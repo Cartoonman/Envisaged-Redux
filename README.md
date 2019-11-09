@@ -33,6 +33,14 @@ This container is configurable through docker runtime args and environment varia
 
 ### Environment Variables
 
+#### Repo Settings
+
+| Variable                   | Default Value            | Description                                                                                                                           |
+| -------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| RECURSE_SUBMODULES         | false                    | If set to 1, enables recursing through the repo(s) submodules                                                                         |
+
+#### Render Settings
+
 | Variable                   | Default Value            | Description                                                                                                                           |
 | -------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
 | H265_PRESET                | medium                   | h.265 encoding preset. Refer to [FFmpeg's wiki][ffmpeg_h265].                                                                         |
@@ -40,7 +48,14 @@ This container is configurable through docker runtime args and environment varia
 | VIDEO_RESOLUTION           | 1080p                    | Output video resolution, options are **2160p, 1440p, 1080p, 720p, 480p**                                                              |
 | FPS                        | 60                       | Output video Frames per Second. Supported framerates are 25,30, or 60 only.                                                           |
 | TEMPLATE                   | border                   | This is the template script that will be run. Options are **border**, and **none**.                                                   |
-| RECURSE_SUBMODULES         | false                        | If set to 1, enables recursing through the repo(s) submodules                                                                         |
+| INVERT_COLORS              | false                    | Inverts the colors on the visualization.                                                                                              |
+| GLOBAL_FILTERS             |                          | Global FFmpeg filter options.                                                                                                         |
+| GOURCE_FILTERS             |                          | Gource scene FFmpeg filter options.                                                                                                   |
+
+#### Gource Settings
+
+| Variable                   | Default Value            | Description                                                                                                                           |
+| -------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
 | GOURCE_TITLE               | Software Development     | [--title] Title to be displayed in the lower left hand corner of video.                                                               |
 | GOURCE_DATE_FONT_COLOR     | FFFFFF                   | [--font-colour] Font Color for Date (for border template)                                                                             |
 | GOURCE_TITLE_TEXT_COLOR    | FFFFFF                   | [--font-colour] Font color for Title (for border template)                                                                            |
@@ -59,9 +74,6 @@ This container is configurable through docker runtime args and environment varia
 | GOURCE_DIR_DEPTH           | 3                        | [--dir-name-depth] Draw names of directories down to a specific depth in the tree.                                                    |
 | GOURCE_FILENAME_TIME       | 2                        | [--filename-time] Duration to keep filenames on screen (>= 2.0).                                                                      |
 | GOURCE_MAX_USER_SPEED      | 500                      | [--max-user-speed] Max speed users can travel per second.                                                                             |
-| INVERT_COLORS              | false                    | Inverts the colors on the visualization.                                                                                              |
-| GLOBAL_FILTERS             |                          | Global FFmpeg filter options.                                                                                                         |
-| GOURCE_FILTERS             |                          | Gource scene FFmpeg filter options.                                                                                                   |
 | GOURCE_DATE_FORMAT         | %m/%d/%Y %H:%M:%S        | Date Format (based on strftime format)                                                                                                |
 | GOURCE_START_DATE          |                          | [--start-date] Start with the first entry after the supplied date and optional time. (see [gource] docs for formats)                  |
 | GOURCE_STOP_DATE           |                          | [--stop-date] Stop after the last entry prior to the supplied date and optional time. (see [gource] docs for formats)                 |
@@ -72,6 +84,13 @@ This container is configurable through docker runtime args and environment varia
 | GOURCE_CAPTION_SIZE        | 48                       | [--caption-size] Caption font size.                                                                                                   |
 | GOURCE_CAPTION_COLOR       | FFFFFF                   | [--caption-colour] Caption color in hex.                                                                                              |
 | GOURCE_CAPTION_DURATION    | 5.0                      | [--caption-duration]  Caption duration in seconds.                                                                                    |
+
+#### Experimental Gource Settings
+
+| Variable                   | Default Value            | Description                                                                                                                           |
+| -------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| USE_GOURCE_NIGHTLY         | false                    | Flag to enable the usage of nightly (master branch) [gource]. Enables the use of pre-release configs in this table.                   |
+| GOURCE_FILE_EXT_FALLBACK   | false                    | [--file-extension-fallback] Use filename as extension if the extension is missing or empty.                                           |
 
 
 ## Troubleshooting

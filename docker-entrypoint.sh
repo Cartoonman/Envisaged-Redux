@@ -28,6 +28,16 @@ if [ $(( ${SECONDS} - ${WATCH_START} )) -gt ${XVFB_TIMEOUT} ]; then
 fi
 log_success "Xvfb started successfully."
 
+# Check which gource release is chosen
+if [ "${USE_GOURCE_NIGHTLY}" = "true" ]; then
+	export GOURCE_EXEC='gource_nightly'
+	log_warn "Using `${GOURCE_EXEC} -h | head -n 1` Nightly Release"
+	export USE_NIGHTLY=1
+else
+	export GOURCE_EXEC='gource'
+	log_notice "Using `${GOURCE_EXEC} -h | head -n 1` Stable Release "
+fi
+
 # Check if repo exists
 if [ ! -d /visualization/git_repo ]
 then
@@ -64,7 +74,7 @@ if [ ! -d /visualization/git_repo/.git ]; then
 			for SUBMOD_PATH in "${SUBMOD_PATHS[@]}"; do
 				((++T_COUNT))
 				set -e
-				gource --output-custom-log development${T_COUNT}.log /visualization/git_repo/${DIRECTORY}/${SUBMOD_PATH}
+				${GOURCE_EXEC} --output-custom-log development${T_COUNT}.log /visualization/git_repo/${DIRECTORY}/${SUBMOD_PATH}
 				set +e
 				if [ "${SUBMOD_PATH}" != "" ]; then
 					sed -i -r "s#(.+)\|#\1|/${DIRECTORY}/${SUBMOD_PATH}#" development${T_COUNT}.log
@@ -78,7 +88,7 @@ if [ ! -d /visualization/git_repo/.git ]; then
 		else
 			((++T_COUNT))
 			set -e
-			gource --output-custom-log development${T_COUNT}.log /visualization/git_repo/${DIRECTORY}
+			${GOURCE_EXEC} --output-custom-log development${T_COUNT}.log /visualization/git_repo/${DIRECTORY}
 			set +e
 			sed -i -r "s#(.+)\|#\1|/${DIRECTORY}#" development${T_COUNT}.log
 			LOGS="${LOGS} development${T_COUNT}.log"
@@ -87,8 +97,6 @@ if [ ! -d /visualization/git_repo/.git ]; then
 	log_success "Processed $(($T_COUNT-$S_COUNT)) repos and ${S_COUNT} submodules."
 	cat ${LOGS} | sort -n > development.log
 	rm ${LOGS}
-	# Enable settings specifically tailored for multirepo representation
-	export MULTIREPO=1
 else
 	# Assume this is a single-repo setup
 	log_info "Detected single-repo input."
@@ -109,7 +117,7 @@ else
 		for SUBMOD_PATH in "${SUBMOD_PATHS[@]}"; do
 			((++S_COUNT))
 			set -e
-			gource --output-custom-log development${S_COUNT}.log /visualization/git_repo/${SUBMOD_PATH}
+			${GOURCE_EXEC} --output-custom-log development${S_COUNT}.log /visualization/git_repo/${SUBMOD_PATH}
 			set +e
 			if [ "${SUBMOD_PATH}" != "" ]; then
 				sed -i -r "s#(.+)\|#\1|/${SUBMOD_PATH}#" development${S_COUNT}.log
@@ -122,7 +130,7 @@ else
 	else
 		# Single repo no submods - simple case.
 		set -e
-		gource --output-custom-log development.log /visualization/git_repo
+		${GOURCE_EXEC} --output-custom-log development.log /visualization/git_repo
 		set +e
 	fi
 	log_success "Processed 1 repo and ${S_COUNT} submodules."
@@ -179,7 +187,11 @@ else
 	/visualization/no_template.sh
 fi
 
-log_success "Visualization process is complete"
+if [ -f /visualization/video/output.mp4 ]; then
+	log_success "Visualization process is complete."
+else
+	log_error "Visualization process failed."
+fi
 
 # Wait for httpd process to end.
 while kill -0 $httpd_pid >/dev/null 2>&1; do

@@ -104,15 +104,18 @@ if [ "${USE_CAPTIONS}" = "1" ]; then
 	--caption-duration ${GOURCE_CAPTION_DURATION} "
 fi
 
-# Check if this is multirepo
-if [ "${MULTIREPO}" = "1" ]; then
-	# if something needs to be done, do it here.
-	:
+# Check for nightly release args
+if [ "${USE_NIGHTLY}" = "1" ]; then
+	# Check nightly args (0.50)
+	if [ "${GOURCE_FILE_EXT_FALLBACK}" = "true" ]; then
+		GOURCE_NIGHTLY_ARGS+=" --file-extension-fallback "
+	fi
 fi
+
 
 # Start Gource for visualization.
 log_notice "Starting Gource primary with title: ${GOURCE_TITLE}"
-gource \
+${GOURCE_EXEC} \
 	${GOURCE_START_DATE} \
 	${GOURCE_STOP_DATE} \
 	${GOURCE_START_POSITION} \
@@ -120,6 +123,7 @@ gource \
 	${GOURCE_STOP_AT_TIME} \
 	${GOURCE_CAPTIONS} \
 	${GOURCE_USER_AVATARS} \
+	${GOURCE_NIGHTLY_ARGS} \
 	--auto-skip-seconds ${GOURCE_AUTO_SKIP_SECONDS} \
 	--seconds-per-day ${GOURCE_SECONDS_PER_DAY} \
 	--user-scale ${GOURCE_USER_SCALE} \
@@ -149,12 +153,13 @@ log_success "Gource primary started."
 
 # Start Gource for the overlay elements.
 log_notice "Starting Gource secondary for overlay components"
-gource \
+${GOURCE_EXEC} \
 	${GOURCE_START_DATE} \
 	${GOURCE_STOP_DATE} \
 	${GOURCE_START_POSITION} \
 	${GOURCE_STOP_POSITION} \
 	${GOURCE_STOP_AT_TIME} \
+	${GOURCE_NIGHTLY_ARGS} \
 	--seconds-per-day ${GOURCE_SECONDS_PER_DAY} \
 	--user-scale ${GOURCE_USER_SCALE} \
 	--time-scale ${GOURCE_TIME_SCALE} \
