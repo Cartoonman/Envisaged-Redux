@@ -89,6 +89,12 @@ if [ "${GOURCE_STOP_AT_TIME}" != "" ]; then
 	GOURCE_STOP_AT_TIME="--stop-at-time ${GOURCE_STOP_AT_TIME}"
 fi
 
+if [ "${GOURCE_HIGHLIGHT_ALL_USERS}" = "true" ]; then
+	GOURCE_HIGHLIGHT_ALL_USERS="--highlight-users"
+else
+	GOURCE_HIGHLIGHT_ALL_USERS=""
+fi
+
 # Avatars
 if [ "${USE_AVATARS}" = "1" ]; then
 	GOURCE_USER_AVATARS="--user-image-dir /visualization/avatars"
@@ -135,13 +141,14 @@ ${GOURCE_EXEC} \
 	--background-colour ${GOURCE_BACKGROUND_COLOR} \
 	--font-colour ${GOURCE_TITLE_TEXT_COLOR} \
 	--camera-mode ${GOURCE_CAMERA_MODE} \
-	--hide ${GOURCE_HIDE_ITEMS} \
+	--hide date,mouse,${GOURCE_HIDE_ITEMS} \
 	--font-size ${GOURCE_TITLE_FONT_SIZE} \
 	--dir-name-depth ${GOURCE_DIR_DEPTH} \
 	--filename-time ${GOURCE_FILENAME_TIME} \
 	--max-user-speed ${GOURCE_MAX_USER_SPEED} \
-	--bloom-multiplier 1.2 \
-	--highlight-users \
+	--bloom-multiplier ${GOURCE_BLOOM_MULTIPLIER} \
+	--bloom-intensity ${GOURCE_BLOOM_INTENSITY} \
+	${GOURCE_HIGHLIGHT_ALL_USERS} \
 	--multi-sampling \
 	--padding ${GOURCE_PADDING} \
 	--${GOURCE_RES} \
@@ -160,11 +167,13 @@ ${GOURCE_EXEC} \
 	${GOURCE_STOP_POSITION} \
 	${GOURCE_STOP_AT_TIME} \
 	${GOURCE_NIGHTLY_ARGS} \
+	--auto-skip-seconds ${GOURCE_AUTO_SKIP_SECONDS} \
 	--seconds-per-day ${GOURCE_SECONDS_PER_DAY} \
 	--user-scale ${GOURCE_USER_SCALE} \
 	--time-scale ${GOURCE_TIME_SCALE} \
-	--auto-skip-seconds ${GOURCE_AUTO_SKIP_SECONDS} \
 	--file-idle-time ${GOURCE_FILE_IDLE_TIME} \
+	--max-files ${GOURCE_MAX_FILES} \
+	--max-file-lag ${GOURCE_MAX_FILE_LAG} \
 	--key \
 	--transparent \
 	--background-colour 202021 \

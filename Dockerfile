@@ -36,9 +36,11 @@ RUN set -xe; \
         python \
         subversion \
         findutils \
+        curl \
         wget; \
     mkdir -p /visualization/video; \
-    mkdir -p /visualization/html; 
+    mkdir -p /visualization/html; \
+    curl https://cdn.jsdelivr.net/npm/hls.js@latest > /visualization/html/hls.js 
 
 # Copy our assets
 COPY . /visualization/
@@ -73,12 +75,16 @@ ENV H265_PRESET="medium" \
     GOURCE_SECONDS_PER_DAY="0.1" \
     GOURCE_TIME_SCALE="1.0" \
     GOURCE_USER_SCALE="1.0" \
+    GOURCE_HIGHLIGHT_ALL_USERS="true" \
     GOURCE_AUTO_SKIP_SECONDS="3.0" \
     GOURCE_BACKGROUND_COLOR="000000" \
+    GOURCE_BLOOM_MULTIPLIER="1.2" \
+    GOURCE_BLOOM_INTENSITY="0.75" \
     GOURCE_HIDE_ITEMS="mouse,date,filenames" \
     GOURCE_FILE_IDLE_TIME="0" \
     GOURCE_MAX_FILES="0" \
     GOURCE_MAX_FILE_LAG="5.0" \
+    GOURCE_FONT_SIZE="48" \
     GOURCE_TITLE_FONT_SIZE="48" \
     GOURCE_DATE_FONT_SIZE="60" \
     GOURCE_DIR_DEPTH="3" \

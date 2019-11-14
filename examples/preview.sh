@@ -25,6 +25,7 @@ ${LOGO_URI} \
 -e GOURCE_STOP_AT_TIME="5" \
 -e FPS="25" \
 -e VIDEO_RESOLUTION="480p" \
+-e GOURCE_TITLE="Fast Preview Example" \
 -e H265_PRESET="ultrafast" \
 -e H265_CRF="0" \
 -e GOURCE_DATE_FONT_SIZE="35" \

@@ -22,7 +22,7 @@ Example scripts can be found under `examples/`.
 
 This container is configurable through docker runtime args and environment variables listed below. The generated video is delivered via HTTP.
 
-### Docker Runtime Args
+### Docker Runtime Mounts
 
 | Purpose          | Example                                                                                                     | Description                                                                                                                                     |
 | -----------------| ------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -33,11 +33,13 @@ This container is configurable through docker runtime args and environment varia
 
 ### Environment Variables
 
-#### Repo Settings
+This is the current list of supported environment runtime variables that you can use to customize how the container renders and works with your repo(s). 
 
-| Variable                   | Default Value            | Description                                                                                                                           |
-| -------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
-| RECURSE_SUBMODULES         | false                    | If set to 1, enables recursing through the repo(s) submodules                                                                         |
+#### Mode Settings
+
+| Variable                   | Default Value            | Description                                                                                                            |
+| -------------------------- | ------------------------ | -----------------------------------------------------------------------------------------------------------------------|
+| RECURSE_SUBMODULES         | false                    | If set to 1, enables recursing through the repo(s) submodules                                                          |
 
 #### Render Settings
 
@@ -63,14 +65,18 @@ This container is configurable through docker runtime args and environment varia
 | GOURCE_SECONDS_PER_DAY     | 0.1                      | [--seconds-per-day] Speed of simulation in seconds per day.                                                                           |
 | GOURCE_TIME_SCALE          | 1.0                      | [--time-scale] Change simulation time scale.                                                                                          |
 | GOURCE_USER_SCALE          | 1.0                      | [--user-scale] Change scale of user avatars.                                                                                          |
+| GOURCE_HIGHLIGHT_ALL_USERS | true                     | [--highlight-users] Keeps all contributing user's names visible.                                                                      |
 | GOURCE_AUTO_SKIP_SECONDS   | 3.0                      | [--auto-skip-seconds] Skip to next entry if nothing happens for a number of seconds.                                                  |
 | GOURCE_BACKGROUND_COLOR    | 000000                   | [--background-colour] Background color in hex.                                                                                        |
-| GOURCE_HIDE_ITEMS          | mouse,date,filenames     | [--hide] Hide one or more display elements (border template does not need date)                                                       |
+| GOURCE_BLOOM_MULTIPLIER    | 1.2                      | [--bloom-multiplier] Adjust the amount of bloom. (>= 0.0)                                                                             |
+| GOURCE_BLOOM_INTENSITY     | 0.75                     | [--bloom-intensity] Adjust the intensity of the bloom. (>= 0.0)                                                                       |
+| GOURCE_HIDE_ITEMS          | mouse,filenames          | [--hide] Hide one or more display elements (border template overrides date)                                                           |
 | GOURCE_FILE_IDLE_TIME      | 0.0                      | [--file-idle-time] Time in seconds files remain idle before they are removed or 0 for no limit.                                       |
 | GOURCE_MAX_FILES           | 0                        | [--max-files] Set the maximum number of files or 0 for no limit. Excess files will be discarded.                                      |
 | GOURCE_MAX_FILE_LAG        | 5.0                      | [--max-file-lag] Max time files of a commit can take to appear. Use -1 for no limit.                                                  |
-| GOURCE_TITLE_FONT_SIZE     | 48                       | [--font-size] Font size for title (for border template)                                                                               |
-| GOURCE_DATE_FONT_SIZE      | 60                       | [--font-size] Font size for date (for border template)                                                                                |
+| GOURCE_FONT_SIZE           | 48                       | [--font-size] Font size for title and date (not border template)                                                                      |
+| GOURCE_TITLE_FONT_SIZE     | 48                       | [--font-size] Font size for title (border template only)                                                                              |
+| GOURCE_DATE_FONT_SIZE      | 60                       | [--font-size] Font size for date (border template only)                                                                               |
 | GOURCE_DIR_DEPTH           | 3                        | [--dir-name-depth] Draw names of directories down to a specific depth in the tree.                                                    |
 | GOURCE_FILENAME_TIME       | 2                        | [--filename-time] Duration to keep filenames on screen (>= 2.0).                                                                      |
 | GOURCE_MAX_USER_SPEED      | 500                      | [--max-user-speed] Max speed users can travel per second.                                                                             |
