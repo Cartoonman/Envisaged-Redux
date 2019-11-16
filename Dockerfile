@@ -40,7 +40,9 @@ RUN set -xe; \
         wget; \
     mkdir -p /visualization/video; \
     mkdir -p /visualization/html; \
-    curl https://cdn.jsdelivr.net/npm/hls.js@latest > /visualization/html/hls.js 
+    curl -L https://github.com/video-dev/hls.js/releases/download/v0.12.4/hls.light.min.js > /visualization/html/hls.light.min.js; \
+    curl -L https://github.com/video-dev/hls.js/releases/download/v0.12.4/hls.light.min.js.map > /visualization/html/hls.light.min.js.map;
+
 
 # Copy our assets
 COPY . /visualization/
@@ -91,8 +93,6 @@ ENV H265_PRESET="medium" \
     GOURCE_FILENAME_TIME="2" \
     GOURCE_MAX_USER_SPEED="500" \
     INVERT_COLORS="false" \
-    GLOBAL_FILTERS="" \
-    GOURCE_FILTERS="" \
     GOURCE_DATE_FORMAT="%m/%d/%Y %H:%M:%S" \
     GOURCE_START_DATE="" \
     GOURCE_STOP_DATE="" \
@@ -104,7 +104,9 @@ ENV H265_PRESET="medium" \
     GOURCE_CAPTION_COLOR="FFFFFF" \
     GOURCE_CAPTION_DURATION="5.0" \
     USE_GOURCE_NIGHTLY="false" \
-    GOURCE_FILE_EXT_FALLBACK="false"
+    GOURCE_FILE_EXT_FALLBACK="false" \
+    ENABLE_LIVE_PREVIEW="false" \
+    PREVIEW_SLOWDOWN_FACTOR="2"
 
 
 

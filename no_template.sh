@@ -12,28 +12,45 @@ if [[ ! -d  "$DIR" ]]; then DIR="$PWD"; fi
 # Predefined resolutions and settings.
 if [[ "${VIDEO_RESOLUTION}" == "2160p" ]]; then
 	GOURCE_RES="3840x2160"
-	echo "Using 2160p settings. Output will be 3840x2160 at ${FPS}fps."
+	log_info "Using 2160p settings. Output will be 3840x2160 at ${FPS}fps."
 elif [[ "${VIDEO_RESOLUTION}" == "1440p" ]]; then
 	GOURCE_RES="2560x1440"
-	echo "Using 1440p settings. Output will be 2560x1440 at ${FPS}fps."
+	log_info "Using 1440p settings. Output will be 2560x1440 at ${FPS}fps."
 elif [[ "${VIDEO_RESOLUTION}" == "1080p" ]]; then
 	GOURCE_RES="1920x1080"
-	echo "Using 1080p settings. Output will be 1920x1080 at ${FPS}fps."
+	log_info "Using 1080p settings. Output will be 1920x1080 at ${FPS}fps."
 elif [[ "${VIDEO_RESOLUTION}" == "720p" ]]; then
 	GOURCE_RES="1280x720"
-	echo "Using 720p settings. Output will be 1280x720 at ${FPS}fps."
+	log_info "Using 720p settings. Output will be 1280x720 at ${FPS}fps."
 elif [[ "${VIDEO_RESOLUTION}" == "480p" ]]; then
 	GOURCE_RES="854x480"
-	echo "Using 720p settings. Output will be 1280x720 at ${FPS}fps."
+	log_info "Using 720p settings. Output will be 1280x720 at ${FPS}fps."
+else
+	log_error "${VIDEO_RESOLUTION} is not a valid/supported video resolution."
+	exit 1
 fi
 
-
+# Default map
+PRIMARY_MAP_LABEL="[default]"
 if [[ "${INVERT_COLORS}" == "true" ]]; then
-	if [[ "${GOURCE_FILTERS}" == "" ]]; then
-		GOURCE_FILTERS="lutrgb=r=negval:g=negval:b=negval"
-	else
-		GOURCE_FILTERS="${GOURCE_FILTERS},lutrgb=r=negval:g=negval:b=negval,"
-	fi
+	INVERT_FILTER=";${PRIMARY_MAP_LABEL}lutrgb=r=negval:g=negval:b=negval[invert]"
+	PRIMARY_MAP_LABEL="[invert]"
+fi
+
+if [ "${LOGO}" != "" ]; then
+	LOGO_FILTER_GRAPH=";${PRIMARY_MAP_LABEL}[1:v]overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
+	PRIMARY_MAP_LABEL="[with_logo]"
+fi
+
+if [ "${LIVE_PREVIEW}" = "1" ]; then
+	LP_FPS=$((${FPS} / ${PREVIEW_SLOWDOWN_FACTOR}))
+	LIVE_PREVIEW_SPLITTER=";${PRIMARY_MAP_LABEL}split[original_feed][time_scaler];[time_scaler]setpts=${PREVIEW_SLOWDOWN_FACTOR}*PTS[live_preview]"
+	PRIMARY_MAP_LABEL="[original_feed]"
+	LIVE_PREVIEW_ARGS=" -map [live_preview] -c:v libx264 -pix_fmt yuv420p -maxrate 40M -bufsize 2M \
+		-profile:v high -level:v 5.2 -y -r ${LP_FPS} -preset ultrafast -crf 1 \
+		-tune zerolatency -x264-params keyint=$((${LP_FPS} * 3)):min-keyint=${LP_FPS} \
+		-vsync vfr -hls_flags independent_segments+delete_segments -hls_allow_cache 1 \
+		-hls_time 1 -hls_list_size 10 -start_number 0 ./html/preview.m3u8"
 fi
 
 # Create our temp directory
@@ -136,26 +153,12 @@ log_success "Gource primary started."
 # Start ffmpeg 
 log_notice "Rendering video pipe.."
 mkdir -p ./video
-if [[ "${LOGO_FILTER_GRAPH}" != "" ]]; then
-	if [[ "${GOURCE_FILTERS}" != "" ]]; then
-		ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
+# [0:v]: gource, [1:v]: logo
+ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
 			${LOGO} \
-			-filter_complex "[0:v]${GOURCE_FILTERS}[filtered];[filtered]${LOGO_FILTER_GRAPH}${GLOBAL_FILTERS}" ${FILTER_GRAPH_MAP} \
-			-vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} ./video/output.mp4
-	else
-		ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
-			${LOGO} \
-			-filter_complex "[0:v]${LOGO_FILTER_GRAPH}${GLOBAL_FILTERS}" ${FILTER_GRAPH_MAP} \
-			-vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} ./video/output.mp4
-	fi
-elif [[ "${GOURCE_FILTERS}" != "" ]]; then
-	ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
-		-filter_complex "${GOURCE_FILTERS}${GLOBAL_FILTERS}" ${FILTER_GRAPH_MAP} \
-		-vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} ./video/output.mp4
-else
-	ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
-		-vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} ./video/output.mp4
-fi
+			-filter_complex "[0:v]select[default]${INVERT_FILTER}${LOGO_FILTER_GRAPH}${LIVE_PREVIEW_SPLITTER}" -map ${PRIMARY_MAP_LABEL} \
+			-vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} ./video/output.mp4 ${LIVE_PREVIEW_ARGS}
+
 log_success "FFmpeg video render completed!"
 # Remove our temporary files.
 echo "Removing temporary files."

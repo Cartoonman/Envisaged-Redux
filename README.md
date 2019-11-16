@@ -2,14 +2,14 @@
 
 A fork of James Brink's excellent [Envisaged][envisaged] docker container.
 
-Built on top of Alpine 3.10. **No GPU is required**, this will run on any machine, such as a standard EC2 instance or any other VPS.  
+Built on top of Alpine 3.10. **No GPU is required**, this will run on any machine, such as a standard EC2 instance or any other VPS.
 
 ## About
 
-Painless data visualizations from git history showing a repositories development progression over time.  
+Painless data visualizations from git history showing a repositories development progression over time.
 This container combines the awesome [Gource][gource] program with the power of [FFmpeg][ffmpeg_home] and the H.265 codec to bring you high resolution (up to 4k at 60fps) video visualizations.
 
-This container is 100% headless, it does this by leveraging [Xvfb][xvfb] combined with the [Mesa 3d Gallium llvmpipe Driver][mesa]. Unlike other docker containers with Gource, this container does not eat up 100's of gigabtyes of disk space, nor does it require an actual GPU to run. The process runs the Gource simulation concurrently with the FFmpeg encoding process using a set of named pipes. There is a slight trade off in performance, but this makes it very easy to run in any environment such as AWS without the need to provision large amounts of storage, or run any cleanup.  
+This container is 100% headless, it does this by leveraging [Xvfb][xvfb] combined with the [Mesa 3d Gallium llvmpipe Driver][mesa]. Unlike other docker containers with Gource, this container does not eat up 100's of gigabytes of disk space, nor does it require an actual GPU to run. The process runs the Gource simulation concurrently with the FFmpeg encoding process using a set of named pipes. There is a slight trade off in performance, but this makes it very easy to run in any environment such as AWS, without the need to provision large amounts of storage or run any cleanup.
 
 ## Example Scripts
 
@@ -39,7 +39,27 @@ This is the current list of supported environment runtime variables that you can
 
 | Variable                   | Default Value            | Description                                                                                                            |
 | -------------------------- | ------------------------ | -----------------------------------------------------------------------------------------------------------------------|
-| RECURSE_SUBMODULES         | false                    | If set to 1, enables recursing through the repo(s) submodules                                                          |
+| RECURSE_SUBMODULES         | false                    | Flag to enable recursing through the repo(s) submodules                                                                |
+| ENABLE_LIVE_PREVIEW        | false                    | Flag to enable Live Gource preview through the web interface. Read section below for details.                          |
+| PREVIEW_SLOWDOWN_FACTOR    | 2                        | Slowdown Factor for easing buffer hangs from slow renders. 1 means no slowdown. Supported values are integers >= 1.    |
+
+##### Regarding Live Preview
+
+Live preview requires H.264 codec support and JavaScript enabled in your browser. Has been confirmed working on the latest versions of Firefox, Chromium, and Edge, with likely support on Chrome, Safari and Opera. Since this works through the browser, it is inherently platform agnostic.
+
+Live preview works concurrently with the normal video rendering process, so at the end of the render you will have the original video available to save. 
+
+The PREVIEW_SLOWDOWN_FACTOR option is used to slow the preview stream to reduce buffer hangs from slow renders. This setting only affects the preview, and will not affect the resultant `output.mp4`.
+
+Excluding H265_PRESET, H265_CRF, and PREVIEW_SLOWDOWN_FACTOR > 1, all other render settings, Gource effects, and templates represented in the live_preview are exactly shown as what is rendered to `output.mp4`.
+Of the given exclusions, the CRF config is the configuration with the biggest impact on visual differences between the saved video and the live preview. 
+The live preview uses a CRF of 1 and a fixed max bitrate ceiling. 
+Because of this, visual artifacts seen in the live preview may not manifest in `output.mp4` and vice versa.
+
+If you want to ensure the video will look like what you expect from a visual quality point of view, it is recommended you run a separate run with a small time segment and view the rendered video.
+
+If you are unable to use live preview, the `preview.sh` script is the best alternative to quickly check the effects of your configs before rendering a longer run.
+You can also make `preview.sh` run for the whole duration by removing the `-e GOURCE_STOP_AT_TIME="5"` argument from the `docker run` step. 
 
 #### Render Settings
 
@@ -51,8 +71,6 @@ This is the current list of supported environment runtime variables that you can
 | FPS                        | 60                       | Output video Frames per Second. Supported framerates are 25,30, or 60 only.                                                           |
 | TEMPLATE                   | border                   | This is the template script that will be run. Options are **border**, and **none**.                                                   |
 | INVERT_COLORS              | false                    | Inverts the colors on the visualization.                                                                                              |
-| GLOBAL_FILTERS             |                          | Global FFmpeg filter options.                                                                                                         |
-| GOURCE_FILTERS             |                          | Gource scene FFmpeg filter options.                                                                                                   |
 
 #### Gource Settings
 

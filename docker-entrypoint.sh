@@ -12,6 +12,15 @@ if [[ ! -d  "${DIR}" ]]; then DIR="${PWD}"; fi
 # Print Banner
 print_intro
 
+
+# Check runtime mode.
+echo 0 > /visualization/html/LIVE_PREVIEW_STATE
+if [ "${ENABLE_LIVE_PREVIEW}" = "true" ]; then
+	export LIVE_PREVIEW=1
+	echo 1 > /visualization/html/LIVE_PREVIEW_STATE
+fi
+
+
 # Start Xvfb
 log_notice "Starting Xvfb..."
 Xvfb :99 -ac -screen 0 $XVFB_WHD -nocursor -noreset -nolisten tcp &
@@ -157,19 +166,6 @@ if [ -f /visualization/logo.image ]; then
 	set +e
 	log_success "Success. Using logo file"
 	export LOGO=" -i ./logo_txfrmed.image "
-	if [[ "${TEMPLATE}" == "border" ]]; then
-		export LOGO_FILTER_GRAPH=";[with_date][2:v]overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
-		export FILTER_GRAPH_MAP=" -map [with_logo] "
-	else
-		export LOGO_FILTER_GRAPH="[1:v]overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
-		export FILTER_GRAPH_MAP=" -map [with_logo] "
-	fi
-else
-	if [[ "${TEMPLATE}" == "border" ]]; then
-		export FILTER_GRAPH_MAP=" -map [with_date] "
-	else
-		export FILTER_GRAPH_MAP=""
-	fi
 fi
 
 # Start the httpd to serve the video.
