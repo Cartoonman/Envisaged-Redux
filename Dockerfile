@@ -8,15 +8,15 @@
 FROM alpine:3.10 as gource-nightly-builder
 
 RUN apk add --update --no-cache --virtual .build-deps alpine-sdk git sdl2-dev sdl2_image-dev pcre-dev freetype-dev glew-dev glm-dev boost-dev libpng-dev tinyxml-dev autoconf automake \
-&& git clone https://github.com/acaudwell/Gource.git \
-&& cd Gource \
-&& ./autogen.sh \
-&& ./configure \
-&& make -j`nproc` \
-&& make install \
-&& cd / \
-&& rm -rf Gource \
-&& apk del .build-deps
+    && git clone https://github.com/acaudwell/Gource.git \
+    && cd Gource \
+    && ./autogen.sh \
+    && ./configure \
+    && make -j`nproc` \
+    && make install \
+    && cd / \
+    && rm -rf Gource \
+    && apk del .build-deps
 
 
 FROM utensils/opengl:stable
@@ -54,13 +54,13 @@ WORKDIR /visualization
 ARG VCS_REF
 ARG BUILD_DATE
 LABEL maintainer="Carl Colena, carl.colena@gmail.com" \
-      org.label-schema.build-date="${BUILD_DATE}" \
-      org.label-schema.decription="Envisaged Redux - Dockerized Gource Visualizations, Reborn" \
-      org.label-schema.name="Envisaged Redux" \
-      org.label-schema.schema-version="0.1.0" \
-      org.label-schema.vcs-ref="${VCS_REF}" \
-      org.label-schema.vcs-url="https://github.com/Cartoonman/Envisaged-Redux" \
-      org.label-schema.version="0.1.4"
+    org.label-schema.build-date="${BUILD_DATE}" \
+    org.label-schema.decription="Envisaged Redux - Dockerized Gource Visualizations, Reborn" \
+    org.label-schema.name="Envisaged Redux" \
+    org.label-schema.schema-version="0.1.0" \
+    org.label-schema.vcs-ref="${VCS_REF}" \
+    org.label-schema.vcs-url="https://github.com/Cartoonman/Envisaged-Redux" \
+    org.label-schema.version="0.1.4"
 
 # Set our default environment variables.
 
@@ -107,10 +107,6 @@ ENV H265_PRESET="medium" \
     GOURCE_FILE_EXT_FALLBACK="false" \
     ENABLE_LIVE_PREVIEW="false" \
     PREVIEW_SLOWDOWN_FACTOR="2"
-
-
-
-
 
 # Expose port 80 to serve mp4 video over HTTP
 EXPOSE 80

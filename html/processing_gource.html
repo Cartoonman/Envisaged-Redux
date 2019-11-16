@@ -1,53 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<!--
+  <!--
 Copyright (c) 2019 Carl Colena
 Copyright (c) 2019 Utensils Union
 
 SPDX-License-Identifier: MIT
 -->
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="refresh" content="10">
-  <title>Envisaged-Redux</title>
-  <style>
-  html, body {
-  width:  100%;
-  height: 100%;
-  margin: 0;
-}</style>
-<script>
-    async function checkLivePreviewState()
-    {
-      const response = await fetch("/LIVE_PREVIEW_STATE");
-      const result = await response.json();
-      parsePreviewStateResult(result);
-    }
-
-    function parsePreviewStateResult(result)
-    {
-      if (result === 1)
-      {
-        let e = document.getElementById('preview');
-        e.innerHTML = '<a href="preview.html" target="_blank" rel="noopener noreferrer">Click here for Live Preivew.</a>';
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="10" />
+    <title>Envisaged-Redux</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
       }
-    }
+    </style>
+    <script>
+      async function checkLivePreviewState() {
+        const response = await fetch("/LIVE_PREVIEW_STATE");
+        const result = await response.json();
+        parsePreviewStateResult(result);
+      }
+
+      function parsePreviewStateResult(result) {
+        if (result === 1) {
+          let e = document.getElementById("preview");
+          e.innerHTML =
+            '<a href="preview.html" target="_blank" rel="noopener noreferrer">Click here for Live Preivew.</a>';
+        }
+      }
     </script>
-</head>
+  </head>
 
-<body onload="checkLivePreviewState()">
-  <div>
-    <h1>Envisaged-Redux</h1>
-    <p>
-      Your Gource visualization is still running. <br /> This page will be updated when the process is completed.
-    </p>
-    <p>
-      This page will automatically refresh every 10 seconds.
-    </p>
-    <div id="preview">
-
+  <body onload="checkLivePreviewState()">
+    <div>
+      <h1>Envisaged-Redux</h1>
+      <p>
+        Your Gource visualization is still running. <br />
+        This page will be updated when the process is completed.
+      </p>
+      <p>
+        This page will automatically refresh every 10 seconds.
+      </p>
+      <div id="preview"></div>
     </div>
-  </div>
-</body>
-
+  </body>
 </html>

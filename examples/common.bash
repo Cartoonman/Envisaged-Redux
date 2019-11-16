@@ -4,7 +4,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-function print_help 
+function print_help
 {
     echo "Args:"
     echo "  --git-repo-dir [absolute/path/to/repo(s)_dir]       Required"
@@ -27,40 +27,40 @@ function print_help
 }
 
 
-function parse_args 
+function parse_args
 {
     ARGS=""
     while [[ $# -gt 0 ]]; do
         k="$1"
 
-        case $k in 
+        case $k in
             --git-repo-dir)
                 GIT_REPO_DIR=$2
                 shift
-            ;;
+                ;;
             --caption-file)
                 CAPTION_URI="--mount type=bind,source=$2,target=/visualization/captions.txt,readonly"
                 shift
-            ;;
+                ;;
             --avatars-dir)
                 AVATARS_URI="--mount type=bind,source=$2,target=/visualization/avatars,readonly"
                 shift
-            ;;
+                ;;
             --logo-file)
                 LOGO_URI="--mount type=bind,source=$2,target=/visualization/logo.image,readonly"
                 shift
-            ;;
+                ;;
             -h)
                 print_help
                 exit 1
-            ;;
+                ;;
             --help)
                 print_help
                 exit 1
-            ;;
+                ;;
             *)
                 ARGS="${ARGS} $1"
-            ;;
+                ;;
         esac
         shift
     done
