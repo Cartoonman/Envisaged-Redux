@@ -1,0 +1,186 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+- This Changelog
+
+
+## [0.9.1] - 2019-11-15
+
+### Updated
+
+- Reformatted and linted all shell scripts, html files, and Dockerfile.
+
+## [0.9.0] - 2019-11-15
+
+### Added
+
+- Live Preview with PREVIEW_SLOWDOWN_FACTOR option.
+
+### Removed
+
+- GOURCE_FILTER and GLOBAL_FILTER input variables.
+
+### Updated
+
+- Reworked ffmpeg filter chains for both runtime templates.
+- Documentation updated for Live Preview
+
+### Fixed
+
+- Patched edge condition trying to use an unsupported or invalid video resolution.
+
+## [0.8.0] - 2019-11-13
+
+### Added
+
+- highlight-all-users, bloom-multiplier, bloom-intensity, and general font-size added.
+
+### Updated
+
+- Intro banner minor update.
+- Non-template runtime now updated in parity with border template.
+- Documentation Environment variable table refactored.
+
+## [0.7.0] - 2019-11-09
+
+### Added
+
+- Nightly Gource option, with nightly option file-ext-fallback.
+- org.label-schema labels added back in with updated fields.
+- Intro banner
+
+### Updated
+
+- Bash scripts now use common.bash for common functions for scalability and ease of maintenance.
+- Reworked logging to use common functions for improved cleanliness.
+
+### Fixed
+
+- Xvfb race condition handling now deterministic with wait loop. Significantly faster start times observed.
+- Entrypoint sometimes being superseded by old embedded entrypoint, so explicit entrypoint was defined.
+- End notice now checks if a video file was saved before declaring if visualization process completed successfully.
+
+## [0.6.0] - 2019-11-07
+
+### Added
+
+- Recursive submodule support for multi-repo use case.
+- Documentation for Docker Runtime Args (mounts).
+- Documentation for troubleshooting image conversion problems when using logo feature.
+- Color tagged output logging.
+- Hard checks on gource custom log parsing.
+- Example scripts support args for avatars, and logo-file.
+
+### Removed
+
+- LOGO_URL variable. Logos are local-only for now.
+
+### Updated
+
+- Logo and avatar support updated to be in-line with methodology used by captions.
+- Example scripts's help output updated.
+
+### Fixed
+
+- -it added to example scripts to fix terminal handling.
+- Recursive submodule bug not handling nested submodules correctly; using $displaypath instead of $path fixes this.
+
+## [0.5.0] - 2019-11-02
+
+### Added
+
+- MIT License SPDX format propagated to src files
+- Recursive submodule support
+- Link back to original Envisaged repo in Readme
+
+### Removed
+
+- Reverted back to using utencils/opengl as base image for now to make things simpler.
+- Old usage examples that are no longer applicable in Readme.
+
+### Updated
+
+- MIT License updated with copyrights
+- Backticks removed from Readme table to make it easier to read.
+
+## [0.4.0] - 2019-10-13
+
+### Added
+
+- Multi-repository support (single level, non-recursive multirepo)
+- Variadic argument support for example launch scripts.
+- Help function for example scripts.
+
+### Removed
+
+- Title input argument in example launch scripts (Variadic args supersedes this).
+
+### Updated
+
+- Example scripts given variadic argument support
+
+## [0.3.1] - 2019-10-13
+
+### Removed
+
+- Build script.
+
+### Fixed
+
+- Documentation to reflect 480p resolution addition.
+- Documentation to clarify hide args for border template.
+- preview.sh's default video resolution.
+
+## [0.3.0] - 2019-10-13
+
+### Added
+
+- 480p resolution support.
+- Pulled in the opengl docker image into Dockerfile for a pure build.
+- Support for captions, along with caption-size, caption-colour, and caption-duration.
+- Added multisampling on by default.
+- Example launch scripts.
+- start-date, stop-date, start-position, stop-position, and stop-at-time options.
+- auto-skip-seconds, file-idle-time, max-files, max-file-lag, and padding options.
+
+### Removed
+
+- Bootstrap and jquery dependencies, and cleaned up html files to be bare.
+
+### Updated
+
+- Documentation.
+- FPS as a variable configurable by user to 25, 30, or 60 FPS.
+- Font size and color variables for border template.
+
+## [0.2.0] - 2019-10-10
+
+### Updated
+
+- Documentation to reflect relationship with original [Envisaged].
+- Replaced H.264 with H.265/HEVC in ffmpeg render steps
+- Documentation to reflect H.265 support.
+
+## [0.1.0] - 2019-10-10
+
+Initial fork from [Envisaged].
+
+[unreleased]: https://github.com/cartoonman/envisaged-redux/compare/v9.0.1...HEAD
+[0.9.1]: https://github.com/cartoonman/envisaged-redux/compare/v0.9.0...v0.9.1
+[0.9.0]: https://github.com/cartoonman/envisaged-redux/compare/v0.8.0...v0.9.0
+[0.8.0]: https://github.com/cartoonman/envisaged-redux/compare/v0.7.0...v0.8.0
+[0.7.0]: https://github.com/cartoonman/envisaged-redux/compare/v0.6.0...v0.7.0
+[0.6.0]: https://github.com/cartoonman/envisaged-redux/compare/v0.5.0...v0.6.0
+[0.5.0]: https://github.com/cartoonman/envisaged-redux/compare/v0.4.0...v0.5.0
+[0.4.0]: https://github.com/cartoonman/envisaged-redux/compare/v0.3.1...v0.4.0
+[0.3.1]: https://github.com/cartoonman/envisaged-redux/compare/v0.3.0...v0.3.1
+[0.3.0]: https://github.com/cartoonman/envisaged-redux/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/cartoonman/envisaged-redux/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/cartoonman/envisaged-redux/releases/tag/v0.1.0
