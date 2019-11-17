@@ -8,8 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - This Changelog
 
+### Updated
+
+- Updated tags in example scripts to use correct image name.
+
+### Fixed
+
+- Various typos throughout the project.
 
 ## [0.9.1] - 2019-11-15
 
@@ -172,15 +180,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial fork from [Envisaged].
 
-[unreleased]: https://github.com/cartoonman/envisaged-redux/compare/v9.0.1...HEAD
-[0.9.1]: https://github.com/cartoonman/envisaged-redux/compare/v0.9.0...v0.9.1
-[0.9.0]: https://github.com/cartoonman/envisaged-redux/compare/v0.8.0...v0.9.0
-[0.8.0]: https://github.com/cartoonman/envisaged-redux/compare/v0.7.0...v0.8.0
-[0.7.0]: https://github.com/cartoonman/envisaged-redux/compare/v0.6.0...v0.7.0
-[0.6.0]: https://github.com/cartoonman/envisaged-redux/compare/v0.5.0...v0.6.0
-[0.5.0]: https://github.com/cartoonman/envisaged-redux/compare/v0.4.0...v0.5.0
-[0.4.0]: https://github.com/cartoonman/envisaged-redux/compare/v0.3.1...v0.4.0
-[0.3.1]: https://github.com/cartoonman/envisaged-redux/compare/v0.3.0...v0.3.1
-[0.3.0]: https://github.com/cartoonman/envisaged-redux/compare/v0.2.0...v0.3.0
-[0.2.0]: https://github.com/cartoonman/envisaged-redux/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/cartoonman/envisaged-redux/releases/tag/v0.1.0
+[unreleased]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v9.0.1...master
+[0.9.1]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.9.0...v0.9.1
+[0.9.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.8.0...v0.9.0
+[0.8.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.7.0...v0.8.0
+[0.7.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.6.0...v0.7.0
+[0.6.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.5.0...v0.6.0
+[0.5.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.4.0...v0.5.0
+[0.4.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.3.1...v0.4.0
+[0.3.1]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.3.0...v0.3.1
+[0.3.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.2.0...v0.3.0
+[0.2.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.1.0...v0.2.0
+[0.1.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/-/releases#v0.1.0
+[envisaged]: https://github.com/utensils/Envisaged

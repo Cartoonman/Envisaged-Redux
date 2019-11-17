@@ -7,7 +7,7 @@ Built on top of Alpine 3.10. **No GPU is required**, this will run on any machin
 ## About
 
 Painless data visualizations from git history showing a repositories development progression over time.
-This container combines the awesome [Gource][gource] program with the power of [FFmpeg][ffmpeg_home] and the H.265 codec to bring you high resolution (up to 4k at 60fps) video visualizations.
+This container combines the awesome [Gource][gource] program with the power of [FFmpeg][ffmpeg_home] and the H.265/HEVC codec to bring you high resolution (up to 4k at 60fps) video visualizations.
 
 This container is 100% headless, it does this by leveraging [Xvfb][xvfb] combined with the [Mesa 3d Gallium llvmpipe Driver][mesa]. Unlike other docker containers with Gource, this container does not eat up 100's of gigabytes of disk space, nor does it require an actual GPU to run. The process runs the Gource simulation concurrently with the FFmpeg encoding process using a set of named pipes. There is a slight trade off in performance, but this makes it very easy to run in any environment such as AWS, without the need to provision large amounts of storage or run any cleanup.
 

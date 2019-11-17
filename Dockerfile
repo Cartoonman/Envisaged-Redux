@@ -57,10 +57,11 @@ LABEL maintainer="Carl Colena, carl.colena@gmail.com" \
     org.label-schema.build-date="${BUILD_DATE}" \
     org.label-schema.decription="Envisaged Redux - Dockerized Gource Visualizations, Reborn" \
     org.label-schema.name="Envisaged Redux" \
-    org.label-schema.schema-version="0.1.0" \
+    org.label-schema.schema-version="1.0" \
     org.label-schema.vcs-ref="${VCS_REF}" \
     org.label-schema.vcs-url="https://github.com/Cartoonman/Envisaged-Redux" \
-    org.label-schema.version="0.1.4"
+    org.label-schema.vendor="Carl Colena" \
+    org.label-schema.version="0.9.2"
 
 # Set our default environment variables.
 

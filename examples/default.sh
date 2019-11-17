@@ -23,4 +23,4 @@ docker run --rm -i -t \
     ${AVATARS_URI} \
     ${LOGO_URI} \
     $ARGS \
-    envisaged-redux:latest
+    cartoonman/envisaged-redux:latest

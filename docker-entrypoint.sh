@@ -14,10 +14,10 @@ print_intro
 
 
 # Check runtime mode.
-echo 0 > /visualization/html/LIVE_PREVIEW_STATE
+echo 0 > /visualization/html/live_preview
 if [ "${ENABLE_LIVE_PREVIEW}" = "true" ]; then
     export LIVE_PREVIEW=1
-    echo 1 > /visualization/html/LIVE_PREVIEW_STATE
+    echo 1 > /visualization/html/live_preview
 fi
 
 
