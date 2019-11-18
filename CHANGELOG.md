@@ -10,14 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - This Changelog
+- Local output support (saving output.mp4 to a local directory via mount)
 
 ### Updated
 
 - Updated tags in example scripts to use correct image name.
+- Documentation
 
 ### Fixed
 
 - Various typos throughout the project.
+- GOURCE_HIDE_ITEMS_ARG was not properly checked in no-template runtime. This is now fixed.
 
 ## [0.9.1] - 2019-11-15
 
