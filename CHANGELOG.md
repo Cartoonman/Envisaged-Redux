@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Various typos throughout the project.
+- GOURCE_HIDE_ITEMS_ARG was not properly checked in no-template runtime. This is now fixed.
 
 ## [0.9.1] - 2019-11-15
 

@@ -107,7 +107,7 @@ fi
 
 # Check hide items and apply
 if [ "${GOURCE_HIDE_ITEMS}" !=  "" ]; then
-    GOURCE_HIDE_ITEMS_ARG = "--hide ${GOURCE_HIDE_ITEMS}"
+    GOURCE_HIDE_ITEMS_ARG="--hide ${GOURCE_HIDE_ITEMS}"
 fi
 
 

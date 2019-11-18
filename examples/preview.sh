@@ -19,6 +19,7 @@ docker run --rm -i -t \
     -p 8080:80 \
     --name envisaged-redux \
     -v ${GIT_REPO_DIR}:/visualization/git_repo:ro \
+    ${LOCAL_OUTPUT_URI} \
     ${CAPTION_URI} \
     ${AVATARS_URI} \
     ${LOGO_URI} \
@@ -31,5 +32,5 @@ docker run --rm -i -t \
     -e GOURCE_DATE_FONT_SIZE="35" \
     -e GOURCE_TITLE_FONT_SIZE="25" \
     -e GOURCE_PADDING="1.5" \
-    $ARGS \
+    ${ARGS} \
     cartoonman/envisaged-redux:latest

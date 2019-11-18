@@ -22,6 +22,10 @@ function print_help
     echo "  --logo-file    [absolute/path/to/logo_image]        Optional"
     echo "          A logo image file to be rendered in the video."
     echo ""
+    echo "  --output-dir   [path/to/dir]                        Optional"
+    echo "          If given, the video will be saved into this directory "
+    echo "          instead of avaliable for download through web server."
+    echo ""
     echo "  Other args will be passed through to docker run command.    "
     echo "          e.g. -e H265_CRF=\"0\" "
 }
@@ -48,6 +52,10 @@ function parse_args
                 ;;
             --logo-file)
                 LOGO_URI="--mount type=bind,source=$2,target=/visualization/logo.image,readonly"
+                shift
+                ;;
+            --output-dir)
+                LOCAL_OUTPUT_URI="--mount type=bind,source=$2,target=/visualization/video"
                 shift
                 ;;
             -h)

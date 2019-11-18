@@ -20,6 +20,12 @@ if [ "${ENABLE_LIVE_PREVIEW}" = "true" ]; then
     echo 1 > /visualization/html/live_preview
 fi
 
+# Check for video saving mode
+if [ -d /visualization/video ]; then
+    export USE_LOCAL_OUTPUT=1
+else
+    mkdir -p /visualization/video
+fi
 
 # Start Xvfb
 log_notice "Starting Xvfb..."
@@ -189,10 +195,14 @@ else
     log_error "Visualization process failed."
 fi
 
-# Wait for httpd process to end.
-while kill -0 $httpd_pid >/dev/null 2>&1; do
-    wait
-done
+if [ ! "${USE_LOCAL_OUTPUT}" = "1" ]; then
+    # Wait for httpd process to end.
+    while kill -0 $httpd_pid >/dev/null 2>&1; do
+        wait
+    done
+else
+    chmod 666 /visualization/video/output.mp4
+fi
 
 # Exit
 echo "Exiting"

@@ -38,7 +38,6 @@ RUN set -xe; \
         findutils \
         curl \
         wget; \
-    mkdir -p /visualization/video; \
     mkdir -p /visualization/html; \
     curl -L https://github.com/video-dev/hls.js/releases/download/v0.12.4/hls.light.min.js > /visualization/html/hls.light.min.js; \
     curl -L https://github.com/video-dev/hls.js/releases/download/v0.12.4/hls.light.min.js.map > /visualization/html/hls.light.min.js.map;

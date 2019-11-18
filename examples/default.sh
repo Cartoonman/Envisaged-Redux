@@ -19,8 +19,9 @@ docker run --rm -i -t \
     -p 8080:80 \
     --name envisaged-redux \
     -v ${GIT_REPO_DIR}:/visualization/git_repo:ro \
+    ${LOCAL_OUTPUT_URI} \
     ${CAPTION_URI} \
     ${AVATARS_URI} \
     ${LOGO_URI} \
-    $ARGS \
+    ${ARGS} \
     cartoonman/envisaged-redux:latest
