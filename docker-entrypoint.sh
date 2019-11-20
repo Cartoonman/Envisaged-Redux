@@ -15,7 +15,7 @@ print_intro
 
 # Check runtime mode.
 echo 0 > /visualization/html/live_preview
-if [ "${ENABLE_LIVE_PREVIEW}" = "true" ]; then
+if [ "${ENABLE_LIVE_PREVIEW}" = "1" ]; then
     export LIVE_PREVIEW=1
     echo 1 > /visualization/html/live_preview
 fi
@@ -44,7 +44,7 @@ fi
 log_success "Xvfb started successfully."
 
 # Check which gource release is chosen
-if [ "${USE_GOURCE_NIGHTLY}" = "true" ]; then
+if [ "${USE_GOURCE_NIGHTLY}" = "1" ]; then
     export GOURCE_EXEC='gource_nightly'
     log_warn "Using `${GOURCE_EXEC} -h | head -n 1` Nightly Release"
     export USE_NIGHTLY=1
@@ -74,7 +74,7 @@ if [ ! -d /visualization/git_repo/.git ]; then
             log_warn "/visualization/git_repo/${DIRECTORY} is not a git repo, skipping..."
             continue
         fi
-        if [ "${RECURSE_SUBMODULES}" = "true" ]; then
+        if [ "${RECURSE_SUBMODULES}" = "1" ]; then
             log_info "Recursing through submodules in ${DIRECTORY}"
             SUBMOD_PATHS=()
             cd /visualization/git_repo/${DIRECTORY} && git submodule foreach --recursive '( echo "SUBMOD_PATHS+=($displaypath)" >> /visualization/submods.bash )'
@@ -116,7 +116,7 @@ else
     # Assume this is a single-repo setup
     log_info "Detected single-repo input."
     S_COUNT=0
-    if [ "${RECURSE_SUBMODULES}" = "true" ]; then
+    if [ "${RECURSE_SUBMODULES}" = "1" ]; then
         log_info "Recursing through submodules."
         SUBMOD_PATHS=()
         cd /visualization/git_repo && git submodule foreach --recursive '( echo "SUBMOD_PATHS+=($displaypath)" >> /visualization/submods.bash )'
@@ -181,9 +181,14 @@ httpd_pid="$!"
 trap "echo 'Stopping proccesses PIDs: ($xvfb_pid, $http_pid)'; kill -SIGTERM $xvfb_pid $httpd_pid" SIGINT SIGTERM
 
 # Run the visualization
-if [[ "${TEMPLATE}" == "border" ]]; then
-    log_info "Using border template..."
-    /visualization/border_template.sh
+if [ -n "${TEMPLATE}" ]; then
+    if [ "${TEMPLATE}" = "border" ]; then
+        log_info "Using border template..."
+        /visualization/border_template.sh
+    else
+        log_error "Unknown template option ${TEMPLATE}"
+        exit 1
+    fi
 else
     log_info "Using no template..."
     /visualization/no_template.sh

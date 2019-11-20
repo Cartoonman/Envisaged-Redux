@@ -11,11 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - This Changelog
 - Local output support (saving output.mp4 to a local directory via mount)
+- Multi-sampling and key Gource options.
+- Font color Gource option.
 
 ### Updated
 
 - Updated tags in example scripts to use correct image name.
 - Documentation
+- Significant refactor work on Gource and ffmpeg arg parsing. 
+- Refactored border template specific variables
 
 ### Fixed
 
