@@ -5,9 +5,8 @@
 #
 # SPDX-License-Identifier: MIT
 
-DIR="${BASH_SRC%/*}"
-if [[ ! -d  "$DIR" ]]; then DIR="$PWD"; fi
-. "$DIR/common.bash"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+. "${DIR}/../common/common.bash"
 
 # Predefined resolutions and settings.
 if [[ "${VIDEO_RESOLUTION}" == "2160p" ]]; then

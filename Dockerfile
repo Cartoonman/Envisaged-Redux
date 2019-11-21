@@ -44,7 +44,9 @@ RUN set -xe; \
 
 
 # Copy our assets
-COPY . /visualization/
+COPY html /visualization/html
+COPY runtime /visualization/runtime
+COPY LICENSE /visualization/LICENSE
 
 WORKDIR /visualization
 
@@ -58,12 +60,11 @@ LABEL maintainer="Carl Colena, carl.colena@gmail.com" \
     org.label-schema.name="Envisaged Redux" \
     org.label-schema.schema-version="1.0" \
     org.label-schema.vcs-ref="${VCS_REF}" \
-    org.label-schema.vcs-url="https://github.com/Cartoonman/Envisaged-Redux" \
+    org.label-schema.vcs-url="https://gitlab.com/Cartoonman/Envisaged-Redux" \
     org.label-schema.vendor="Carl Colena" \
-    org.label-schema.version="0.9.2"
+    org.label-schema.version="0.10.0"
 
 # Set our default environment variables.
-
 ENV H265_PRESET="medium" \
     H265_CRF="21" \
     VIDEO_RESOLUTION="1080p" \
@@ -72,4 +73,6 @@ ENV H265_PRESET="medium" \
 # Expose port 80 to serve mp4 video over HTTP
 EXPOSE 80
 
-ENTRYPOINT ["/visualization/docker-entrypoint.sh"]
+SHELL ["/bin/bash", "-c"]
+
+ENTRYPOINT ["/visualization/runtime/entrypoint.sh"]

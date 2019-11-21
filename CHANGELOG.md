@@ -17,14 +17,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Updated tags in example scripts to use correct image name.
-- Documentation
+- Documentation.
 - Significant refactor work on Gource and ffmpeg arg parsing. 
-- Refactored border template specific variables
+- Refactored border template specific variables.
+- Updated VCS repo to point to Gitlab in Docker Label.
 
 ### Fixed
 
 - Various typos throughout the project.
 - GOURCE_HIDE_ITEMS_ARG was not properly checked in no-template runtime. This is now fixed.
+- Fixed inconsistent DIR path discovery to get current script DIR path for common imports.
 
 ## [0.9.1] - 2019-11-15
 

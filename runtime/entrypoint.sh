@@ -5,9 +5,8 @@
 #
 # SPDX-License-Identifier: MIT
 
-DIR="${BASH_SRC%/*}"
-if [[ ! -d  "${DIR}" ]]; then DIR="${PWD}"; fi
-. "${DIR}/common.bash"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+. "${DIR}/common/common.bash"
 
 # Print Banner
 print_intro
@@ -171,12 +170,12 @@ if [ -f /visualization/logo.image ]; then
     convert -geometry x160 /visualization/logo.image /visualization/logo_txfrmed.image
     set +e
     log_success "Success. Using logo file"
-    export LOGO=" -i ./logo_txfrmed.image "
+    export LOGO=" -i /visualization/logo_txfrmed.image "
 fi
 
 # Start the httpd to serve the video.
 cp /visualization/html/processing_gource.html /visualization/html/index.html
-lighttpd -f http.conf -D &
+lighttpd -f /visualization/runtime/http.conf -D &
 httpd_pid="$!"
 trap "echo 'Stopping proccesses PIDs: ($xvfb_pid, $http_pid)'; kill -SIGTERM $xvfb_pid $httpd_pid" SIGINT SIGTERM
 
@@ -184,14 +183,14 @@ trap "echo 'Stopping proccesses PIDs: ($xvfb_pid, $http_pid)'; kill -SIGTERM $xv
 if [ -n "${TEMPLATE}" ]; then
     if [ "${TEMPLATE}" = "border" ]; then
         log_info "Using border template..."
-        /visualization/border_template.sh
+        /visualization/runtime/templates/border_template.sh
     else
         log_error "Unknown template option ${TEMPLATE}"
         exit 1
     fi
 else
     log_info "Using no template..."
-    /visualization/no_template.sh
+    /visualization/runtime/templates/no_template.sh
 fi
 
 if [ -f /visualization/video/output.mp4 ]; then
