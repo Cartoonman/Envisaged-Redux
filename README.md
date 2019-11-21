@@ -1,4 +1,4 @@
-# Envisaged-Redux - Dockerized Gource Visualizations
+# Envisaged-Redux - Dockerized Gource Visualizations, Reborn
 
 A fork of James Brink's excellent [Envisaged][envisaged] docker container.
 
