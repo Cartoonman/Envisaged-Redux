@@ -1,21 +1,30 @@
 #!/bin/bash
 
+# Envisaged Redux
 # Copyright (c) 2019 Carl Colena
 # Copyright (c) 2019 Utensils Union
 #
 # SPDX-License-Identifier: MIT
 
-DIR="${BASH_SRC%/*}"
-if [[ ! -d  "${DIR}" ]]; then DIR="${PWD}"; fi
-. "${DIR}/common.bash"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+. "${DIR}/common/common.bash"
 
 # Print Banner
 print_intro
 
 
+
+# If this is a test, hang and wait.
+if [[ $# -eq 1 ]] && [ "$1" = "TEST" ]; then
+    log_info "Test mode enabled. Spinning main thread. Run docker stop on container when complete."
+    trap 'exit 143' SIGTERM # exit = 128 + 15 (SIGTERM)
+    tail -f /dev/null & wait ${!}
+    exit 0
+fi
+
 # Check runtime mode.
 echo 0 > /visualization/html/live_preview
-if [ "${ENABLE_LIVE_PREVIEW}" = "true" ]; then
+if [ "${ENABLE_LIVE_PREVIEW}" = "1" ]; then
     export LIVE_PREVIEW=1
     echo 1 > /visualization/html/live_preview
 fi
@@ -44,7 +53,7 @@ fi
 log_success "Xvfb started successfully."
 
 # Check which gource release is chosen
-if [ "${USE_GOURCE_NIGHTLY}" = "true" ]; then
+if [ "${USE_GOURCE_NIGHTLY}" = "1" ]; then
     export GOURCE_EXEC='gource_nightly'
     log_warn "Using `${GOURCE_EXEC} -h | head -n 1` Nightly Release"
     export USE_NIGHTLY=1
@@ -74,7 +83,7 @@ if [ ! -d /visualization/git_repo/.git ]; then
             log_warn "/visualization/git_repo/${DIRECTORY} is not a git repo, skipping..."
             continue
         fi
-        if [ "${RECURSE_SUBMODULES}" = "true" ]; then
+        if [ "${RECURSE_SUBMODULES}" = "1" ]; then
             log_info "Recursing through submodules in ${DIRECTORY}"
             SUBMOD_PATHS=()
             cd /visualization/git_repo/${DIRECTORY} && git submodule foreach --recursive '( echo "SUBMOD_PATHS+=($displaypath)" >> /visualization/submods.bash )'
@@ -116,7 +125,7 @@ else
     # Assume this is a single-repo setup
     log_info "Detected single-repo input."
     S_COUNT=0
-    if [ "${RECURSE_SUBMODULES}" = "true" ]; then
+    if [ "${RECURSE_SUBMODULES}" = "1" ]; then
         log_info "Recursing through submodules."
         SUBMOD_PATHS=()
         cd /visualization/git_repo && git submodule foreach --recursive '( echo "SUBMOD_PATHS+=($displaypath)" >> /visualization/submods.bash )'
@@ -171,22 +180,27 @@ if [ -f /visualization/logo.image ]; then
     convert -geometry x160 /visualization/logo.image /visualization/logo_txfrmed.image
     set +e
     log_success "Success. Using logo file"
-    export LOGO=" -i ./logo_txfrmed.image "
+    export LOGO=" -i /visualization/logo_txfrmed.image "
 fi
 
 # Start the httpd to serve the video.
 cp /visualization/html/processing_gource.html /visualization/html/index.html
-lighttpd -f http.conf -D &
+lighttpd -f /visualization/runtime/http.conf -D &
 httpd_pid="$!"
 trap "echo 'Stopping proccesses PIDs: ($xvfb_pid, $http_pid)'; kill -SIGTERM $xvfb_pid $httpd_pid" SIGINT SIGTERM
 
 # Run the visualization
-if [[ "${TEMPLATE}" == "border" ]]; then
-    log_info "Using border template..."
-    /visualization/border_template.sh
+if [ -n "${TEMPLATE}" ]; then
+    if [ "${TEMPLATE}" = "border" ]; then
+        log_info "Using border template..."
+        /visualization/runtime/templates/border_template.sh
+    else
+        log_error "Unknown template option ${TEMPLATE}"
+        exit 1
+    fi
 else
     log_info "Using no template..."
-    /visualization/no_template.sh
+    /visualization/runtime/templates/no_template.sh
 fi
 
 if [ -f /visualization/video/output.mp4 ]; then

@@ -1,5 +1,4 @@
-# Envisaged - Dockerized Gource Visualizations
-
+# Envisaged Redux
 # Copyright (c) 2019 Carl Colena
 # Copyright (c) 2019 Utensils Union
 #
@@ -44,7 +43,9 @@ RUN set -xe; \
 
 
 # Copy our assets
-COPY . /visualization/
+COPY html /visualization/html
+COPY runtime /visualization/runtime
+COPY LICENSE /visualization/LICENSE
 
 WORKDIR /visualization
 
@@ -58,57 +59,19 @@ LABEL maintainer="Carl Colena, carl.colena@gmail.com" \
     org.label-schema.name="Envisaged Redux" \
     org.label-schema.schema-version="1.0" \
     org.label-schema.vcs-ref="${VCS_REF}" \
-    org.label-schema.vcs-url="https://github.com/Cartoonman/Envisaged-Redux" \
+    org.label-schema.vcs-url="https://gitlab.com/Cartoonman/Envisaged-Redux" \
     org.label-schema.vendor="Carl Colena" \
-    org.label-schema.version="0.9.2"
+    org.label-schema.version="0.10.0"
 
 # Set our default environment variables.
-
 ENV H265_PRESET="medium" \
     H265_CRF="21" \
     VIDEO_RESOLUTION="1080p" \
-    FPS="60" \
-    TEMPLATE="border" \
-    RECURSE_SUBMODULES="0" \
-    GOURCE_TITLE="Software Development" \
-    GOURCE_DATE_FONT_COLOR="FFFFFF" \
-    GOURCE_TITLE_TEXT_COLOR="FFFFFF" \
-    GOURCE_CAMERA_MODE="overview" \
-    GOURCE_SECONDS_PER_DAY="0.1" \
-    GOURCE_TIME_SCALE="1.0" \
-    GOURCE_USER_SCALE="1.0" \
-    GOURCE_HIGHLIGHT_ALL_USERS="true" \
-    GOURCE_AUTO_SKIP_SECONDS="3.0" \
-    GOURCE_BACKGROUND_COLOR="000000" \
-    GOURCE_BLOOM_MULTIPLIER="1.2" \
-    GOURCE_BLOOM_INTENSITY="0.75" \
-    GOURCE_HIDE_ITEMS="mouse,date,filenames" \
-    GOURCE_FILE_IDLE_TIME="0" \
-    GOURCE_MAX_FILES="0" \
-    GOURCE_MAX_FILE_LAG="5.0" \
-    GOURCE_FONT_SIZE="48" \
-    GOURCE_TITLE_FONT_SIZE="48" \
-    GOURCE_DATE_FONT_SIZE="60" \
-    GOURCE_DIR_DEPTH="3" \
-    GOURCE_FILENAME_TIME="2" \
-    GOURCE_MAX_USER_SPEED="500" \
-    INVERT_COLORS="false" \
-    GOURCE_DATE_FORMAT="%m/%d/%Y %H:%M:%S" \
-    GOURCE_START_DATE="" \
-    GOURCE_STOP_DATE="" \
-    GOURCE_START_POSITION="" \
-    GOURCE_STOP_POSITION="" \
-    GOURCE_STOP_AT_TIME="" \
-    GOURCE_PADDING="1.1" \
-    GOURCE_CAPTION_SIZE="48" \
-    GOURCE_CAPTION_COLOR="FFFFFF" \
-    GOURCE_CAPTION_DURATION="5.0" \
-    USE_GOURCE_NIGHTLY="false" \
-    GOURCE_FILE_EXT_FALLBACK="false" \
-    ENABLE_LIVE_PREVIEW="false" \
-    PREVIEW_SLOWDOWN_FACTOR="2"
+    FPS="60" 
 
 # Expose port 80 to serve mp4 video over HTTP
 EXPOSE 80
 
-ENTRYPOINT ["/visualization/docker-entrypoint.sh"]
+SHELL ["/bin/bash", "-c"]
+
+ENTRYPOINT ["/visualization/runtime/entrypoint.sh"]
