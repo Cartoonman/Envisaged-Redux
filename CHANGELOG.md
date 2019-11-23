@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Local output support (saving output.mp4 to a local directory via mount)
 - Multi-sampling and key Gource options.
 - Font color Gource option.
+- Hook for testing
 
 ### Updated
 
@@ -21,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Significant refactor work on Gource and ffmpeg arg parsing. 
 - Refactored border template specific variables.
 - Updated VCS repo to point to Gitlab in Docker Label.
+- Logger output now has labels.
 
 ### Fixed
 
