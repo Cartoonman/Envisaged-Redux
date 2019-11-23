@@ -13,6 +13,15 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 print_intro
 
 
+
+# If this is a test, hang and wait.
+if [[ $# -eq 1 ]] && [ "$1" = "TEST" ]; then
+    log_info "Test mode enabled. Spinning main thread. Run docker stop on container when complete."
+    trap 'exit 143' SIGTERM # exit = 128 + 15 (SIGTERM)
+    tail -f /dev/null & wait ${!}
+    exit 0
+fi
+
 # Check runtime mode.
 echo 0 > /visualization/html/live_preview
 if [ "${ENABLE_LIVE_PREVIEW}" = "1" ]; then

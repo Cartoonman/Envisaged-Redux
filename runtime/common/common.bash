@@ -29,23 +29,23 @@ EOF
 
 function log_error
 {
-    echo -e "${COLOR_RED}${1}${NC}"
+    echo -e "${COLOR_RED}[ERROR] ${1}${NC}"
 }
 function log_warn
 {
-    echo -e "${COLOR_MAGENTA}${1}${NC}"
+    echo -e "${COLOR_MAGENTA}[WARN] ${1}${NC}"
 }
 function log_notice
 {
-    echo -e "${COLOR_YELLOW}${1}${NC}"
+    echo -e "${COLOR_YELLOW}[NOTICE] ${1}${NC}"
 }
 function log_info
 {
-    echo -e "${COLOR_CYAN}${1}${NC}"
+    echo -e "${COLOR_CYAN}[INFO] ${1}${NC}"
 }
 function log_success
 {
-    echo -e "${COLOR_GREEN}${1}${NC}"
+    echo -e "${COLOR_GREEN}[OK] ${1}${NC}"
 }
 
 

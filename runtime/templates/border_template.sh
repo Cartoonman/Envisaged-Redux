@@ -65,10 +65,7 @@ else
     exit 1
 fi
 
-if [[ "${INVERT_COLORS}" == "true" ]]; then
-    INVERT_FILTER=",lutrgb=r=negval:g=negval:b=negval"
-fi
-
+# Generate ffmpeg flags
 LOGO_FFMPEG_LABEL="[2:v]" && gen_ffmpeg_flags
 
 # Create our temp directory

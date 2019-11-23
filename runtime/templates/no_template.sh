@@ -30,7 +30,7 @@ else
     exit 1
 fi
 
-
+# Generate ffmpeg flags
 LOGO_FFMPEG_LABEL="[1:v]" && gen_ffmpeg_flags
 
 # Create our temp directory
