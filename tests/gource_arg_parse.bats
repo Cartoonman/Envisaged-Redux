@@ -1,5 +1,10 @@
 #!/usr/bin/env bats
 
+# Envisaged Redux
+# Copyright (c) 2019 Carl Colena
+#
+# SPDX-License-Identifier: MIT
+
 load test_common
 
 

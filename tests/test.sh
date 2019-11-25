@@ -9,42 +9,46 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 . ${DIR}/test_common.bash
 
-IMAGES=$(docker images --format '{{.Repository}}:{{.Tag}}' | sort | grep ${IMAGE_NAME} | grep -v -e '<none>')
-SAVEIFS=${IFS} && IFS=$'\n' && IMAGES=(${IMAGES}) && IFS=${SAVEIFS}
-if [ ${#IMAGES[@]} -eq 0 ]; then
-    echo "No Image for ${IMAGE_NAME} exists. Cannot run tests."
-    exit 1
-elif [ ${#IMAGES[@]} -gt 1 ]; then
-    PS3="More than one image for ${IMAGE_NAME} exists. Select which one to perform test on (number choice): "
-    select img in "${IMAGES[@]}"
-    do
-        IMAGE=${img}
-        break
-    done
-else
-    IMAGE="${IMAGES[@]}"
-fi
+IMAGE=$1
+
+set -e
+
+# Set up git test repo
+GIT_PARENT_DIR="/workvol/git_sandbox"
+mkdir -p ${GIT_PARENT_DIR}
+echo "Initializing Git Test Sandbox..."
+${DIR}/git_testbed.sh ${GIT_PARENT_DIR} > /dev/null 2>&1
+
+
+# Unit tests
+echo "Starting test"
+bats ${DIR}/gource_arg_parse.bats
 
 
 
 
-# Test setup (get repos?)
-
-
-# Start test container
+# Integration tests
+mkdir /workvol/output
+ls /
 docker run --rm -d \
-    -p 8080:80 \
     --name ${IMAGE_NAME} \
-    -v ~/mnt/GitHub:/visualization/git_repo:ro \
+    -v ev-test-volume:/workvol \
     ${IMAGE} \
     TEST
+
 
 
 test=$(docker exec -t ${IMAGE_NAME} bash -c 'echo "hello there"' | tr -d '\r')
 echo "$test"
 
-bats ${DIR}/gource_arg_parse.bats
-
+docker exec \
+-e RECURSE_SUBMODULES="1" 
+-e FPS="60" \
+-e ENABLE_LIVE_PREVIEW="1" \
+-e PREVIEW_SLOWDOWN_FACTOR="2" \
+-e VIDEO_RESOLUTION="720p" \
+-e USE_GOURCE_NIGHTLY=1 \
+-t ${IMAGE_NAME}
 
 # Stop test container
 docker stop ${IMAGE_NAME}

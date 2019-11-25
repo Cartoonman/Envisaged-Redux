@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Envisaged Redux
+# Copyright (c) 2019 Carl Colena
+#
+# SPDX-License-Identifier: MIT
+
 source "$(dirname "${BASH_SOURCE[0]}")/helpers/output.bash"
 source "$(dirname "${BASH_SOURCE[0]}")/helpers/error.bash"
 source "$(dirname "${BASH_SOURCE[0]}")/helpers/lang.bash"
@@ -8,22 +13,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 IMAGE_NAME="envisaged-redux"
 
-gource_args_test_long=("bash" "-c"  'source /visualization/runtime/common/common.bash; gen_gource_args; printf "%s," "${GOURCE_ARG_ARRAY[@]}";')
 gource_args_test=("bash" "-c"  "source ${DIR}/../runtime/common/common.bash; gen_gource_args; echo \"\${GOURCE_ARG_ARRAY[@]}\";")
-
-gource_test_vars_long() {
-    local -r VAR_NAME_1=("$1=value")
-    local -r VAR_NAME_2=("$1=Multi Word Value")
-    local -r VAR_NAME_3=("$1=")
-    local -r EXPECTED="$2"
-
-    run docker exec -e "${VAR_NAME_1[@]}" -t ${IMAGE_NAME} "${gource_args_test_long[@]}"
-    assert_equal "${output}" "${EXPECTED},value,"
-    run docker exec -e "${VAR_NAME_2[@]}"  -t ${IMAGE_NAME} "${gource_args_test_long[@]}" 
-    assert_equal "${output}" "${EXPECTED},Multi Word Value,"
-    run docker exec -e "${VAR_NAME_3[@]}"  -t ${IMAGE_NAME} "${gource_args_test_long[@]}"
-    assert_equal "${output}"  "," 
-}
 
 
 gource_test_entrypoint_1() {
