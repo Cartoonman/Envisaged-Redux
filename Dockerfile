@@ -43,9 +43,7 @@ RUN set -xe; \
 
 
 # Copy our assets
-COPY html /visualization/html
-COPY runtime /visualization/runtime
-COPY LICENSE /visualization/LICENSE
+COPY . /visualization/
 
 WORKDIR /visualization
 

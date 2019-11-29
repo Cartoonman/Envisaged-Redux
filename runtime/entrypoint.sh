@@ -219,5 +219,7 @@ else
 fi
 
 # Exit
+kill -15 $xvfb_pid
+kill -15 $httpd_pid
 echo "Exiting"
 exit
