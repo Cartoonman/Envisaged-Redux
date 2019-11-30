@@ -11,9 +11,9 @@ RUN apk add --update --no-cache --virtual .build-deps alpine-sdk git sdl2-dev sd
     && cd Gource \
     && ./autogen.sh \
     && ./configure \
-    && make -j`nproc` \
+    && make -j"$(nproc)" \
     && make install \
-    && cd / \
+    && cd .. \
     && rm -rf Gource \
     && apk del .build-deps
 
@@ -35,7 +35,6 @@ RUN set -xe; \
         python \
         subversion \
         findutils \
-        diffutils \ 
         curl \
         wget; \
     mkdir -p /visualization/html; \
@@ -64,12 +63,6 @@ LABEL maintainer="Carl Colena, carl.colena@gmail.com" \
     org.label-schema.vcs-url="https://gitlab.com/Cartoonman/Envisaged-Redux" \
     org.label-schema.vendor="Carl Colena" \
     org.label-schema.version="0.10.0"
-
-# Set our default environment variables.
-ENV H265_PRESET="medium" \
-    H265_CRF="21" \
-    VIDEO_RESOLUTION="1080p" \
-    FPS="60" 
 
 # Expose port 80 to serve mp4 video over HTTP
 EXPOSE 80

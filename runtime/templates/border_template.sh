@@ -109,7 +109,7 @@ ${GOURCE_EXEC} \
     -o \
 )
 
-[ "${TEST}" = "1" ] && printf "%s " "${G1_CMD[@]}" >> /visualization/metadata
+[ "${TEST}" = "1" ] && printf "%s " "${G1_CMD[@]}" >> /visualization/cmd_test_data.txt
 [ "${NORUN}" != "1" ] && "${G1_CMD[@]}" - >/visualization/tmp/gource.pipe &
 
 # Start Gource for the overlay elements.
@@ -127,7 +127,7 @@ ${GOURCE_EXEC} \
     -o \
  )
 
-[ "${TEST}" = "1" ] && printf "%s " "${G2_CMD[@]}" >> /visualization/metadata
+[ "${TEST}" = "1" ] && printf "%s " "${G2_CMD[@]}" >> /visualization/cmd_test_data.txt
 [ "${NORUN}" != "1" ] && "${G2_CMD[@]}" - >/visualization/tmp/overlay.pipe &
 
 
@@ -152,8 +152,8 @@ ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i /visualization/tmp/gource.p
     ${LIVE_PREVIEW_ARGS} \
 )
 
-[ "${TEST}" = "1" ] && printf "%s " "${F_CMD[@]}" >> /visualization/metadata
-[ "${NORUN}" != "1" ] && "${F_CMD[@]}"
+[ "${TEST}" = "1" ] && printf "%s " "${F_CMD[@]}" >> /visualization/cmd_test_data.txt
+[ "${NORUN}" != "1" ] && "${F_CMD[@]}" || log_success "Test Files Written!" && rm -rf /visualization/tmp && exit 0
 
 log_success "FFmpeg video render completed!"
 # Remove our temporary files.

@@ -12,6 +12,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 # Print Banner
 print_intro
 
+EXIT_CODE=0
+
 # Parse input args if any
 parse_args $@
 
@@ -187,6 +189,7 @@ if [ -n "${TEMPLATE}" ]; then
     if [ "${TEMPLATE}" = "border" ]; then
         log_info "Using border template..."
         /visualization/runtime/templates/border_template.sh
+        EXIT_CODE=$?
     else
         log_error "Unknown template option ${TEMPLATE}"
         exit 1
@@ -194,24 +197,28 @@ if [ -n "${TEMPLATE}" ]; then
 else
     log_info "Using no template..."
     /visualization/runtime/templates/no_template.sh
+    EXIT_CODE=$?
+fi
+if [ "${TEST}" != "1" ]; then
+    if [ -f /visualization/video/output.mp4 ]; then
+        chmod 666 /visualization/video/output.mp4
+        log_success "Visualization process is complete."
+    else
+        log_error "Visualization process failed."
+    fi
+    
+    if [ "${USE_LOCAL_OUTPUT}" != "1" ]; then
+        # Wait for httpd process to end.
+        while kill -0 $httpd_pid >/dev/null 2>&1; do
+            wait
+        done
+    fi
 fi
 
-if [ "${TEST}" != "1" ] && [ -f /visualization/video/output.mp4 ]; then
-    chmod 666 /visualization/video/output.mp4
-    log_success "Visualization process is complete."
-else
-    log_error "Visualization process failed."
-fi
 
-if [ "${TEST}" != "1" ] && [ "${USE_LOCAL_OUTPUT}" != "1" ]; then
-    # Wait for httpd process to end.
-    while kill -0 $httpd_pid >/dev/null 2>&1; do
-        wait
-    done
-fi
 
 # Exit
 kill -15 $xvfb_pid
 kill -15 $httpd_pid
 echo "Exiting"
-exit
+exit "${EXIT_CODE}"

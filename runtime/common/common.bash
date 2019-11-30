@@ -14,6 +14,12 @@ NC='\e[0m'
 
 XVFB_TIMEOUT=60
 
+# Assign defaults if not set
+: "${H265_PRESET:=medium}"
+: "${H265_CRF:=21}"
+: "${VIDEO_RESOLUTION:=1080p}"
+: "${FPS:=30}"
+
 function print_intro
 {
 cat << "EOF"
@@ -115,6 +121,7 @@ function gen_ffmpeg_flags
     fi
 
     if [ "${LIVE_PREVIEW}" = "1" ]; then
+        : "${PREVIEW_SLOWDOWN_FACTOR:=1}"
         LP_FPS=$((${FPS} / ${PREVIEW_SLOWDOWN_FACTOR}))
         LIVE_PREVIEW_SPLITTER=";${PRIMARY_MAP_LABEL}split[original_feed][time_scaler]; \
             [time_scaler]setpts=${PREVIEW_SLOWDOWN_FACTOR}*PTS[live_preview]"

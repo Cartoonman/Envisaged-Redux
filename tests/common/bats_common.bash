@@ -5,11 +5,12 @@
 #
 # SPDX-License-Identifier: MIT
 
-source "$(dirname "${BASH_SOURCE[0]}")/helpers/output.bash"
-source "$(dirname "${BASH_SOURCE[0]}")/helpers/error.bash"
-source "$(dirname "${BASH_SOURCE[0]}")/helpers/lang.bash"
-source "$(dirname "${BASH_SOURCE[0]}")/helpers/assert.bash"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "${DIR}/helpers/output.bash"
+source "${DIR}/helpers/error.bash"
+source "${DIR}/helpers/lang.bash"
+source "${DIR}/helpers/assert.bash"
+
 
 gource_args_test=("bash" "-c"  "source /visualization/runtime/common/common.bash; gen_gource_args; echo \"\${GOURCE_ARG_ARRAY[@]}\";")
 
@@ -144,45 +145,16 @@ integration_run()
         local ENV_ARGS+=("$1")
         shift
     done
-    eval "${ENV_ARGS[@]}" /visualization/runtime/entrypoint.sh TEST NORUN > /dev/null 2>&1
+    local LOG_OUTPUT=$(eval "${ENV_ARGS[@]}" /visualization/runtime/entrypoint.sh TEST NORUN 2>&1)
+    [ ! $? -eq 0 ] && echo -e "${LOG_OUTPUT}" && fail "Failure detected on test #${COUNT}"
     if [ "${SAVE}" = "1" ]; then
-        printf "\n" >> /visualization/metadata
+        printf "\n" >> /visualization/cmd_test_data.txt
     else
         # Check 512 sum matches
-        local RESULT=$(cat /visualization/metadata)
-        local EXPECTED=$(awk "NR==${COUNT}" /visualization/tests/metadata)
-        assert_equal "${RESULT}" "${EXPECTED}" || wdiff -3 <(echo "${RESULT}") <(echo "${EXPECTED}") || fail "Failure detected on test #${COUNT}"
-        rm /visualization/metadata
+        local RESULT=$(cat /visualization/cmd_test_data.txt)
+        local EXPECTED=$(awk "NR==${COUNT}" /visualization/tests/cmd_test_data.txt)
+        assert_equal "${EXPECTED}" "${RESULT}" || wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m' <(echo "${EXPECTED}") <(echo "${RESULT}") || fail "Failure detected on test #${COUNT}"
+        rm /visualization/cmd_test_data.txt
     fi
     (( ++COUNT ))
-}
-
-integration_run_alt()
-{
-    ID="$1" && shift
-    while [[ $# -ne 0 ]]; do
-        local DOCKER_ARGS+=("$1")
-        shift
-    done
-    docker exec \
-        -e GOURCE_SECONDS_PER_DAY="0.1" \
-        -e GOURCE_TIME_SCALE="2.0" \
-        -e FPS="25" \
-        -e VIDEO_RESOLUTION="480p" \
-        "${DOCKER_ARGS[@]}" \
-        envisaged-redux \
-        bash /visualization/runtime/entrypoint.sh
-    local RESULT=$(sha512sum /workvol/video/output.mp4 | awk '{ print $1 }')
-    if [ "${SAVE}" = "1" ]; then
-        cp /workvol/video/output.mp4 /hostdir/v_${ID}.mp4
-        echo "${RESULT}" >> /hostdir/metadata
-    else
-        # Check 512 sum matches
-        local EXPECTED=$(awk "NR==${ID}" ${DIR}/metadata)
-        if [ "${RESULT}" != "${EXPECTED}" ]; then
-            exit 1
-        fi
-    fi
-
-    docker restart envisaged-redux
 }

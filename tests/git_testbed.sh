@@ -6,7 +6,7 @@
 # SPDX-License-Identifier: MIT
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-source $DIR/git_common.bash
+source $DIR/common/git_common.bash
 
 PARENT_DIR=$1
 

@@ -7,7 +7,7 @@
 
 # Entry Point into testing.
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-. ${DIR}/test_common.bash
+. ${DIR}/common/test_common.bash
 export SAVE=0
 export COUNT=1
 while [[ $# -gt 0 ]]; do
@@ -15,7 +15,7 @@ while [[ $# -gt 0 ]]; do
     case $k in
         -s)
             SAVE=1
-            ;;
+        ;;
     esac
     shift
 done
@@ -28,10 +28,11 @@ ${DIR}/git_testbed.sh ${GIT_PARENT_DIR} > /dev/null 2>&1
 
 
 # Unit tests
-echo "Starting unit tests"
-bats ${DIR}/gource_arg_parse.bats
+echo "Starting Unit Tests"
+bats ${DIR}/bats_tests/gource_arg_parse.bats
 
 # Integration tests
+echo "Starting Integration Tests"
 
 # TODO Test log creation (revursive, multi, etc)
 
@@ -42,8 +43,8 @@ bats ${DIR}/gource_arg_parse.bats
 mkdir -p /visualization/video
 ln -sf /visualization/git_sandbox/repo1 /visualization/git_repo
 
-bats ${DIR}/integration_args.bats
+bats ${DIR}/bats_tests/integration_args.bats
 
-[ "${SAVE}" = "1" ] && mv /visualization/metadata /hostdir/metadata
+[ "${SAVE}" = "1" ] && mv /visualization/cmd_test_data.txt /hostdir/cmd_test_data.txt
 
 echo "Test Complete Success"

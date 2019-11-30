@@ -55,7 +55,7 @@ G_CMD=\
     -o \
 )
 
-[ "${TEST}" = "1" ] && printf "%s " "${G_CMD[@]}" >> /visualization/metadata
+[ "${TEST}" = "1" ] && printf "%s " "${G_CMD[@]}" >> /visualization/cmd_test_data.txt
 [ "${NORUN}" != "1" ] && "${G_CMD[@]}" - >/visualization/tmp/gource.pipe &
 
 # Start ffmpeg
@@ -70,8 +70,8 @@ ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
     -map ${PRIMARY_MAP_LABEL} -vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} \
     /visualization/video/output.mp4 ${LIVE_PREVIEW_ARGS} \
 )
-[ "${TEST}" = "1" ] && printf "%s " "${F_CMD[@]}" >> /visualization/metadata
-[ "${NORUN}" != "1" ] && "${F_CMD[@]}"
+[ "${TEST}" = "1" ] && printf "%s " "${F_CMD[@]}" >> /visualization/cmd_test_data.txt
+[ "${NORUN}" != "1" ] && "${F_CMD[@]}" || log_success "Test Files Written!" && rm -rf /visualization/tmp && exit 0
 
 log_success "FFmpeg video render completed!"
 # Remove our temporary files.
