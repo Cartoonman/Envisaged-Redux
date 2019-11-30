@@ -35,6 +35,7 @@ RUN set -xe; \
         python \
         subversion \
         findutils \
+        diffutils \ 
         curl \
         wget; \
     mkdir -p /visualization/html; \
@@ -43,7 +44,10 @@ RUN set -xe; \
 
 
 # Copy our assets
-COPY . /visualization/
+COPY html /visualization/html
+COPY runtime /visualization/runtime
+COPY LICENSE /visualization/LICENSE
+COPY *.md /visualization/
 
 WORKDIR /visualization
 

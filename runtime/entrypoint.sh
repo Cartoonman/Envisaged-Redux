@@ -12,15 +12,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 # Print Banner
 print_intro
 
-
-
-# If this is a test, hang and wait.
-if [[ $# -eq 1 ]] && [ "$1" = "TEST" ]; then
-    log_info "Test mode enabled. Spinning main thread. Run docker stop on container when complete."
-    trap 'exit 143' SIGTERM # exit = 128 + 15 (SIGTERM)
-    tail -f /dev/null & wait ${!}
-    exit 0
-fi
+# Parse input args if any
+parse_args $@
 
 # Check runtime mode.
 echo 0 > /visualization/html/live_preview
@@ -203,19 +196,18 @@ else
     /visualization/runtime/templates/no_template.sh
 fi
 
-if [ -f /visualization/video/output.mp4 ]; then
+if [ "${TEST}" != "1" ] && [ -f /visualization/video/output.mp4 ]; then
+    chmod 666 /visualization/video/output.mp4
     log_success "Visualization process is complete."
 else
     log_error "Visualization process failed."
 fi
 
-if [ ! "${USE_LOCAL_OUTPUT}" = "1" ]; then
+if [ "${TEST}" != "1" ] && [ "${USE_LOCAL_OUTPUT}" != "1" ]; then
     # Wait for httpd process to end.
     while kill -0 $httpd_pid >/dev/null 2>&1; do
         wait
     done
-else
-    chmod 666 /visualization/video/output.mp4
 fi
 
 # Exit

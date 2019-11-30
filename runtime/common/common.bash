@@ -127,4 +127,27 @@ function gen_ffmpeg_flags
     fi
 }
 
+function parse_args
+{
+    while [[ $# -gt 0 ]]; do
+        k="$1"
+        case $k in
+            HOLD)
+                log_info "Test mode enabled. Spinning main thread. Run docker stop on container when complete."
+                trap 'exit 143' SIGTERM # exit = 128 + 15 (SIGTERM)
+                tail -f /dev/null & wait ${!}
+                exit 0
+                ;;
+            TEST)
+                export TEST=1
+                log_warn "TEST"
+                ;;
+            NORUN)
+                export NORUN=1
+                log_warn "NORUN"
+                ;;
+        esac
+        shift
+    done
+}
 
