@@ -5,10 +5,11 @@
 #
 # SPDX-License-Identifier: MIT
 
-load ../common/bats_common
+load common/bats_common
 
 
-@test "Integration Tests" {
+@test "Test Args" {
+    export COUNT=1
     # Baseline
     integration_run 
     integration_run TEMPLATE="border"

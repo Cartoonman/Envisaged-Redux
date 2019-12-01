@@ -137,7 +137,7 @@ mkdir -p /visualization/video
 # [0:v]: gource, [1:v]: overlay, [2:v]: logo
 F_CMD=\
 ( \
-ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i /visualization/tmp/gource.pipe \
+    ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i /visualization/tmp/gource.pipe \
     -y -r ${FPS} -f image2pipe -probesize 100M -i /visualization/tmp/overlay.pipe \
     ${LOGO} \
     -filter_complex "[0:v]pad=${GOURCE_PAD}${INVERT_FILTER}[center];\
@@ -153,7 +153,7 @@ ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i /visualization/tmp/gource.p
 )
 
 [ "${TEST}" = "1" ] && printf "%s " "${F_CMD[@]}" >> /visualization/cmd_test_data.txt
-[ "${NORUN}" != "1" ] && "${F_CMD[@]}" || log_success "Test Files Written!" && rm -rf /visualization/tmp && exit 0
+[ "${NORUN}" != "1" ] && "${F_CMD[@]}" || [ "${TEST}" = "1" ] && log_success "Test Files Written!" && rm -rf /visualization/tmp && exit 0
 
 log_success "FFmpeg video render completed!"
 # Remove our temporary files.

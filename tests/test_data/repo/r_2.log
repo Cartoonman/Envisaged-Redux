@@ -1,0 +1,49 @@
+1358795000|John Doe|A|/Makefile
+1358795000|John Doe|A|/README.md
+1358798258|John Doe|A|/include/test1.hpp
+1358798258|John Doe|A|/include/test2.hpp
+1358798258|John Doe|A|/include/test3.hpp
+1358798258|John Doe|A|/src/test1.cpp
+1358798258|John Doe|A|/src/test2.cpp
+1358798258|John Doe|A|/src/test3.cpp
+1358801237|John Doe|M|/include/test1.hpp
+1358801237|John Doe|M|/include/test2.hpp
+1358801237|John Doe|M|/include/test3.hpp
+1358801237|John Doe|M|/src/test1.cpp
+1358801237|John Doe|M|/src/test2.cpp
+1358801237|John Doe|M|/src/test3.cpp
+1358808146|John Doe|M|/README.md
+1358838062|OtherPerson|M|/README.md
+1358856455|Third|M|/src/test1.cpp
+1358856455|Third|M|/src/test3.cpp
+1358860896|John Doe|M|/src/test1.cpp
+1358860896|John Doe|M|/src/test2.cpp
+1358860896|John Doe|M|/src/test3.cpp
+1358864761|OtherPerson|A|/src/p1/test1.cpp
+1358999911|John Doe|A|/src/submod1/Makefile
+1358999911|John Doe|A|/src/submod1/README.md
+1359006721|John Doe|A|/src/submod1/include/test1.hpp
+1359006721|John Doe|A|/src/submod1/include/test2.hpp
+1359006721|John Doe|A|/src/submod1/include/test3.hpp
+1359006721|John Doe|A|/src/submod1/src/test1.cpp
+1359006721|John Doe|A|/src/submod1/src/test2.cpp
+1359006721|John Doe|A|/src/submod1/src/test3.cpp
+1359015912|John Doe|A|/.gitmodules
+1359015912|John Doe|A|/src/submod1
+1359033082|OtherPerson|A|/LICENSE
+1359033082|OtherPerson|M|/README.md
+1359054727|John Doe|A|/src/submod1/src/p1/test1.cpp
+1359085257|John Doe|M|/README.md
+1359085257|John Doe|M|/src/submod1
+1359090374|John Doe|A|/src/submod1/src/submod2/Makefile
+1359090374|John Doe|A|/src/submod1/src/submod2/README.md
+1359116547|John Doe|A|/src/submod1/src/submod2/include/test1.hpp
+1359116547|John Doe|A|/src/submod1/src/submod2/include/test2.hpp
+1359116547|John Doe|A|/src/submod1/src/submod2/include/test3.hpp
+1359116547|John Doe|A|/src/submod1/src/submod2/src/test1.cpp
+1359116547|John Doe|A|/src/submod1/src/submod2/src/test2.cpp
+1359116547|John Doe|A|/src/submod1/src/submod2/src/test3.cpp
+1359141997|John Doe|A|/src/submod1/.gitmodules
+1359141997|John Doe|A|/src/submod1/src/submod2
+1359167873|John Doe|M|/LICENSE
+1359167873|John Doe|M|/src/submod1

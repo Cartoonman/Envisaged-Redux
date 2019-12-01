@@ -5,7 +5,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-load ../common/bats_common
+load common/bats_common
 
 
 @test "Test Gource Args General" {

@@ -35,7 +35,7 @@ EOF
 
 function log_error
 {
-    echo -e "${COLOR_RED}[ERROR] ${1}${NC}"
+    >&2 echo -e "${COLOR_RED}[ERROR] ${1}${NC}"
 }
 function log_warn
 {
@@ -116,6 +116,7 @@ function gen_ffmpeg_flags
     # Default map
     PRIMARY_MAP_LABEL="[default]"
     if [ "${LOGO}" != "" ]; then
+        [ -z "${LOGO_FFMPEG_LABEL}" ] && log_error "Error: LOGO_FFMPEG_LABEL variable must be set when using logo for ffmpeg (internal error)." && exit 1
         LOGO_FILTER_GRAPH=";${PRIMARY_MAP_LABEL}${LOGO_FFMPEG_LABEL}overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
         PRIMARY_MAP_LABEL="[with_logo]"
     fi
@@ -147,11 +148,11 @@ function parse_args
                 ;;
             TEST)
                 export TEST=1
-                log_warn "TEST"
+                log_warn "TEST Flag Invoked"
                 ;;
             NORUN)
                 export NORUN=1
-                log_warn "NORUN"
+                log_warn "NORUN Flag Invoked"
                 ;;
         esac
         shift
