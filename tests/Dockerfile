@@ -1,8 +1,7 @@
 # Envisaged Redux
 # Copyright (c) 2019 Carl Colena
-# Copyright (c) 2019 Utensils Union
 #
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0
 
 FROM alpine:3.10 as wdiff-build
 

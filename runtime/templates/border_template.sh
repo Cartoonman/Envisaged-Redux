@@ -4,7 +4,7 @@
 # Copyright (c) 2019 Carl Colena
 # Copyright (c) 2019 Utensils Union
 #
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 . "${DIR}/../common/common.bash"
@@ -153,7 +153,8 @@ F_CMD=\
 )
 
 [ "${TEST}" = "1" ] && printf "%s " "${F_CMD[@]}" >> /visualization/cmd_test_data.txt
-[ "${NORUN}" != "1" ] && "${F_CMD[@]}" || [ "${TEST}" = "1" ] && log_success "Test Files Written!" && rm -rf /visualization/tmp && exit 0
+[ "${NORUN}" != "1" ] && "${F_CMD[@]}"
+[ "${TEST}" = "1" ] && log_success "Test Files Written!" && rm -rf /visualization/tmp && exit 0
 
 log_success "FFmpeg video render completed!"
 # Remove our temporary files.

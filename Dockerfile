@@ -2,7 +2,7 @@
 # Copyright (c) 2019 Carl Colena
 # Copyright (c) 2019 Utensils Union
 #
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 FROM alpine:3.10 as gource-nightly-builder
 

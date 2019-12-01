@@ -3,7 +3,7 @@
 # Envisaged Redux
 # Copyright (c) 2019 Carl Colena
 #
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0
 
 # Entry Point into testing.
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"

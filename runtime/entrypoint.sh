@@ -4,7 +4,7 @@
 # Copyright (c) 2019 Carl Colena
 # Copyright (c) 2019 Utensils Union
 #
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 . "${DIR}/common/common.bash"

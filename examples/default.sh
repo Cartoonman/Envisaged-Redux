@@ -3,12 +3,12 @@
 # Envisaged Redux
 # Copyright (c) 2019 Carl Colena
 #
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 . "$DIR/common.bash"
 
-parse_args $@
+parse_args "$@"
 
 if [ "${GIT_REPO_DIR}" = "" ]; then
     echo "No git repo directory specified, using Envisaged-Redux repo..."

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Unit and Integration Test Suite with Dockerfile.
+
+### Updated
+
+- Migrated project to Apache 2 License (from MIT)
+
 
 ## [0.10.0] - 2019-11-23
 

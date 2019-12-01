@@ -1,5 +1,10 @@
 #!/usr/bin/env bats
 
+# Envisaged Redux
+# Copyright (c) 2019 Carl Colena
+#
+# SPDX-License-Identifier: Apache-2.0
+
 load common/bats_common
 
 

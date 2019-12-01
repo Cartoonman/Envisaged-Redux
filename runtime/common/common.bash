@@ -3,7 +3,7 @@
 # Envisaged Redux
 # Copyright (c) 2019 Carl Colena
 #
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 COLOR_RED='\e[31m'
 COLOR_MAGENTA='\e[95m'

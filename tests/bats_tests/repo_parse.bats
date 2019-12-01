@@ -3,7 +3,7 @@
 # Envisaged Redux
 # Copyright (c) 2019 Carl Colena
 #
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0
 
 load common/bats_common
 
@@ -25,7 +25,7 @@ load common/bats_common
     ln -sf /visualization/git_sandbox /visualization/git_repo
     repo_run 
     repo_run RECURSE_SUBMODULES=1
-    
+
     rm /visualization/git_repo
     mv /visualization/old_git_repo /visualization/git_repo
     [ "${SAVE}" = "1" ] && skip || :
