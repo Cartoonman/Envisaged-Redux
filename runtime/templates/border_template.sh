@@ -4,7 +4,7 @@
 # Copyright (c) 2019 Carl Colena
 # Copyright (c) 2019 Utensils Union
 #
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 . "${DIR}/../common/common.bash"
@@ -92,23 +92,31 @@ GOURCE_FONT_SIZE="${GOURCE_BORDER_TITLE_FONT_SIZE}"
 GOURCE_FONT_COLOR="${GOURCE_BORDER_DATE_FONT_COLOR}"
 GOURCE_HIDE_ITEMS="bloom,dirnames,files,filenames,mouse,root,tree,users,usernames"
 GOURCE_SHOW_KEY=1
+unset GOURCE_BACKGROUND_COLOR
 
 gen_gource_args
 GOURCE_SECONDARY_ARGS=("${GOURCE_ARG_ARRAY[@]}")
 
 # Start Gource for visualization.
 log_notice "Starting Gource primary with title: ${GOURCE_TITLE}"
+G1_CMD=\
+( \
 ${GOURCE_EXEC} \
     --${GOURCE_RES} \
     "${GOURCE_PRIMARY_ARGS[@]}" \
     --stop-at-end \
     /visualization/development.log \
     -r ${FPS} \
-    -o - >/visualization/tmp/gource.pipe &
-log_success "Gource primary started."
+    -o \
+)
+
+[ "${TEST}" = "1" ] && printf "%s " "${G1_CMD[@]}" >> /visualization/cmd_test_data.txt
+[ "${NORUN}" != "1" ] && "${G1_CMD[@]}" - >/visualization/tmp/gource.pipe &
 
 # Start Gource for the overlay elements.
 log_notice "Starting Gource secondary for overlay components"
+G2_CMD=\
+( \
 ${GOURCE_EXEC} \
     --${OVERLAY_RES} \
     "${GOURCE_SECONDARY_ARGS[@]}" \
@@ -117,27 +125,37 @@ ${GOURCE_EXEC} \
     --stop-at-end \
     /visualization/development.log \
     -r ${FPS} \
-    -o - >/visualization/tmp/overlay.pipe &
+    -o \
+ )
 
-log_success "Gource secondary started."
+[ "${TEST}" = "1" ] && printf "%s " "${G2_CMD[@]}" >> /visualization/cmd_test_data.txt
+[ "${NORUN}" != "1" ] && "${G2_CMD[@]}" - >/visualization/tmp/overlay.pipe &
+
 
 # Start ffmpeg to merge the two video outputs.
 log_notice "Combining videos pipes and rendering..."
 mkdir -p /visualization/video
 # [0:v]: gource, [1:v]: overlay, [2:v]: logo
-ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i /visualization/tmp/gource.pipe \
+F_CMD=\
+( \
+    ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i /visualization/tmp/gource.pipe \
     -y -r ${FPS} -f image2pipe -probesize 100M -i /visualization/tmp/overlay.pipe \
     ${LOGO} \
     -filter_complex "[0:v]pad=${GOURCE_PAD}${INVERT_FILTER}[center];\
-                         [1:v]scale=${OUTPUT_RES}[key_scale];\
-                         [1:v]scale=${OUTPUT_RES}[date_scale];\
-                         [key_scale]crop=${KEY_CROP},pad=${KEY_PAD}[key];\
-                         [date_scale]crop=${DATE_CROP},pad=${DATE_PAD}[date];\
-                         [key][center]hstack[with_key];\
-                         [date][with_key]vstack[default]\
+                    [1:v]scale=${OUTPUT_RES}[key_scale];\
+                    [1:v]scale=${OUTPUT_RES}[date_scale];\
+                    [key_scale]crop=${KEY_CROP},pad=${KEY_PAD}[key];\
+                    [date_scale]crop=${DATE_CROP},pad=${DATE_PAD}[date];\
+                    [key][center]hstack[with_key];\
+                    [date][with_key]vstack[default]\
     ${LOGO_FILTER_GRAPH}${LIVE_PREVIEW_SPLITTER}" -map ${PRIMARY_MAP_LABEL} \
     -vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} /visualization/video/output.mp4 \
-    ${LIVE_PREVIEW_ARGS}
+    ${LIVE_PREVIEW_ARGS} \
+)
+
+[ "${TEST}" = "1" ] && printf "%s " "${F_CMD[@]}" >> /visualization/cmd_test_data.txt
+[ "${NORUN}" != "1" ] && "${F_CMD[@]}"
+[ "${TEST}" = "1" ] && log_success "Test Files Written!" && rm -rf /visualization/tmp && exit 0
 
 log_success "FFmpeg video render completed!"
 # Remove our temporary files.

@@ -70,7 +70,7 @@ You can also make `preview.sh` run for the whole duration by removing the `-e GO
 | H265_CRF         | 21            | The Constant Rate Factor (CRF). Refer to [FFmpeg's wiki][ffmpeg_h265].                                                  |
 | VIDEO_RESOLUTION | 1080p         | Output video resolution, options are **2160p, 1440p, 1080p, 720p, 480p**                                                |
 | FPS              | 60            | Output video Frames per Second. Supported framerates are 25,30, or 60 only.                                             |
-| TEMPLATE         | border        | Specify a template to use. Only 1 custom template currently exists: **border**. If not specified, will use no template. |
+| TEMPLATE         |               | Specify a template to use. Only 1 custom template currently exists: **border**. If not specified, will use no template. |
 | INVERT_COLORS    | 0             | Inverts the colors on the visualization.                                                                                |
 
 ##### General Gource Settings

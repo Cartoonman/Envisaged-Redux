@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Unit and Integration Test Suite with Dockerfile and start script.
+
+### Updated
+
+- Migrated project to Apache 2 License (from MIT)
+- Refactored template runtime command args for Gource and ffmpeg for better observation thru tests.
+- VBV bufsize increased for preview
+
+### Fixed
+
+- Edge case of multi-repo support failing if directory is a symbolic link.
+- Slowdown Factor now an assigned default when Live Preview is enabled
+- Added check if logo is given but no assigned logo stream label was set
+- Fixed broken background pid kill chain
+- Fixed exit code to accurately reflect system state.
+- A number of shell and Docker cleanups and fixes through shellcheck and hadolint.
+- Race condition fixed in preview.html when intervalFn is null when not expected.
+- Typo during Xvfb check that ran xdpyinfo in the background.
 
 ## [0.10.0] - 2019-11-23
 

@@ -4,7 +4,7 @@
 # Copyright (c) 2019 Carl Colena
 # Copyright (c) 2019 Utensils Union
 #
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 . "${DIR}/../common/common.bash"
@@ -44,23 +44,36 @@ gen_gource_args
 
 
 log_notice "Starting Gource primary with title: ${GOURCE_TITLE}"
-${GOURCE_EXEC} \
+G_CMD=\
+( \
+    ${GOURCE_EXEC} \
     --${GOURCE_RES} \
     "${GOURCE_ARG_ARRAY[@]}" \
     --stop-at-end \
     /visualization/development.log \
     -r ${FPS} \
-    -o - >/visualization/tmp/gource.pipe &
+    -o \
+)
+
+[ "${TEST}" = "1" ] && printf "%s " "${G_CMD[@]}" >> /visualization/cmd_test_data.txt
+[ "${NORUN}" != "1" ] && "${G_CMD[@]}" - >/visualization/tmp/gource.pipe &
 
 # Start ffmpeg
 log_notice "Rendering video pipe.."
 mkdir -p /visualization/video
 # [0:v]: gource, [1:v]: logo
-ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
+F_CMD=\
+( \
+    ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
     ${LOGO} \
     -filter_complex "[0:v]select${INVERT_FILTER}[default]${LOGO_FILTER_GRAPH}${LIVE_PREVIEW_SPLITTER}" \
     -map ${PRIMARY_MAP_LABEL} -vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} \
-    /visualization/video/output.mp4 ${LIVE_PREVIEW_ARGS}
+    /visualization/video/output.mp4 ${LIVE_PREVIEW_ARGS} \
+)
+
+[ "${TEST}" = "1" ] && printf "%s " "${F_CMD[@]}" >> /visualization/cmd_test_data.txt
+[ "${NORUN}" != "1" ] && "${F_CMD[@]}"
+[ "${TEST}" = "1" ] && log_success "Test Files Written!" && rm -rf /visualization/tmp && exit 0
 
 log_success "FFmpeg video render completed!"
 # Remove our temporary files.

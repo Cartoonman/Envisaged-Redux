@@ -3,7 +3,7 @@
 # Envisaged Redux
 # Copyright (c) 2019 Carl Colena
 #
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0
 
 function print_help
 {
@@ -40,23 +40,23 @@ function parse_args
 
         case $k in
             --git-repo-dir)
-                GIT_REPO_DIR=$2
+                GIT_REPO_URI="--mount type=bind,src=$2,dst=/visualization/git_repo,readonly"
                 shift
                 ;;
             --caption-file)
-                CAPTION_URI="--mount type=bind,source=$2,target=/visualization/captions.txt,readonly"
+                CAPTION_URI="--mount type=bind,src=$2,dst=/visualization/captions.txt,readonly"
                 shift
                 ;;
             --avatars-dir)
-                AVATARS_URI="--mount type=bind,source=$2,target=/visualization/avatars,readonly"
+                AVATARS_URI="--mount type=bind,src=$2,dst=/visualization/avatars,readonly"
                 shift
                 ;;
             --logo-file)
-                LOGO_URI="--mount type=bind,source=$2,target=/visualization/logo.image,readonly"
+                LOGO_URI="--mount type=bind,src=$2,dst=/visualization/logo.image,readonly"
                 shift
                 ;;
             --output-dir)
-                LOCAL_OUTPUT_URI="--mount type=bind,source=$2,target=/visualization/video"
+                LOCAL_OUTPUT_URI="--mount type=bind,src=$2,dst=/visualization/video"
                 shift
                 ;;
             -h)

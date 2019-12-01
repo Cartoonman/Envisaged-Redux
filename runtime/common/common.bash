@@ -3,7 +3,7 @@
 # Envisaged Redux
 # Copyright (c) 2019 Carl Colena
 #
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 COLOR_RED='\e[31m'
 COLOR_MAGENTA='\e[95m'
@@ -13,6 +13,12 @@ COLOR_YELLOW='\e[93m'
 NC='\e[0m'
 
 XVFB_TIMEOUT=60
+
+# Assign defaults if not set
+: "${H265_PRESET:=medium}"
+: "${H265_CRF:=21}"
+: "${VIDEO_RESOLUTION:=1080p}"
+: "${FPS:=30}"
 
 function print_intro
 {
@@ -29,7 +35,7 @@ EOF
 
 function log_error
 {
-    echo -e "${COLOR_RED}[ERROR] ${1}${NC}"
+    >&2 echo -e "${COLOR_RED}[ERROR] ${1}${NC}"
 }
 function log_warn
 {
@@ -110,16 +116,18 @@ function gen_ffmpeg_flags
     # Default map
     PRIMARY_MAP_LABEL="[default]"
     if [ "${LOGO}" != "" ]; then
+        [ -z "${LOGO_FFMPEG_LABEL}" ] && log_error "Error: LOGO_FFMPEG_LABEL variable must be set when using logo for ffmpeg (internal error)." && exit 1
         LOGO_FILTER_GRAPH=";${PRIMARY_MAP_LABEL}${LOGO_FFMPEG_LABEL}overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
         PRIMARY_MAP_LABEL="[with_logo]"
     fi
 
     if [ "${LIVE_PREVIEW}" = "1" ]; then
+        : "${PREVIEW_SLOWDOWN_FACTOR:=1}"
         LP_FPS=$((${FPS} / ${PREVIEW_SLOWDOWN_FACTOR}))
         LIVE_PREVIEW_SPLITTER=";${PRIMARY_MAP_LABEL}split[original_feed][time_scaler]; \
             [time_scaler]setpts=${PREVIEW_SLOWDOWN_FACTOR}*PTS[live_preview]"
         PRIMARY_MAP_LABEL="[original_feed]"
-        LIVE_PREVIEW_ARGS=" -map [live_preview] -c:v libx264 -pix_fmt yuv420p -maxrate 40M -bufsize 2M \
+        LIVE_PREVIEW_ARGS=" -map [live_preview] -c:v libx264 -pix_fmt yuv420p -maxrate 40M -bufsize 5M \
             -profile:v high -level:v 5.2 -y -r ${LP_FPS} -preset ultrafast -crf 1 \
             -tune zerolatency -x264-params keyint=$((${LP_FPS} * 3)):min-keyint=${LP_FPS} \
             -vsync vfr -hls_flags independent_segments+delete_segments -hls_allow_cache 1 \
@@ -127,4 +135,27 @@ function gen_ffmpeg_flags
     fi
 }
 
+function parse_args
+{
+    while [[ $# -gt 0 ]]; do
+        k="$1"
+        case $k in
+            HOLD)
+                log_info "Test mode enabled. Spinning main thread. Run docker stop on container when complete."
+                trap 'exit 143' SIGTERM # exit = 128 + 15 (SIGTERM)
+                tail -f /dev/null & wait ${!}
+                exit 0
+                ;;
+            TEST)
+                export TEST=1
+                log_warn "TEST Flag Invoked"
+                ;;
+            NORUN)
+                export NORUN=1
+                log_warn "NORUN Flag Invoked"
+                ;;
+        esac
+        shift
+    done
+}
 
