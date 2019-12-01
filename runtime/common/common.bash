@@ -127,7 +127,7 @@ function gen_ffmpeg_flags
         LIVE_PREVIEW_SPLITTER=";${PRIMARY_MAP_LABEL}split[original_feed][time_scaler]; \
             [time_scaler]setpts=${PREVIEW_SLOWDOWN_FACTOR}*PTS[live_preview]"
         PRIMARY_MAP_LABEL="[original_feed]"
-        LIVE_PREVIEW_ARGS=" -map [live_preview] -c:v libx264 -pix_fmt yuv420p -maxrate 40M -bufsize 2M \
+        LIVE_PREVIEW_ARGS=" -map [live_preview] -c:v libx264 -pix_fmt yuv420p -maxrate 40M -bufsize 5M \
             -profile:v high -level:v 5.2 -y -r ${LP_FPS} -preset ultrafast -crf 1 \
             -tune zerolatency -x264-params keyint=$((${LP_FPS} * 3)):min-keyint=${LP_FPS} \
             -vsync vfr -hls_flags independent_segments+delete_segments -hls_allow_cache 1 \

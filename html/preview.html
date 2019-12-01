@@ -81,7 +81,10 @@
         }
         if (data.details === "levelLoadError") {
           hls.destroy();
-          if (loadSourceIntervalFn.isRunning()) {
+          if (
+            loadSourceIntervalFn !== null &&
+            loadSourceIntervalFn.isRunning()
+          ) {
             loadSourceIntervalFn.stop();
           }
           loadSourceIntervalFn = null;

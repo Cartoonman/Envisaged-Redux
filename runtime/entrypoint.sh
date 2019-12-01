@@ -38,7 +38,7 @@ xvfb_pid="${!}"
 RET_CODE=1
 WATCH_START=${SECONDS}
 while [ ${RET_CODE} -ne 0 ] && [ $((SECONDS-WATCH_START)) -le ${XVFB_TIMEOUT} ]; do
-    xdpyinfo -display :99 &> /dev/null
+    xdpyinfo -display :99 > /dev/null 2>&1
     RET_CODE=${?}
 done
 if [ $((SECONDS-WATCH_START)) -gt ${XVFB_TIMEOUT} ]; then

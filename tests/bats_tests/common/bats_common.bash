@@ -144,6 +144,7 @@ integration_run()
         local ENV_ARGS+=("$1")
         shift
     done
+    printf "Test ${COUNT}\r" >&3
     local LOG_OUTPUT=$(eval "${ENV_ARGS[@]}" /visualization/runtime/entrypoint.sh TEST NORUN 2>&1)
     [ ! $? -eq 0 ] && echo -e "${LOG_OUTPUT}" && fail "Failure detected on test #${COUNT}"
     if [ "${SAVE}" = "1" ]; then
@@ -163,6 +164,7 @@ repo_run()
         local ENV_ARGS+=("$1")
         shift
     done
+    printf "Test ${COUNT}\r" >&3
     local LOG_OUTPUT=$(eval "${ENV_ARGS[@]}" /visualization/runtime/entrypoint.sh TEST NORUN 2>&1)
     [ ! $? -eq 0 ] && echo -e "${LOG_OUTPUT}" && fail "Failure detected on test #${COUNT}"
     if [ "${SAVE}" = "1" ]; then
