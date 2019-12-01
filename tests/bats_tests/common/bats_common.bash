@@ -149,7 +149,6 @@ integration_run()
     if [ "${SAVE}" = "1" ]; then
         printf "\n" >> /visualization/cmd_test_data.txt
     else
-        # Check 512 sum matches
         local RESULT=$(cat /visualization/cmd_test_data.txt)
         local EXPECTED=$(awk "NR==${COUNT}" /visualization/tests/test_data/cmd_test_data.txt)
         assert_equal "${RESULT}" "${EXPECTED}" || wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m' <(echo "${EXPECTED}") <(echo "${RESULT}") || fail "Failure detected on test #${COUNT}"
@@ -169,7 +168,6 @@ repo_run()
     if [ "${SAVE}" = "1" ]; then
         cp /visualization/development.log /hostdir/r_"${COUNT}".log
     else
-        # Check 512 sum matches
         local RESULT=$(cat /visualization/development.log)
         local EXPECTED=$(cat /visualization/tests/test_data/repo/r_${COUNT}.log)
         assert_equal "${RESULT}" "${EXPECTED}" || wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m' <(echo "${EXPECTED}") <(echo "${RESULT}") || fail "Failure detected on test #${COUNT}"
