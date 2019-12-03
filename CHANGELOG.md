@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Unit and Integration Test Suite with Dockerfile and start script.
+- quick_start.sh script and suite for new users to become familiar with using Envisaged-Redux and it's capabilities.
 
 ### Updated
 
