@@ -7,7 +7,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND MIT
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-. "${DIR}/common/common.bash"
+. "${DIR}/common/common_entrypoint.bash"
 
 # Print Banner
 print_intro
@@ -190,19 +190,28 @@ trap 'echo "Stopping proccesses PIDs: ($xvfb_pid, $httpd_pid)";\
 
 # Run the visualization
 if [ -n "${TEMPLATE}" ]; then
-    if [ "${TEMPLATE}" = "border" ]; then
-        log_info "Using border template..."
-        /visualization/runtime/templates/border_template.sh
-        EXIT_CODE=$?
-    else
-        log_error "Unknown template option ${TEMPLATE}"
-        exit 1
-    fi
+    case ${TEMPLATE} in
+        border)
+            log_info "Using ${TEMPLATE} template..."
+            /visualization/runtime/templates/border.sh
+            EXIT_CODE=$?
+            ;;
+        standard)
+            log_info "Using ${TEMPLATE} template..."
+            /visualization/runtime/templates/standard.sh
+            EXIT_CODE=$?
+            ;;
+        *)
+            log_error "Unknown template option ${TEMPLATE}"
+            exit 1
+            ;;
+    esac
 else
-    log_info "Using no template..."
-    /visualization/runtime/templates/no_template.sh
+    log_info "No template choice provided, Defaulting to standard template..."
+    /visualization/runtime/templates/standard.sh
     EXIT_CODE=$?
 fi
+
 if [ "${TEST}" != "1" ]; then
     if [ -f /visualization/video/output.mp4 ]; then
         chmod 666 /visualization/video/output.mp4
@@ -210,7 +219,7 @@ if [ "${TEST}" != "1" ]; then
     else
         log_error "Visualization process failed."
     fi
-    
+
     if [ "${USE_LOCAL_OUTPUT}" != "1" ]; then
         # Wait for httpd process to end.
         while kill -0 $httpd_pid >/dev/null 2>&1; do
@@ -223,5 +232,5 @@ fi
 # Exit
 [ -n "$xvfb_pid" -a -e /proc/$xvfb_pid ] && kill $xvfb_pid
 [ -n "$httpd_pid" -a -e /proc/$httpd_pid ] && kill $httpd_pid
-echo "Exiting"
+echo "Exiting with code ${EXIT_CODE}"
 exit "${EXIT_CODE}"

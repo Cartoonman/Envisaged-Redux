@@ -8,5 +8,5 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 docker build "${@}" ${DIR}/../ -t cartoonman/envisaged-redux:latest
-docker build "${@}" -f tests/Dockerfile ${DIR}/../ -t cartoonman/test-envisaged-redux:latest
+docker build "${@}" -f ${DIR}/../tests/Dockerfile ${DIR}/../ -t cartoonman/test-envisaged-redux:latest
 ${DIR}/../tests/scripts/start.sh

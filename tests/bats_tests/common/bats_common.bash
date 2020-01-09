@@ -12,7 +12,7 @@ source "${DIR}/helpers/lang.bash"
 source "${DIR}/helpers/assert.bash"
 
 
-gource_args_test=("bash" "-c"  "source /visualization/runtime/common/common.bash; gen_gource_args; echo \"\${GOURCE_ARG_ARRAY[@]}\";")
+gource_args_test=("bash" "-c"  "source /visualization/runtime/common/common_templates.bash; gen_gource_args; echo \"\${GOURCE_ARG_ARRAY[@]}\";")
 
 gource_test_entrypoint_1() {
     local -r TYPE="$1" 
@@ -145,8 +145,8 @@ integration_run()
         shift
     done
     printf "Test ${COUNT}\r" >&3
-    local LOG_OUTPUT=$(eval "${ENV_ARGS[@]}" /visualization/runtime/entrypoint.sh TEST NORUN 2>&1)
-    [ ! $? -eq 0 ] && echo -e "${LOG_OUTPUT}" && fail "Failure detected on test #${COUNT}"
+    local LOG_OUTPUT=$(eval "${ENV_ARGS[@]}" /visualization/runtime/entrypoint.sh TEST NORUN 2>&1) RUNTIME_EXIT_CODE=$?
+    [ ! $RUNTIME_EXIT_CODE -eq 0 ] && echo -e "${LOG_OUTPUT}" && fail "Failure detected on test #${COUNT}"
     if [ "${SAVE}" = "1" ]; then
         printf "\n" >> /visualization/cmd_test_data.txt
     else

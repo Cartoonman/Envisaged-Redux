@@ -9,7 +9,7 @@ load common/bats_common
 
 
 @test "Test Invert Colors" {
-    ffmpeg_flags_test=("bash" "-c" "source /visualization/runtime/common/common.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${INVERT_FILTER}\";")
+    ffmpeg_flags_test=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${INVERT_FILTER}\";")
     output=$(export INVERT_COLORS=0; "${ffmpeg_flags_test[@]}")
     assert_equal "$output" ""
     output=$(export INVERT_COLORS=1; "${ffmpeg_flags_test[@]}")
@@ -17,9 +17,9 @@ load common/bats_common
 }
 
 @test "Test Logo" {
-    ffmpeg_flags_prim_map_label=("bash" "-c" "source /visualization/runtime/common/common.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${PRIMARY_MAP_LABEL}\";")
-    ffmpeg_flags_logo_filter_graph=("bash" "-c" "source /visualization/runtime/common/common.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${LOGO_FILTER_GRAPH}\";")
-    ffmpeg_flags_status=("bash" "-c" "source /visualization/runtime/common/common.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${?}\";")
+    ffmpeg_flags_prim_map_label=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${PRIMARY_MAP_LABEL}\";")
+    ffmpeg_flags_logo_filter_graph=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${LOGO_FILTER_GRAPH}\";")
+    ffmpeg_flags_status=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${?}\";")
     output=$("${ffmpeg_flags_prim_map_label[@]}")
     assert_equal "$output" "[default]"
     output=$("${ffmpeg_flags_logo_filter_graph[@]}")
@@ -36,10 +36,10 @@ load common/bats_common
 
 
 @test "Test Preview" {
-    ffmpeg_flags_lp_fps=("bash" "-c" "source /visualization/runtime/common/common.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${LP_FPS}\";")
-    ffmpeg_flags_live_prev_split=("bash" "-c" "source /visualization/runtime/common/common.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${LIVE_PREVIEW_SPLITTER}\";")
-    ffmpeg_flags_prim_map_label=("bash" "-c" "source /visualization/runtime/common/common.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${PRIMARY_MAP_LABEL}\";")
-    ffmpeg_flags_live_prev_args=("bash" "-c" "source /visualization/runtime/common/common.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${LIVE_PREVIEW_ARGS}\";")
+    ffmpeg_flags_lp_fps=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${LP_FPS}\";")
+    ffmpeg_flags_live_prev_split=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${LIVE_PREVIEW_SPLITTER}\";")
+    ffmpeg_flags_prim_map_label=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${PRIMARY_MAP_LABEL}\";")
+    ffmpeg_flags_live_prev_args=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${LIVE_PREVIEW_ARGS}\";")
 
     
     output=$("${ffmpeg_flags_lp_fps[@]}")

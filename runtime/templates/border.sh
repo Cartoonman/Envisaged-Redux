@@ -7,7 +7,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND MIT
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-. "${DIR}/../common/common.bash"
+. "${DIR}/../common/common_templates.bash"
 
 # Predefined resolutions and settings.
 if [[ "${VIDEO_RESOLUTION}" == "2160p" ]]; then
@@ -100,15 +100,15 @@ GOURCE_SECONDARY_ARGS=("${GOURCE_ARG_ARRAY[@]}")
 # Start Gource for visualization.
 log_notice "Starting Gource primary with title: ${GOURCE_TITLE}"
 G1_CMD=\
-( \
-${GOURCE_EXEC} \
-    --${GOURCE_RES} \
-    "${GOURCE_PRIMARY_ARGS[@]}" \
-    --stop-at-end \
-    /visualization/development.log \
-    -r ${FPS} \
-    -o \
-)
+    ( \
+        ${GOURCE_EXEC} \
+        --${GOURCE_RES} \
+        "${GOURCE_PRIMARY_ARGS[@]}" \
+        --stop-at-end \
+        /visualization/development.log \
+        -r ${FPS} \
+        -o \
+    )
 
 [ "${TEST}" = "1" ] && printf "%s " "${G1_CMD[@]}" >> /visualization/cmd_test_data.txt
 [ "${NORUN}" != "1" ] && "${G1_CMD[@]}" - >/visualization/tmp/gource.pipe &
@@ -116,17 +116,17 @@ ${GOURCE_EXEC} \
 # Start Gource for the overlay elements.
 log_notice "Starting Gource secondary for overlay components"
 G2_CMD=\
-( \
-${GOURCE_EXEC} \
-    --${OVERLAY_RES} \
-    "${GOURCE_SECONDARY_ARGS[@]}" \
-    --transparent \
-    --background-colour 202021 \
-    --stop-at-end \
-    /visualization/development.log \
-    -r ${FPS} \
-    -o \
- )
+    ( \
+        ${GOURCE_EXEC} \
+        --${OVERLAY_RES} \
+        "${GOURCE_SECONDARY_ARGS[@]}" \
+        --transparent \
+        --background-colour 202021 \
+        --stop-at-end \
+        /visualization/development.log \
+        -r ${FPS} \
+        -o \
+    )
 
 [ "${TEST}" = "1" ] && printf "%s " "${G2_CMD[@]}" >> /visualization/cmd_test_data.txt
 [ "${NORUN}" != "1" ] && "${G2_CMD[@]}" - >/visualization/tmp/overlay.pipe &
@@ -137,21 +137,21 @@ log_notice "Combining videos pipes and rendering..."
 mkdir -p /visualization/video
 # [0:v]: gource, [1:v]: overlay, [2:v]: logo
 F_CMD=\
-( \
-    ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i /visualization/tmp/gource.pipe \
-    -y -r ${FPS} -f image2pipe -probesize 100M -i /visualization/tmp/overlay.pipe \
-    ${LOGO} \
-    -filter_complex "[0:v]pad=${GOURCE_PAD}${INVERT_FILTER}[center];\
+    ( \
+        ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i /visualization/tmp/gource.pipe \
+        -y -r ${FPS} -f image2pipe -probesize 100M -i /visualization/tmp/overlay.pipe \
+        ${LOGO} \
+        -filter_complex "[0:v]pad=${GOURCE_PAD}${INVERT_FILTER}[center];\
                     [1:v]scale=${OUTPUT_RES}[key_scale];\
                     [1:v]scale=${OUTPUT_RES}[date_scale];\
                     [key_scale]crop=${KEY_CROP},pad=${KEY_PAD}[key];\
                     [date_scale]crop=${DATE_CROP},pad=${DATE_PAD}[date];\
                     [key][center]hstack[with_key];\
                     [date][with_key]vstack[default]\
-    ${LOGO_FILTER_GRAPH}${LIVE_PREVIEW_SPLITTER}" -map ${PRIMARY_MAP_LABEL} \
-    -vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} /visualization/video/output.mp4 \
-    ${LIVE_PREVIEW_ARGS} \
-)
+        ${LOGO_FILTER_GRAPH}${LIVE_PREVIEW_SPLITTER}" -map ${PRIMARY_MAP_LABEL} \
+        -vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} /visualization/video/output.mp4 \
+        ${LIVE_PREVIEW_ARGS} \
+    )
 
 [ "${TEST}" = "1" ] && printf "%s " "${F_CMD[@]}" >> /visualization/cmd_test_data.txt
 [ "${NORUN}" != "1" ] && "${F_CMD[@]}"

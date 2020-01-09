@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Migrated project to Apache 2 License (from MIT)
 - Refactored template runtime command args for Gource and ffmpeg for better observation thru tests.
+- Refactored common imports for entrypoint and templates
+- Renamed template names
 - VBV bufsize increased for preview
 
 ### Fixed

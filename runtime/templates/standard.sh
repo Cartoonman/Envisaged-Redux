@@ -7,7 +7,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND MIT
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-. "${DIR}/../common/common.bash"
+. "${DIR}/../common/common_templates.bash"
 
 # Predefined resolutions and settings.
 if [[ "${VIDEO_RESOLUTION}" == "2160p" ]]; then
@@ -45,15 +45,15 @@ gen_gource_args
 
 log_notice "Starting Gource primary with title: ${GOURCE_TITLE}"
 G_CMD=\
-( \
-    ${GOURCE_EXEC} \
-    --${GOURCE_RES} \
-    "${GOURCE_ARG_ARRAY[@]}" \
-    --stop-at-end \
-    /visualization/development.log \
-    -r ${FPS} \
-    -o \
-)
+    ( \
+        ${GOURCE_EXEC} \
+        --${GOURCE_RES} \
+        "${GOURCE_ARG_ARRAY[@]}" \
+        --stop-at-end \
+        /visualization/development.log \
+        -r ${FPS} \
+        -o \
+    )
 
 [ "${TEST}" = "1" ] && printf "%s " "${G_CMD[@]}" >> /visualization/cmd_test_data.txt
 [ "${NORUN}" != "1" ] && "${G_CMD[@]}" - >/visualization/tmp/gource.pipe &
@@ -63,13 +63,13 @@ log_notice "Rendering video pipe.."
 mkdir -p /visualization/video
 # [0:v]: gource, [1:v]: logo
 F_CMD=\
-( \
-    ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
-    ${LOGO} \
-    -filter_complex "[0:v]select${INVERT_FILTER}[default]${LOGO_FILTER_GRAPH}${LIVE_PREVIEW_SPLITTER}" \
-    -map ${PRIMARY_MAP_LABEL} -vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} \
-    /visualization/video/output.mp4 ${LIVE_PREVIEW_ARGS} \
-)
+    ( \
+        ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
+        ${LOGO} \
+        -filter_complex "[0:v]select${INVERT_FILTER}[default]${LOGO_FILTER_GRAPH}${LIVE_PREVIEW_SPLITTER}" \
+        -map ${PRIMARY_MAP_LABEL} -vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} \
+        /visualization/video/output.mp4 ${LIVE_PREVIEW_ARGS} \
+    )
 
 [ "${TEST}" = "1" ] && printf "%s " "${F_CMD[@]}" >> /visualization/cmd_test_data.txt
 [ "${NORUN}" != "1" ] && "${F_CMD[@]}"
