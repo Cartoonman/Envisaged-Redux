@@ -44,8 +44,7 @@ gen_gource_args
 
 
 log_notice "Starting Gource primary with title: ${GOURCE_TITLE}"
-G_CMD=\
-    ( \
+G_CMD=( \
         ${GOURCE_EXEC} \
         --${GOURCE_RES} \
         "${GOURCE_ARG_ARRAY[@]}" \
@@ -62,8 +61,7 @@ G_CMD=\
 log_notice "Rendering video pipe.."
 mkdir -p /visualization/video
 # [0:v]: gource, [1:v]: logo
-F_CMD=\
-    ( \
+F_CMD=( \
         ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
         ${LOGO} \
         -filter_complex "[0:v]select${INVERT_FILTER}[default]${LOGO_FILTER_GRAPH}${LIVE_PREVIEW_SPLITTER}" \

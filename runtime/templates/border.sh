@@ -99,8 +99,7 @@ GOURCE_SECONDARY_ARGS=("${GOURCE_ARG_ARRAY[@]}")
 
 # Start Gource for visualization.
 log_notice "Starting Gource primary with title: ${GOURCE_TITLE}"
-G1_CMD=\
-    ( \
+G1_CMD=( \
         ${GOURCE_EXEC} \
         --${GOURCE_RES} \
         "${GOURCE_PRIMARY_ARGS[@]}" \
@@ -115,8 +114,7 @@ G1_CMD=\
 
 # Start Gource for the overlay elements.
 log_notice "Starting Gource secondary for overlay components"
-G2_CMD=\
-    ( \
+G2_CMD=( \
         ${GOURCE_EXEC} \
         --${OVERLAY_RES} \
         "${GOURCE_SECONDARY_ARGS[@]}" \
@@ -136,8 +134,7 @@ G2_CMD=\
 log_notice "Combining videos pipes and rendering..."
 mkdir -p /visualization/video
 # [0:v]: gource, [1:v]: overlay, [2:v]: logo
-F_CMD=\
-    ( \
+F_CMD=( \
         ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i /visualization/tmp/gource.pipe \
         -y -r ${FPS} -f image2pipe -probesize 100M -i /visualization/tmp/overlay.pipe \
         ${LOGO} \
