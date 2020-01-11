@@ -11,19 +11,19 @@ source "${CUR_DIR_PATH}/../common/common_templates.bash"
 
 # Predefined resolutions and settings.
 if [[ "${VIDEO_RESOLUTION}" == "2160p" ]]; then
-    GOURCE_RES="3840x2160"
+    gource_res="3840x2160"
     log_info "Using 2160p settings. Output will be 3840x2160 at ${FPS}fps."
 elif [[ "${VIDEO_RESOLUTION}" == "1440p" ]]; then
-    GOURCE_RES="2560x1440"
+    gource_res="2560x1440"
     log_info "Using 1440p settings. Output will be 2560x1440 at ${FPS}fps."
 elif [[ "${VIDEO_RESOLUTION}" == "1080p" ]]; then
-    GOURCE_RES="1920x1080"
+    gource_res="1920x1080"
     log_info "Using 1080p settings. Output will be 1920x1080 at ${FPS}fps."
 elif [[ "${VIDEO_RESOLUTION}" == "720p" ]]; then
-    GOURCE_RES="1280x720"
+    gource_res="1280x720"
     log_info "Using 720p settings. Output will be 1280x720 at ${FPS}fps."
 elif [[ "${VIDEO_RESOLUTION}" == "480p" ]]; then
-    GOURCE_RES="854x480"
+    gource_res="854x480"
     log_info "Using 720p settings. Output will be 1280x720 at ${FPS}fps."
 else
     log_error "${VIDEO_RESOLUTION} is not a valid/supported video resolution."
@@ -31,7 +31,7 @@ else
 fi
 
 # Generate ffmpeg flags
-LOGO_FFMPEG_LABEL="[1:v]" && gen_ffmpeg_flags
+logo_ffmpeg_label="[1:v]" && gen_ffmpeg_flags
 
 # Create our temp directory
 mkdir -p /visualization/tmp
@@ -44,9 +44,9 @@ gen_gource_args
 
 
 log_notice "Starting Gource primary with title: ${GOURCE_TITLE}"
-G_CMD=( \
+g_cmd=( \
         ${GOURCE_EXEC} \
-        --${GOURCE_RES} \
+        --${gource_res} \
         "${gource_arg_array[@]}" \
         --stop-at-end \
         /visualization/development.log \
@@ -54,23 +54,23 @@ G_CMD=( \
         -o \
     )
 
-[ "${TEST}" = "1" ] && printf "%s " "${G_CMD[@]}" >> /visualization/cmd_test_data.txt
-[ "${NORUN}" != "1" ] && "${G_CMD[@]}" - >/visualization/tmp/gource.pipe &
+[ "${TEST}" = "1" ] && printf "%s " "${g_cmd[@]}" >> /visualization/cmd_test_data.txt
+[ "${NORUN}" != "1" ] && "${g_cmd[@]}" - >/visualization/tmp/gource.pipe &
 
 # Start ffmpeg
 log_notice "Rendering video pipe.."
 mkdir -p /visualization/video
 # [0:v]: gource, [1:v]: logo
-F_CMD=( \
+f_cmd=( \
         ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
         ${LOGO} \
-        -filter_complex "[0:v]select${INVERT_FILTER}[default]${LOGO_FILTER_GRAPH}${LIVE_PREVIEW_SPLITTER}" \
-        -map ${PRIMARY_MAP_LABEL} -vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} \
-        /visualization/video/output.mp4 ${LIVE_PREVIEW_ARGS} \
+        -filter_complex "[0:v]select${invert_filter}[default]${logo_filter_graph}${live_preview_splitter}" \
+        -map ${primary_map_label} -vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} \
+        /visualization/video/output.mp4 ${live_preview_args} \
     )
 
-[ "${TEST}" = "1" ] && printf "%s " "${F_CMD[@]}" >> /visualization/cmd_test_data.txt
-[ "${NORUN}" != "1" ] && "${F_CMD[@]}"
+[ "${TEST}" = "1" ] && printf "%s " "${f_cmd[@]}" >> /visualization/cmd_test_data.txt
+[ "${NORUN}" != "1" ] && "${f_cmd[@]}"
 [ "${TEST}" = "1" ] && log_success "Test Files Written!" && rm -rf /visualization/tmp && exit 0
 
 log_success "FFmpeg video render completed!"

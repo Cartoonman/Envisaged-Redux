@@ -12,7 +12,7 @@ source "${CUR_DIR_PATH}/common/common_entrypoint.bash"
 # Print Banner
 print_intro
 
-EXIT_CODE=0
+exit_code=0
 
 # Parse input args if any
 parse_args "$@"
@@ -34,14 +34,14 @@ fi
 # Start Xvfb
 log_notice "Starting Xvfb..."
 Xvfb :99 -ac -screen 0 "${XVFB_WHD}" -nocursor -noreset -nolisten tcp &
-xvfb_pid="${!}"
-RET_CODE=1
-WATCH_START=${SECONDS}
-while [ ${RET_CODE} -ne 0 ] && [ $((SECONDS-WATCH_START)) -le ${XVFB_TIMEOUT} ]; do
+xvfb_pid="$!"
+ret_code=1
+watch_start=${SECONDS}
+while [ ${ret_code} -ne 0 ] && [ $((SECONDS-watch_start)) -le ${XVFB_TIMEOUT} ]; do
     xdpyinfo -display :99 > /dev/null 2>&1
-    RET_CODE=${?}
+    ret_code=$?
 done
-if [ $((SECONDS-WATCH_START)) -gt ${XVFB_TIMEOUT} ]; then
+if [ $((SECONDS-watch_start)) -gt ${XVFB_TIMEOUT} ]; then
     log_error "Timeout: Xvfb failed to start properly. Exiting."
     exit 1
 fi
@@ -68,62 +68,62 @@ fi
 if [ ! -d /visualization/git_repo/.git ]; then
     # Assume this is a multi-repo setup
     log_info "Detected potential multi-repo input. Assuming this is a multi-repo directory."
-    T_COUNT=0
-    S_COUNT=0
-    LOGS=""
-    for DIRECTORY in $(find /visualization/git_repo/ -maxdepth 1 -mindepth 1 -type d -printf '%f\n')
+    t_count=0
+    s_count=0
+    logs=""
+    for dir in $(find /visualization/git_repo/ -maxdepth 1 -mindepth 1 -type d -printf '%f\n')
     do
-        log_notice "Checking ${DIRECTORY}... "
-        if [ ! -d /visualization/git_repo/"${DIRECTORY}"/.git ]; then
-            log_warn "/visualization/git_repo/${DIRECTORY} is not a git repo, skipping..."
+        log_notice "Checking ${dir}... "
+        if [ ! -d /visualization/git_repo/"${dir}"/.git ]; then
+            log_warn "/visualization/git_repo/${dir} is not a git repo, skipping..."
             continue
         fi
         if [ "${RECURSE_SUBMODULES}" = "1" ]; then
-            log_info "Recursing through submodules in ${DIRECTORY}"
-            SUBMOD_PATHS=()
-            cd /visualization/git_repo/"${DIRECTORY}" && git submodule foreach --recursive '( echo "SUBMOD_PATHS+=($displaypath)" >> /visualization/submods.bash )'
+            log_info "Recursing through submodules in ${dir}"
+            submod_paths=()
+            cd /visualization/git_repo/"${dir}" && git submodule foreach --recursive '( echo "submod_paths+=($displaypath)" >> /visualization/submods.bash )'
             cd /visualization
             if [ ! -f /visualization/submods.bash ]; then
-                log_warn "No submodules found in ${DIRECTORY}. Continuing..."
+                log_warn "No submodules found in ${dir}. Continuing..."
             else
                 . submods.bash
                 rm  submods.bash
             fi
-            SUBMOD_PATHS+=('') # include parent of course
-            for SUBMOD_PATH in "${SUBMOD_PATHS[@]}"; do
-                ((++T_COUNT))
+            submod_paths+=('') # include parent of course
+            for submod_path in "${submod_paths[@]}"; do
+                ((++t_count))
                 set -e
-                ${GOURCE_EXEC} --output-custom-log development${T_COUNT}.log /visualization/git_repo/"${DIRECTORY}"/"${SUBMOD_PATH}"
+                ${GOURCE_EXEC} --output-custom-log development${t_count}.log /visualization/git_repo/"${dir}"/"${submod_path}"
                 set +e
-                if [ "${SUBMOD_PATH}" != "" ]; then
-                    sed -i -r "s#(.+)\|#\1|/${DIRECTORY}/${SUBMOD_PATH}#" development${T_COUNT}.log
-                    ((S_COUNT++))
+                if [ "${submod_path}" != "" ]; then
+                    sed -i -r "s#(.+)\|#\1|/${dir}/${submod_path}#" development${t_count}.log
+                    ((s_count++))
                 else
-                    sed -i -r "s#(.+)\|#\1|/${DIRECTORY}#" development${T_COUNT}.log
+                    sed -i -r "s#(.+)\|#\1|/${dir}#" development${t_count}.log
                 fi
 
-                LOGS="${LOGS} development${T_COUNT}.log"
+                logs="${logs} development${t_count}.log"
             done
         else
-            ((++T_COUNT))
+            ((++t_count))
             set -e
-            ${GOURCE_EXEC} --output-custom-log development${T_COUNT}.log /visualization/git_repo/"${DIRECTORY}"
+            ${GOURCE_EXEC} --output-custom-log development${t_count}.log /visualization/git_repo/"${dir}"
             set +e
-            sed -i -r "s#(.+)\|#\1|/${DIRECTORY}#" development${T_COUNT}.log
-            LOGS="${LOGS} development${T_COUNT}.log"
+            sed -i -r "s#(.+)\|#\1|/${dir}#" development${t_count}.log
+            logs="${logs} development${t_count}.log"
         fi
     done
-    log_success "Processed $((T_COUNT-S_COUNT)) repos and ${S_COUNT} submodules."
-    cat ${LOGS} | sort -n > development.log
-    rm "${LOGS}"
+    log_success "Processed $((t_count-s_count)) repos and ${s_count} submodules."
+    cat ${logs} | sort -n > development.log
+    rm "${logs}"
 else
     # Assume this is a single-repo setup
     log_info "Detected single-repo input."
-    S_COUNT=0
+    s_count=0
     if [ "${RECURSE_SUBMODULES}" = "1" ]; then
         log_info "Recursing through submodules."
-        SUBMOD_PATHS=()
-        cd /visualization/git_repo && git submodule foreach --recursive '( echo "SUBMOD_PATHS+=($displaypath)" >> /visualization/submods.bash )'
+        submod_paths=()
+        cd /visualization/git_repo && git submodule foreach --recursive '( echo "submod_paths+=($displaypath)" >> /visualization/submods.bash )'
         cd /visualization
         if [ ! -f /visualization/submods.bash ]; then
             log_warn "No submodules found. Continuing..."
@@ -131,30 +131,30 @@ else
             . submods.bash
             rm  submods.bash
         fi
-        LOGS=""
-        SUBMOD_PATHS+=('') # include parent of course
-        for SUBMOD_PATH in "${SUBMOD_PATHS[@]}"; do
-            ((++S_COUNT))
+        logs=""
+        submod_paths+=('') # include parent of course
+        for submod_path in "${submod_paths[@]}"; do
+            ((++s_count))
             set -e
-            ${GOURCE_EXEC} --output-custom-log development${S_COUNT}.log /visualization/git_repo/"${SUBMOD_PATH}"
+            ${GOURCE_EXEC} --output-custom-log development${s_count}.log /visualization/git_repo/"${submod_path}"
             set +e
-            if [ "${SUBMOD_PATH}" != "" ]; then
-                sed -i -r "s#(.+)\|#\1|/${SUBMOD_PATH}#" development${S_COUNT}.log
+            if [ "${submod_path}" != "" ]; then
+                sed -i -r "s#(.+)\|#\1|/${submod_path}#" development${s_count}.log
             fi
-            LOGS="${LOGS} development${S_COUNT}.log"
+            logs="${logs} development${s_count}.log"
         done
-        ((--S_COUNT)) # Account for repo itself
-        cat ${LOGS} | sort -n > development.log
-        rm "${LOGS}"
+        ((--s_count)) # Account for repo itself
+        cat ${logs} | sort -n > development.log
+        rm "${logs}"
     else
         # Single repo no submods - simple case.
         set -e
         ${GOURCE_EXEC} --output-custom-log development.log /visualization/git_repo
         set +e
     fi
-    log_success "Processed 1 repo and ${S_COUNT} submodules."
+    log_success "Processed 1 repo and ${s_count} submodules."
 fi
-log_info "Git Logs Parsed."
+log_info "Git logs Parsed."
 
 # Check for avatar directory mount.
 if [ -d /visualization/avatars ]; then
@@ -194,12 +194,12 @@ if [ -n "${TEMPLATE}" ]; then
         border)
             log_info "Using ${TEMPLATE} template..."
             /visualization/runtime/templates/border.sh
-            EXIT_CODE=$?
+            exit_code=$?
             ;;
         standard)
             log_info "Using ${TEMPLATE} template..."
             /visualization/runtime/templates/standard.sh
-            EXIT_CODE=$?
+            exit_code=$?
             ;;
         *)
             log_error "Unknown template option ${TEMPLATE}"
@@ -209,7 +209,7 @@ if [ -n "${TEMPLATE}" ]; then
 else
     log_info "No template choice provided, Defaulting to standard template..."
     /visualization/runtime/templates/standard.sh
-    EXIT_CODE=$?
+    exit_code=$?
 fi
 
 if [ "${TEST}" != "1" ]; then
@@ -232,5 +232,5 @@ fi
 # Exit
 [ -n "$xvfb_pid" -a -e /proc/$xvfb_pid ] && kill $xvfb_pid
 [ -n "$httpd_pid" -a -e /proc/$httpd_pid ] && kill $httpd_pid
-echo "Exiting with code ${EXIT_CODE}"
-exit "${EXIT_CODE}"
+echo "Exiting with code ${exit_code}"
+exit "${exit_code}"

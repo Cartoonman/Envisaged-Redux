@@ -30,7 +30,7 @@ function print_help
     echo "  Other args will be passed through to docker run command.    "
     echo "          e.g. -e H265_CRF=\"0\" "
 }
-
+readonly -f print_help
 
 function parse_args
 {
@@ -74,3 +74,4 @@ function parse_args
         shift
     done
 }
+readonly -f print_help

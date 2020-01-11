@@ -9,7 +9,7 @@ load common/bats_common
 
 
 @test "Test Invert Colors" {
-    ffmpeg_flags_test=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${INVERT_FILTER}\";")
+    ffmpeg_flags_test=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${invert_filter}\";")
     output=$(export INVERT_COLORS=0; "${ffmpeg_flags_test[@]}")
     assert_equal "$output" ""
     output=$(export INVERT_COLORS=1; "${ffmpeg_flags_test[@]}")
@@ -17,8 +17,8 @@ load common/bats_common
 }
 
 @test "Test Logo" {
-    ffmpeg_flags_prim_map_label=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${PRIMARY_MAP_LABEL}\";")
-    ffmpeg_flags_logo_filter_graph=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${LOGO_FILTER_GRAPH}\";")
+    ffmpeg_flags_prim_map_label=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${primary_map_label}\";")
+    ffmpeg_flags_logo_filter_graph=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${logo_filter_graph}\";")
     ffmpeg_flags_status=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${?}\";")
     output=$("${ffmpeg_flags_prim_map_label[@]}")
     assert_equal "$output" "[default]"
@@ -26,24 +26,21 @@ load common/bats_common
     assert_equal "$output" ""
 
     refute [ "$(export LOGO=/path/to/logo.image; "${ffmpeg_flags_status[@]}")" = "0" ]
-    assert [ "$(export LOGO=/path/to/logo.image; export LOGO_FFMPEG_LABEL=[1:v]; "${ffmpeg_flags_status[@]}")" = "0" ]
+    assert [ "$(export LOGO=/path/to/logo.image; export logo_ffmpeg_label=[1:v]; "${ffmpeg_flags_status[@]}")" = "0" ]
 
-    output=$(export LOGO=/path/to/logo.image; export LOGO_FFMPEG_LABEL=[1:v]; "${ffmpeg_flags_prim_map_label[@]}")
+    output=$(export LOGO=/path/to/logo.image; export logo_ffmpeg_label=[1:v]; "${ffmpeg_flags_prim_map_label[@]}")
     assert_equal "$output" "[with_logo]"
-    output=$(export LOGO=/path/to/logo.image; export LOGO_FFMPEG_LABEL=[1:v]; "${ffmpeg_flags_logo_filter_graph[@]}")
+    output=$(export LOGO=/path/to/logo.image; export logo_ffmpeg_label=[1:v]; "${ffmpeg_flags_logo_filter_graph[@]}")
     assert_equal "$output" ";[default][1:v]overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
 }
 
 
 @test "Test Preview" {
-    ffmpeg_flags_lp_fps=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${LP_FPS}\";")
-    ffmpeg_flags_live_prev_split=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${LIVE_PREVIEW_SPLITTER}\";")
-    ffmpeg_flags_prim_map_label=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${PRIMARY_MAP_LABEL}\";")
-    ffmpeg_flags_live_prev_args=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${LIVE_PREVIEW_ARGS}\";")
+    ffmpeg_flags_live_prev_split=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${live_preview_splitter}\";")
+    ffmpeg_flags_prim_map_label=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${primary_map_label}\";")
+    ffmpeg_flags_live_prev_args=("bash" "-c" "source /visualization/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${live_preview_args}\";")
 
     
-    output=$("${ffmpeg_flags_lp_fps[@]}")
-    assert_equal "$output" ""
     output=$("${ffmpeg_flags_live_prev_split[@]}")
     assert_equal "$output" ""
     output=$("${ffmpeg_flags_prim_map_label[@]}")
@@ -51,8 +48,6 @@ load common/bats_common
     output=$("${ffmpeg_flags_live_prev_args[@]}")
     assert_equal "$output" ""
     
-    output=$(export LIVE_PREVIEW=1; "${ffmpeg_flags_lp_fps[@]}")
-    assert_equal "$output" "30"
     output=$(export LIVE_PREVIEW=1; "${ffmpeg_flags_live_prev_split[@]}")
     assert_equal "$output" ";[default]split[original_feed][time_scaler]; \
             [time_scaler]setpts=1*PTS[live_preview]"
@@ -65,8 +60,6 @@ load common/bats_common
             -vsync vfr -hls_flags independent_segments+delete_segments -hls_allow_cache 1 \
             -hls_time 1 -hls_list_size 10 -start_number 0 ./html/preview.m3u8"
 
-    output=$(export LIVE_PREVIEW=1; export PREVIEW_SLOWDOWN_FACTOR=3; "${ffmpeg_flags_lp_fps[@]}")
-    assert_equal "$output" "10"
     output=$(export LIVE_PREVIEW=1; export PREVIEW_SLOWDOWN_FACTOR=3; "${ffmpeg_flags_live_prev_split[@]}")
     assert_equal "$output" ";[default]split[original_feed][time_scaler]; \
             [time_scaler]setpts=3*PTS[live_preview]"

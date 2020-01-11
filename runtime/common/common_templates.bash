@@ -15,6 +15,17 @@ unset inc_dir_path
 : "${VIDEO_RESOLUTION:=1080p}"
 : "${FPS:=30}"
 
+# gen_gource_args
+# Generates an indexed array of gource args to pass to gource.
+#
+#
+# Consumes:
+#   Gource Global Environment Variables, user-defined.
+# Arguments:
+#   none
+# Outputs:
+#   gource_arg_array - indexed array with gource args to 
+#   forward to Gource.
 function gen_gource_args
 {
     gource_arg_array=()
@@ -67,29 +78,52 @@ function gen_gource_args
 }
 readonly -f gen_gource_args
 
+
+# gen_ffmpeg_flags
+# Sets a number of variables and flags used by the ffmepg execution step.
+#
+#
+# Consumes:
+#   INVERT_COLORS
+#   LOGO
+#   LIVE_PREVIEW
+#   PREVIEW_SLOWDOWN_FACTOR (optional)
+#   FPS
+#   logo_ffmpeg_label
+# Arguments:
+#   none
+# Outputs:
+#   invert_filter (depend -> INVERT_COLORS)
+#   primary_map_label
+#   logo_filter_graph (depend -> LOGO)
+#   live_preview_args (depend -> LIVE_PREVIEW)
+#   live_preview_splitter (depend -> LIVE_PREVIEW)
 function gen_ffmpeg_flags
 {
     if [ "${INVERT_COLORS}" == "1" ]; then
-        INVERT_FILTER=",lutrgb=r=negval:g=negval:b=negval"
+        invert_filter=",lutrgb=r=negval:g=negval:b=negval"
     fi
 
     # Default map
-    PRIMARY_MAP_LABEL="[default]"
+    declare -g primary_map_label="[default]"
     if [ "${LOGO}" != "" ]; then
-        [ -z "${LOGO_FFMPEG_LABEL+x}" ] && log_error "Error: LOGO_FFMPEG_LABEL variable must be set when using logo for ffmpeg (internal error)." && exit 1
-        LOGO_FILTER_GRAPH=";${PRIMARY_MAP_LABEL}${LOGO_FFMPEG_LABEL}overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
-        PRIMARY_MAP_LABEL="[with_logo]"
+        declare -g logo_filter_graph
+        [ -z "${logo_ffmpeg_label+x}" ] && log_error "Error: logo_ffmpeg_label variable must be set when using logo for ffmpeg (internal error)." && exit 1
+        logo_filter_graph=";${primary_map_label}${logo_ffmpeg_label}overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
+        primary_map_label="[with_logo]"
     fi
 
     if [ "${LIVE_PREVIEW}" = "1" ]; then
+        declare -g live_preview_splitter live_preview_args
         : "${PREVIEW_SLOWDOWN_FACTOR:=1}"
-        LP_FPS=$((${FPS} / ${PREVIEW_SLOWDOWN_FACTOR}))
-        LIVE_PREVIEW_SPLITTER=";${PRIMARY_MAP_LABEL}split[original_feed][time_scaler]; \
+        local lp_fps=$((${FPS} / ${PREVIEW_SLOWDOWN_FACTOR}))
+
+        live_preview_splitter=";${primary_map_label}split[original_feed][time_scaler]; \
             [time_scaler]setpts=${PREVIEW_SLOWDOWN_FACTOR}*PTS[live_preview]"
-        PRIMARY_MAP_LABEL="[original_feed]"
-        LIVE_PREVIEW_ARGS=" -map [live_preview] -c:v libx264 -pix_fmt yuv420p -maxrate 40M -bufsize 5M \
-            -profile:v high -level:v 5.2 -y -r ${LP_FPS} -preset ultrafast -crf 1 \
-            -tune zerolatency -x264-params keyint=$((${LP_FPS} * 3)):min-keyint=${LP_FPS} \
+        primary_map_label="[original_feed]"
+        live_preview_args=" -map [live_preview] -c:v libx264 -pix_fmt yuv420p -maxrate 40M -bufsize 5M \
+            -profile:v high -level:v 5.2 -y -r ${lp_fps} -preset ultrafast -crf 1 \
+            -tune zerolatency -x264-params keyint=$((${lp_fps} * 3)):min-keyint=${lp_fps} \
             -vsync vfr -hls_flags independent_segments+delete_segments -hls_allow_cache 1 \
             -hls_time 1 -hls_list_size 10 -start_number 0 ./html/preview.m3u8"
     fi
