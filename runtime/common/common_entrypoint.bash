@@ -5,11 +5,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-. "${DIR}/common.bash"
+inc_dir_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "${inc_dir_path}/common.bash"
+unset inc_dir_path
 
-
-XVFB_TIMEOUT=60
+declare -r XVFB_TIMEOUT=60
 
 function print_intro
 {
@@ -23,11 +23,12 @@ function print_intro
 
 EOF
 }
+readonly -f print_intro
 
 function parse_args
 {
     while [[ $# -gt 0 ]]; do
-        k="$1"
+        local k="$1"
         case $k in
             HOLD)
                 log_info "Test mode enabled. Spinning main thread. Run docker stop on container when complete."
@@ -47,3 +48,4 @@ function parse_args
         shift
     done
 }
+readonly -f parse_args

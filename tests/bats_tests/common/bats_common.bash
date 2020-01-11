@@ -5,14 +5,14 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-source "${DIR}/helpers/output.bash"
-source "${DIR}/helpers/error.bash"
-source "${DIR}/helpers/lang.bash"
-source "${DIR}/helpers/assert.bash"
+declare -r CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "${CUR_DIR_PATH}/helpers/output.bash"
+source "${CUR_DIR_PATH}/helpers/error.bash"
+source "${CUR_DIR_PATH}/helpers/lang.bash"
+source "${CUR_DIR_PATH}/helpers/assert.bash"
 
 
-gource_args_test=("bash" "-c"  "source /visualization/runtime/common/common_templates.bash; gen_gource_args; echo \"\${GOURCE_ARG_ARRAY[@]}\";")
+gource_args_test=("bash" "-c"  "source /visualization/runtime/common/common_templates.bash; gen_gource_args; echo \"\${gource_arg_array[@]}\";")
 
 gource_test_entrypoint_1() {
     local -r TYPE="$1" 

@@ -6,8 +6,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND MIT
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-. "${DIR}/../common/common_templates.bash"
+declare -r CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "${CUR_DIR_PATH}/../common/common_templates.bash"
 
 # Predefined resolutions and settings.
 if [[ "${VIDEO_RESOLUTION}" == "2160p" ]]; then
@@ -47,7 +47,7 @@ log_notice "Starting Gource primary with title: ${GOURCE_TITLE}"
 G_CMD=( \
         ${GOURCE_EXEC} \
         --${GOURCE_RES} \
-        "${GOURCE_ARG_ARRAY[@]}" \
+        "${gource_arg_array[@]}" \
         --stop-at-end \
         /visualization/development.log \
         -r ${FPS} \

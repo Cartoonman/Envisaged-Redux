@@ -6,8 +6,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND MIT
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-. "${DIR}/common/common_entrypoint.bash"
+declare -r CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "${CUR_DIR_PATH}/common/common_entrypoint.bash"
 
 # Print Banner
 print_intro

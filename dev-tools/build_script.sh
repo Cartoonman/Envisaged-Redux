@@ -5,8 +5,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+declare -r CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-docker build "${@}" ${DIR}/../ -t cartoonman/envisaged-redux:latest
-docker build "${@}" -f ${DIR}/../tests/Dockerfile ${DIR}/../ -t cartoonman/test-envisaged-redux:latest
-${DIR}/../tests/scripts/start.sh
+docker build "$@" ${CUR_DIR_PATH}/../ -t cartoonman/envisaged-redux:latest
+docker build "$@" -f ${CUR_DIR_PATH}/../tests/Dockerfile ${CUR_DIR_PATH}/../ -t cartoonman/test-envisaged-redux:latest
+${CUR_DIR_PATH}/../tests/scripts/start.sh

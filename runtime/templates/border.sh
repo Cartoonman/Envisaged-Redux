@@ -6,8 +6,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND MIT
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-. "${DIR}/../common/common_templates.bash"
+declare -r CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "${CUR_DIR_PATH}/../common/common_templates.bash"
 
 # Predefined resolutions and settings.
 if [[ "${VIDEO_RESOLUTION}" == "2160p" ]]; then
@@ -83,7 +83,7 @@ GOURCE_HIDE_ITEMS="date,mouse,${GOURCE_HIDE_ITEMS}"
 GOURCE_SHOW_KEY=0
 
 gen_gource_args
-GOURCE_PRIMARY_ARGS=("${GOURCE_ARG_ARRAY[@]}")
+GOURCE_PRIMARY_ARGS=("${gource_arg_array[@]}")
 
 
 
@@ -95,7 +95,7 @@ GOURCE_SHOW_KEY=1
 unset GOURCE_BACKGROUND_COLOR
 
 gen_gource_args
-GOURCE_SECONDARY_ARGS=("${GOURCE_ARG_ARRAY[@]}")
+GOURCE_SECONDARY_ARGS=("${gource_arg_array[@]}")
 
 # Start Gource for visualization.
 log_notice "Starting Gource primary with title: ${GOURCE_TITLE}"

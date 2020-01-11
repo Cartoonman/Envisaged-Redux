@@ -5,8 +5,9 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-. "${DIR}/common.bash"
+inc_dir_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "${inc_dir_path}/common.bash"
+unset inc_dir_path
 
 # Assign defaults if not set
 : "${H265_PRESET:=medium}"
@@ -16,55 +17,55 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 function gen_gource_args
 {
-    GOURCE_ARG_ARRAY=()
+    gource_arg_array=()
 
-    [ -n "${GOURCE_TITLE}" ]                    && GOURCE_ARG_ARRAY+=("--title" "${GOURCE_TITLE}")
-    [ -n "${GOURCE_CAMERA_MODE}" ]              && GOURCE_ARG_ARRAY+=("--camera-mode" "${GOURCE_CAMERA_MODE}")
-    [ -n "${GOURCE_START_DATE}" ]               && GOURCE_ARG_ARRAY+=("--start-date" "${GOURCE_START_DATE}")
-    [ -n "${GOURCE_STOP_DATE}" ]                && GOURCE_ARG_ARRAY+=("--stop-date" "${GOURCE_STOP_DATE}")
-    [ -n "${GOURCE_START_POSITION}" ]           && GOURCE_ARG_ARRAY+=("--start-position" "${GOURCE_START_POSITION}")
-    [ -n "${GOURCE_STOP_POSITION}" ]            && GOURCE_ARG_ARRAY+=("--stop-position" "${GOURCE_STOP_POSITION}")
-    [ -n "${GOURCE_STOP_AT_TIME}" ]             && GOURCE_ARG_ARRAY+=("--stop-at-time" "${GOURCE_STOP_AT_TIME}")
-    [ -n "${GOURCE_SECONDS_PER_DAY}" ]          && GOURCE_ARG_ARRAY+=("--seconds-per-day" "${GOURCE_SECONDS_PER_DAY}")
-    [ -n "${GOURCE_AUTO_SKIP_SECONDS}" ]        && GOURCE_ARG_ARRAY+=("--auto-skip-seconds" "${GOURCE_AUTO_SKIP_SECONDS}")
-    [ -n "${GOURCE_TIME_SCALE}" ]               && GOURCE_ARG_ARRAY+=("--time-scale" "${GOURCE_TIME_SCALE}")
-    [ -n "${GOURCE_USER_SCALE}" ]               && GOURCE_ARG_ARRAY+=("--user-scale" "${GOURCE_USER_SCALE}")
-    [ -n "${GOURCE_MAX_USER_SPEED}" ]           && GOURCE_ARG_ARRAY+=("--max-user-speed" "${GOURCE_MAX_USER_SPEED}")
-    [ -n "${GOURCE_HIDE_ITEMS}" ]               && GOURCE_ARG_ARRAY+=("--hide" "${GOURCE_HIDE_ITEMS}")
-    [ -n "${GOURCE_FILE_IDLE_TIME}" ]           && GOURCE_ARG_ARRAY+=("--file-idle-time" "${GOURCE_FILE_IDLE_TIME}")
-    [ -n "${GOURCE_MAX_FILES}" ]                && GOURCE_ARG_ARRAY+=("--max-files" "${GOURCE_MAX_FILES}")
-    [ -n "${GOURCE_MAX_FILE_LAG}" ]             && GOURCE_ARG_ARRAY+=("--max-file-lag" "${GOURCE_MAX_FILE_LAG}")
-    [ -n "${GOURCE_FILENAME_TIME}" ]            && GOURCE_ARG_ARRAY+=("--filename-time" "${GOURCE_FILENAME_TIME}")
-    [ -n "${GOURCE_FONT_SIZE}" ]                && GOURCE_ARG_ARRAY+=("--font-size" "${GOURCE_FONT_SIZE}")
-    [ -n "${GOURCE_FONT_COLOR}" ]               && GOURCE_ARG_ARRAY+=("--font-colour" "${GOURCE_FONT_COLOR}")
-    [ -n "${GOURCE_BACKGROUND_COLOR}" ]         && GOURCE_ARG_ARRAY+=("--background-colour" "${GOURCE_BACKGROUND_COLOR}")
-    [ -n "${GOURCE_DATE_FORMAT}" ]              && GOURCE_ARG_ARRAY+=("--date-format" "${GOURCE_DATE_FORMAT}")
-    [ -n "${GOURCE_DIR_DEPTH}" ]                && GOURCE_ARG_ARRAY+=("--dir-name-depth" "${GOURCE_DIR_DEPTH}")
-    [ -n "${GOURCE_BLOOM_MULTIPLIER}" ]         && GOURCE_ARG_ARRAY+=("--bloom-multiplier" "${GOURCE_BLOOM_MULTIPLIER}")
-    [ -n "${GOURCE_BLOOM_INTENSITY}" ]          && GOURCE_ARG_ARRAY+=("--bloom-intensity" "${GOURCE_BLOOM_INTENSITY}")
-    [ -n "${GOURCE_PADDING}" ]                  && GOURCE_ARG_ARRAY+=("--padding" "${GOURCE_PADDING}")
+    [ -n "${GOURCE_TITLE}" ]                    && gource_arg_array+=("--title" "${GOURCE_TITLE}")
+    [ -n "${GOURCE_CAMERA_MODE}" ]              && gource_arg_array+=("--camera-mode" "${GOURCE_CAMERA_MODE}")
+    [ -n "${GOURCE_START_DATE}" ]               && gource_arg_array+=("--start-date" "${GOURCE_START_DATE}")
+    [ -n "${GOURCE_STOP_DATE}" ]                && gource_arg_array+=("--stop-date" "${GOURCE_STOP_DATE}")
+    [ -n "${GOURCE_START_POSITION}" ]           && gource_arg_array+=("--start-position" "${GOURCE_START_POSITION}")
+    [ -n "${GOURCE_STOP_POSITION}" ]            && gource_arg_array+=("--stop-position" "${GOURCE_STOP_POSITION}")
+    [ -n "${GOURCE_STOP_AT_TIME}" ]             && gource_arg_array+=("--stop-at-time" "${GOURCE_STOP_AT_TIME}")
+    [ -n "${GOURCE_SECONDS_PER_DAY}" ]          && gource_arg_array+=("--seconds-per-day" "${GOURCE_SECONDS_PER_DAY}")
+    [ -n "${GOURCE_AUTO_SKIP_SECONDS}" ]        && gource_arg_array+=("--auto-skip-seconds" "${GOURCE_AUTO_SKIP_SECONDS}")
+    [ -n "${GOURCE_TIME_SCALE}" ]               && gource_arg_array+=("--time-scale" "${GOURCE_TIME_SCALE}")
+    [ -n "${GOURCE_USER_SCALE}" ]               && gource_arg_array+=("--user-scale" "${GOURCE_USER_SCALE}")
+    [ -n "${GOURCE_MAX_USER_SPEED}" ]           && gource_arg_array+=("--max-user-speed" "${GOURCE_MAX_USER_SPEED}")
+    [ -n "${GOURCE_HIDE_ITEMS}" ]               && gource_arg_array+=("--hide" "${GOURCE_HIDE_ITEMS}")
+    [ -n "${GOURCE_FILE_IDLE_TIME}" ]           && gource_arg_array+=("--file-idle-time" "${GOURCE_FILE_IDLE_TIME}")
+    [ -n "${GOURCE_MAX_FILES}" ]                && gource_arg_array+=("--max-files" "${GOURCE_MAX_FILES}")
+    [ -n "${GOURCE_MAX_FILE_LAG}" ]             && gource_arg_array+=("--max-file-lag" "${GOURCE_MAX_FILE_LAG}")
+    [ -n "${GOURCE_FILENAME_TIME}" ]            && gource_arg_array+=("--filename-time" "${GOURCE_FILENAME_TIME}")
+    [ -n "${GOURCE_FONT_SIZE}" ]                && gource_arg_array+=("--font-size" "${GOURCE_FONT_SIZE}")
+    [ -n "${GOURCE_FONT_COLOR}" ]               && gource_arg_array+=("--font-colour" "${GOURCE_FONT_COLOR}")
+    [ -n "${GOURCE_BACKGROUND_COLOR}" ]         && gource_arg_array+=("--background-colour" "${GOURCE_BACKGROUND_COLOR}")
+    [ -n "${GOURCE_DATE_FORMAT}" ]              && gource_arg_array+=("--date-format" "${GOURCE_DATE_FORMAT}")
+    [ -n "${GOURCE_DIR_DEPTH}" ]                && gource_arg_array+=("--dir-name-depth" "${GOURCE_DIR_DEPTH}")
+    [ -n "${GOURCE_BLOOM_MULTIPLIER}" ]         && gource_arg_array+=("--bloom-multiplier" "${GOURCE_BLOOM_MULTIPLIER}")
+    [ -n "${GOURCE_BLOOM_INTENSITY}" ]          && gource_arg_array+=("--bloom-intensity" "${GOURCE_BLOOM_INTENSITY}")
+    [ -n "${GOURCE_PADDING}" ]                  && gource_arg_array+=("--padding" "${GOURCE_PADDING}")
 
-    [ "${GOURCE_HIGHLIGHT_ALL_USERS}" = "1" ]   && GOURCE_ARG_ARRAY+=("--highlight-users")
-    [ "${GOURCE_MULTI_SAMPLING}" = "1" ]        && GOURCE_ARG_ARRAY+=("--multi-sampling")
-    [ "${GOURCE_SHOW_KEY}" = "1" ]              && GOURCE_ARG_ARRAY+=("--key")
+    [ "${GOURCE_HIGHLIGHT_ALL_USERS}" = "1" ]   && gource_arg_array+=("--highlight-users")
+    [ "${GOURCE_MULTI_SAMPLING}" = "1" ]        && gource_arg_array+=("--multi-sampling")
+    [ "${GOURCE_SHOW_KEY}" = "1" ]              && gource_arg_array+=("--key")
 
     # Captions
-    [ "${USE_CAPTIONS}" = "1" ]                 && GOURCE_ARG_ARRAY+=("--caption-file" "/visualization/captions.txt")
+    [ "${USE_CAPTIONS}" = "1" ]                 && gource_arg_array+=("--caption-file" "/visualization/captions.txt")
     if [ "${USE_CAPTIONS}" = "1" ]; then
-        [ -n "${GOURCE_CAPTION_SIZE}" ]         && GOURCE_ARG_ARRAY+=("--caption-size" "${GOURCE_CAPTION_SIZE}")
-        [ -n "${GOURCE_CAPTION_COLOR}" ]        && GOURCE_ARG_ARRAY+=("--caption-colour" "${GOURCE_CAPTION_COLOR}")
-        [ -n "${GOURCE_CAPTION_DURATION}" ]     && GOURCE_ARG_ARRAY+=("--caption-duration" "${GOURCE_CAPTION_DURATION}")
+        [ -n "${GOURCE_CAPTION_SIZE}" ]         && gource_arg_array+=("--caption-size" "${GOURCE_CAPTION_SIZE}")
+        [ -n "${GOURCE_CAPTION_COLOR}" ]        && gource_arg_array+=("--caption-colour" "${GOURCE_CAPTION_COLOR}")
+        [ -n "${GOURCE_CAPTION_DURATION}" ]     && gource_arg_array+=("--caption-duration" "${GOURCE_CAPTION_DURATION}")
     fi
 
     # Avatars
-    [ "${USE_AVATARS}" = "1" ]                  && GOURCE_ARG_ARRAY+=("--user-image-dir" "/visualization/avatars")
+    [ "${USE_AVATARS}" = "1" ]                  && gource_arg_array+=("--user-image-dir" "/visualization/avatars")
 
     # Nightly
     if [ "${USE_NIGHTLY}" = "1" ]; then
-        [ "${GOURCE_FILE_EXT_FALLBACK}" = "1" ] && GOURCE_ARG_ARRAY+=("--file-extension-fallback")
+        [ "${GOURCE_FILE_EXT_FALLBACK}" = "1" ] && gource_arg_array+=("--file-extension-fallback")
     fi
 }
-
+readonly -f gen_gource_args
 
 function gen_ffmpeg_flags
 {
@@ -75,7 +76,7 @@ function gen_ffmpeg_flags
     # Default map
     PRIMARY_MAP_LABEL="[default]"
     if [ "${LOGO}" != "" ]; then
-        [ -z "${LOGO_FFMPEG_LABEL}" ] && log_error "Error: LOGO_FFMPEG_LABEL variable must be set when using logo for ffmpeg (internal error)." && exit 1
+        [ -z "${LOGO_FFMPEG_LABEL+x}" ] && log_error "Error: LOGO_FFMPEG_LABEL variable must be set when using logo for ffmpeg (internal error)." && exit 1
         LOGO_FILTER_GRAPH=";${PRIMARY_MAP_LABEL}${LOGO_FFMPEG_LABEL}overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
         PRIMARY_MAP_LABEL="[with_logo]"
     fi
@@ -93,3 +94,4 @@ function gen_ffmpeg_flags
             -hls_time 1 -hls_list_size 10 -start_number 0 ./html/preview.m3u8"
     fi
 }
+readonly -f gen_ffmpeg_flags
