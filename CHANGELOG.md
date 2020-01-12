@@ -12,46 +12,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Unit and Integration Test Suite with Dockerfile and start script.
 - quick_start.sh script and suite for new users to become familiar with using Envisaged-Redux and it's capabilities.
 - Version file
+- Added correctness check for httpd startup with curl.
 
 ### Updated
 
-- Updated base image to Alpine Linux 3.11
-- Updated Mesa to 19.2.8
-- Updated hls.js to 13.1
+- Updated base image to Alpine Linux 3.11.
+- Updated Mesa to 19.2.8.
+- Updated hls.js to 13.1.
 - Ported the deprecated autotools-based build of Mesa to Meson.
-- Updated to LLVM 9
+- Updated to LLVM 9.
 - Replaced upstream reference to utensils/opengl with local build of mesa library for direct control and to keep it up to date.
-- Migrated project to Apache 2 License (from MIT)
+- Migrated project to Apache 2 License (from MIT).
 - Refactored template runtime command args for Gource and ffmpeg for better observation thru tests.
-- Refactored common imports for entrypoint and templates
-- Renamed template names
-- VBV bufsize increased for preview
+- Refactored common imports for entrypoint and templates.
+- Refactored entrypoint and modularized components.
+- Renamed template names.
+- VBV bufsize increased for preview.
 - Colored logging now only colors the tag indicator.
 - Migrated echo statements in loggers to printf for better reliability.
+- Consistent punctuation in Changelog.
 
 ### Fixed
 
 - Edge case of multi-repo support failing if directory is a symbolic link.
-- Slowdown Factor now an assigned default when Live Preview is enabled
-- Added check if logo is given but no assigned logo stream label was set
-- Fixed broken background pid kill chain
+- Slowdown Factor now an assigned default when Live Preview is enabled.
+- Added check if logo is given but no assigned logo stream label was set.
+- Fixed broken background pid kill chain.
 - Fixed exit code to accurately reflect system state.
 - A number of shell and Docker cleanups and fixes through shellcheck and hadolint.
 - Race condition fixed in preview.html when intervalFn is null when not expected.
 - Typo during Xvfb check that ran xdpyinfo in the background.
+- Fixed hanging background processes if failure occurs during bootup of httpd or xvfb (before the traps are set).
 
 ### Removed
-- swr libraries (Will be added back in later when further testing occurs with swr. Does not affect LLVMPipe)
+- swr libraries (Will be added back in later when further testing occurs with swr. Does not affect LLVMPipe).
 
 ## [0.10.0] - 2019-11-23
 
 ### Added
 
-- This Changelog
-- Local output support (saving output.mp4 to a local directory via mount)
+- This Changelog.
+- Local output support (saving output.mp4 to a local directory via mount).
 - Multi-sampling and key Gource options.
 - Font color Gource option.
-- Hook for testing
+- Hook for testing.
 
 ### Updated
 
@@ -87,7 +91,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Reworked ffmpeg filter chains for both runtime templates.
-- Documentation updated for Live Preview
+- Documentation updated for Live Preview.
 
 ### Fixed
 
@@ -153,9 +157,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- MIT License SPDX format propagated to src files
-- Recursive submodule support
-- Link back to original Envisaged repo in Readme
+- MIT License SPDX format propagated to src files.
+- Recursive submodule support.
+- Link back to original Envisaged repo in Readme.
 
 ### Removed
 
@@ -164,14 +168,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- MIT License updated with copyrights
+- MIT License updated with copyrights.
 - Backticks removed from Readme table to make it easier to read.
 
 ## [0.4.0] - 2019-10-13
 
 ### Added
 
-- Multi-repository support (single level, non-recursive multirepo)
+- Multi-repository support (single level, non-recursive multirepo).
 - Variadic argument support for example launch scripts.
 - Help function for example scripts.
 
@@ -181,7 +185,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- Example scripts given variadic argument support
+- Example scripts given variadic argument support.
 
 ## [0.3.1] - 2019-10-13
 
@@ -222,7 +226,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Documentation to reflect relationship with original [Envisaged].
-- Replaced H.264 with H.265/HEVC in ffmpeg render steps
+- Replaced H.264 with H.265/HEVC in ffmpeg render steps.
 - Documentation to reflect H.265 support.
 
 ## [0.1.0] - 2019-10-10
