@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Unit and Integration Test Suite with Dockerfile and start script.
 - quick_start.sh script and suite for new users to become familiar with using Envisaged-Redux and it's capabilities.
+- Version file
 
 ### Updated
 
@@ -25,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactored common imports for entrypoint and templates
 - Renamed template names
 - VBV bufsize increased for preview
+- Colored logging now only colors the tag indicator.
+- Migrated echo statements in loggers to printf for better reliability.
 
 ### Fixed
 

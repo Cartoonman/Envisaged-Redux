@@ -7,6 +7,7 @@
 
 inc_dir_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source "${inc_dir_path}/common.bash"
+declare -r ER_VERSION=$( cat "${inc_dir_path}/../../VERSION" )
 unset inc_dir_path
 
 declare -r XVFB_TIMEOUT=60
@@ -20,8 +21,8 @@ function print_intro
 | |___| | | \ V /| \__ \ (_| | (_| |  __/ (_| |  |  _ <  __/ (_| | |_| |>  <
 |_____|_| |_|\_/ |_|___/\__,_|\__, |\___|\__,_|  |_| \_\___|\__,_|\__,_/_/\_\
 ******************************|___/******************************************
-
 EOF
+printf "Version ${ER_VERSION}\n\n"
 }
 readonly -f print_intro
 

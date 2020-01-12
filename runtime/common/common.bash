@@ -15,23 +15,23 @@ declare -r ER_NC='\e[0m'
 
 function log_error
 {
-    >&2 echo -e "${ER_COLOR_ERROR}[ERROR] ${1}${ER_NC}"
+    >&2 printf "${ER_COLOR_ERROR}[ERROR]${ER_NC} ${1}\n"
 }
 function log_warn
 {
-    echo -e "${ER_COLOR_WARN}[WARN] ${1}${ER_NC}"
+    printf "${ER_COLOR_WARN}[WARN]${ER_NC} ${1}\n"
 }
 function log_notice
 {
-    echo -e "${ER_COLOR_NOTICE}[NOTE] ${1}${ER_NC}"
+    printf "${ER_COLOR_NOTICE}[NOTE]${ER_NC} ${1}\n"
 }
 function log_info
 {
-    echo -e "${ER_COLOR_INFO}[INFO] ${1}${ER_NC}"
+    printf "${ER_COLOR_INFO}[INFO]${ER_NC} ${1}\n"
 }
 function log_success
 {
-    echo -e "${ER_COLOR_OK}[OK] ${1}${ER_NC}"
+    printf "${ER_COLOR_OK}[OK]${ER_NC} ${1}\n"
 }
 
 readonly -f log_error

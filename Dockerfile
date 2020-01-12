@@ -102,6 +102,7 @@ RUN set -xe; \
 COPY html /visualization/html
 COPY runtime /visualization/runtime
 COPY LICENSE /visualization/LICENSE
+COPY VERSION /visualization/VERSION
 COPY *.md /visualization/
 
 WORKDIR /visualization

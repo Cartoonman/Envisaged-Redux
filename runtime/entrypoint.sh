@@ -12,6 +12,7 @@ source "${CUR_DIR_PATH}/common/common_entrypoint.bash"
 # Print Banner
 print_intro
 
+# Set exit code
 exit_code=0
 
 # Parse input args if any
