@@ -10,25 +10,32 @@ declare -r CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&
 source "${CUR_DIR_PATH}/../common/common_templates.bash"
 
 # Predefined resolutions and settings.
-if [[ "${VIDEO_RESOLUTION}" == "2160p" ]]; then
-    gource_res="3840x2160"
-    log_info "Using 2160p settings. Output will be 3840x2160 at ${FPS}fps."
-elif [[ "${VIDEO_RESOLUTION}" == "1440p" ]]; then
-    gource_res="2560x1440"
-    log_info "Using 1440p settings. Output will be 2560x1440 at ${FPS}fps."
-elif [[ "${VIDEO_RESOLUTION}" == "1080p" ]]; then
-    gource_res="1920x1080"
-    log_info "Using 1080p settings. Output will be 1920x1080 at ${FPS}fps."
-elif [[ "${VIDEO_RESOLUTION}" == "720p" ]]; then
-    gource_res="1280x720"
-    log_info "Using 720p settings. Output will be 1280x720 at ${FPS}fps."
-elif [[ "${VIDEO_RESOLUTION}" == "480p" ]]; then
-    gource_res="854x480"
-    log_info "Using 720p settings. Output will be 1280x720 at ${FPS}fps."
-else
-    log_error "${VIDEO_RESOLUTION} is not a valid/supported video resolution."
-    exit 1
-fi
+case ${VIDEO_RESOLUTION} in
+    2160p)
+        gource_res="3840x2160"
+        log_info "Using 2160p settings. Output will be 3840x2160 at ${FPS}fps."
+        ;;
+    1440p)
+        gource_res="2560x1440"
+        log_info "Using 1440p settings. Output will be 2560x1440 at ${FPS}fps."
+        ;;
+    1080p)
+        gource_res="1920x1080"
+        log_info "Using 1080p settings. Output will be 1920x1080 at ${FPS}fps."
+        ;;
+    720p)
+        gource_res="1280x720"
+        log_info "Using 720p settings. Output will be 1280x720 at ${FPS}fps."
+        ;;
+    480p)
+        gource_res="854x480"
+        log_info "Using 720p settings. Output will be 1280x720 at ${FPS}fps."
+        ;;
+    *)
+        log_error "${VIDEO_RESOLUTION} is not a valid/supported video resolution."
+        exit 1
+        ;;
+esac
 
 # Generate ffmpeg flags
 logo_ffmpeg_label="[1:v]" && gen_ffmpeg_flags

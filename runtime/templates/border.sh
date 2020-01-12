@@ -10,60 +10,68 @@ declare -r CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&
 source "${CUR_DIR_PATH}/../common/common_templates.bash"
 
 # Predefined resolutions and settings.
-if [[ "${VIDEO_RESOLUTION}" == "2160p" ]]; then
-    gource_res="3500x1940"
-    overlay_res="1920x1080"
-    gource_pad="3520:1960:3520:1960:#313133"
-    key_crop="320:1860:0:0"
-    key_pad="320:1960:0:0:#202021"
-    date_crop="3520:200:640:0"
-    date_pad="3840:200:320:200:#202021"
-    output_res="3840:2160"
-    log_info "Using 2160p settings. Output will be 3840x2160 at ${FPS}fps."
-elif [[ "${VIDEO_RESOLUTION}" == "1440p" ]]; then
-    gource_res="2333x1293"
-    overlay_res="1920x1080"
-    gource_pad="2346:1306:2346:1306:#313133"
-    key_crop="214:1240:0:0"
-    key_pad="214:1306:0:0:#202021"
-    date_crop="2346:134:426:0"
-    date_pad="2560:134:214:134:#202021"
-    output_res="2560:1440"
-    log_info "Using 1440p settings. Output will be 2560x1440 at ${FPS}fps."
-elif [[ "${VIDEO_RESOLUTION}" == "1080p" ]]; then
-    gource_res="1750x970"
-    overlay_res="1920x1080"
-    gource_pad="1760:980:1760:980:#313133"
-    key_crop="160:930:0:0"
-    key_pad="160:980:0:0:#202021"
-    date_crop="1760:100:320:0"
-    date_pad="1920:100:160:100:#202021"
-    output_res="1920:1080"
-    log_info "Using 1080p settings. Output will be 1920x1080 at ${FPS}fps."
-elif [[ "${VIDEO_RESOLUTION}" == "720p" ]]; then
-    gource_res="1116x646"
-    overlay_res="1280x720"
-    gource_pad="1128:653:1128:653:#313133"
-    key_crop="152:590:0:0"
-    key_pad="152:653:0:0:#202021"
-    date_crop="1128:67:152:0"
-    date_pad="1280:67:152:67:#202021"
-    output_res="1280:720"
-    log_info "Using 720p settings. Output will be 1280x720 at ${FPS}fps."
-elif [[ "${VIDEO_RESOLUTION}" == "480p" ]]; then
-    gource_res="700x410"
-    overlay_res="854x480"
-    gource_pad="708:420:708:420:#313133"
-    key_crop="146:390:0:0"
-    key_pad="146:420:0:0:#202021"
-    date_crop="708:60:146:0"
-    date_pad="854:60:146:60:#202021"
-    output_res="854:480"
-    log_info "Using 480p settings. Output will be 854x480 at ${FPS}fps."
-else
-    log_error "${VIDEO_RESOLUTION} is not a valid/supported video resolution."
-    exit 1
-fi
+case ${VIDEO_RESOLUTION} in
+    2160p)
+        gource_res="3500x1940"
+        overlay_res="1920x1080"
+        gource_pad="3520:1960:3520:1960:#313133"
+        key_crop="320:1860:0:0"
+        key_pad="320:1960:0:0:#202021"
+        date_crop="3520:200:640:0"
+        date_pad="3840:200:320:200:#202021"
+        output_res="3840:2160"
+        log_info "Using 2160p settings. Output will be 3840x2160 at ${FPS}fps."
+        ;;
+    1440p)
+        gource_res="2333x1293"
+        overlay_res="1920x1080"
+        gource_pad="2346:1306:2346:1306:#313133"
+        key_crop="214:1240:0:0"
+        key_pad="214:1306:0:0:#202021"
+        date_crop="2346:134:426:0"
+        date_pad="2560:134:214:134:#202021"
+        output_res="2560:1440"
+        log_info "Using 1440p settings. Output will be 2560x1440 at ${FPS}fps."
+        ;;
+    1080p)
+        gource_res="1750x970"
+        overlay_res="1920x1080"
+        gource_pad="1760:980:1760:980:#313133"
+        key_crop="160:930:0:0"
+        key_pad="160:980:0:0:#202021"
+        date_crop="1760:100:320:0"
+        date_pad="1920:100:160:100:#202021"
+        output_res="1920:1080"
+        log_info "Using 1080p settings. Output will be 1920x1080 at ${FPS}fps."
+        ;;
+    720p)
+        gource_res="1116x646"
+        overlay_res="1280x720"
+        gource_pad="1128:653:1128:653:#313133"
+        key_crop="152:590:0:0"
+        key_pad="152:653:0:0:#202021"
+        date_crop="1128:67:152:0"
+        date_pad="1280:67:152:67:#202021"
+        output_res="1280:720"
+        log_info "Using 720p settings. Output will be 1280x720 at ${FPS}fps."
+        ;;
+    480p)
+        gource_res="700x410"
+        overlay_res="854x480"
+        gource_pad="708:420:708:420:#313133"
+        key_crop="146:390:0:0"
+        key_pad="146:420:0:0:#202021"
+        date_crop="708:60:146:0"
+        date_pad="854:60:146:60:#202021"
+        output_res="854:480"
+        log_info "Using 480p settings. Output will be 854x480 at ${FPS}fps."
+        ;;
+    *)
+        log_error "${VIDEO_RESOLUTION} is not a valid/supported video resolution."
+        exit 1
+        ;;
+esac
+
 
 # Generate ffmpeg flags
 logo_ffmpeg_label="[2:v]" && gen_ffmpeg_flags
