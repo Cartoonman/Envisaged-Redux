@@ -77,11 +77,11 @@ mkfifo /visualization/tmp/overlay.pipe
 
 
 # Save backup of Env Vars to be overridden
-gource_font_size_backup = "${GOURCE_FONT_SIZE}"
-gource_font_color_backup = "${GOURCE_FONT_COLOR}"
-gource_hide_items_backup = "${GOURCE_HIDE_ITEMS}"
-gource_show_key_backup = "${GOURCE_SHOW_KEY}"
-gource_background_color_backup = "${GOURCE_BACKGROUND_COLOR}"
+gource_font_size_backup="${GOURCE_FONT_SIZE}"
+gource_font_color_backup="${GOURCE_FONT_COLOR}"
+gource_hide_items_backup="${GOURCE_HIDE_ITEMS}"
+gource_show_key_backup="${GOURCE_SHOW_KEY}"
+gource_background_color_backup="${GOURCE_BACKGROUND_COLOR}"
 
 # Generate args for Primary Gource
 GOURCE_FONT_SIZE="${GOURCE_BORDER_TITLE_FONT_SIZE}"
@@ -104,11 +104,11 @@ gource_secondary_args=("${gource_arg_array[@]}")
 
 
 # Restore Env Vars
-GOURCE_FONT_SIZE = "${gource_font_size_backup}"
-GOURCE_FONT_COLOR = "${gource_font_color_backup}"
-GOURCE_HIDE_ITEMS = "${gource_hide_items_backup}"
-GOURCE_SHOW_KEY = "${gource_show_key_backup}"
-GOURCE_BACKGROUND_COLOR = "${gource_background_color_backup}"
+GOURCE_FONT_SIZE="${gource_font_size_backup}"
+GOURCE_FONT_COLOR="${gource_font_color_backup}"
+GOURCE_HIDE_ITEMS="${gource_hide_items_backup}"
+GOURCE_SHOW_KEY="${gource_show_key_backup}"
+GOURCE_BACKGROUND_COLOR="${gource_background_color_backup}"
 
 unset gource_font_size_backup
 unset gource_font_color_backup

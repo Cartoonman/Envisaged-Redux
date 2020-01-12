@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Updated base image to Alpine Linux 3.11
+- Updated Mesa to 19.2.8
+- Updated hls.js to 13.1
+- Ported the deprecated autotools-based build of Mesa to Meson.
+- Updated to LLVM 9
+- Replaced upstream reference to utensils/opengl with local build of mesa library for direct control and to keep it up to date.
 - Migrated project to Apache 2 License (from MIT)
 - Refactored template runtime command args for Gource and ffmpeg for better observation thru tests.
 - Refactored common imports for entrypoint and templates
@@ -30,6 +36,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A number of shell and Docker cleanups and fixes through shellcheck and hadolint.
 - Race condition fixed in preview.html when intervalFn is null when not expected.
 - Typo during Xvfb check that ran xdpyinfo in the background.
+
+### Removed
+- swr libraries (Will be added back in later when further testing occurs with swr. Does not affect LLVMPipe)
 
 ## [0.10.0] - 2019-11-23
 
@@ -230,4 +239,4 @@ Initial fork from [Envisaged].
 [0.3.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.2.0...v0.3.0
 [0.2.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.1.0...v0.2.0
 [0.1.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/-/releases#v0.1.0
-[envisaged]: https://github.com/utensils/Envisaged
+[Envisaged]: https://github.com/utensils/Envisaged

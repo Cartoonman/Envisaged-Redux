@@ -1,15 +1,16 @@
 # Envisaged-Redux - Dockerized Gource Visualizations, Reborn
+**Powered by Gource, FFMpeg, and the Gallium LLVMPipe Driver**
 
-A fork of James Brink's excellent [Envisaged][envisaged] docker container.
-
-Built on top of Alpine 3.10. **No GPU is required**, this will run on any machine, such as a standard EC2 instance or any other VPS.
+Built on top of Alpine 3.11. **No GPU is required**, this will run on any machine, such as a standard EC2 instance or any other VPS.
 
 ## About
 
 Painless data visualizations from git history showing a repositories development progression over time.
 This container combines the awesome [Gource][gource] program with the power of [FFmpeg][ffmpeg_home] and the H.265/HEVC codec to bring you high resolution (up to 4k at 60fps) video visualizations.
 
-This container is 100% headless, it does this by leveraging [Xvfb][xvfb] combined with the [Mesa 3d Gallium llvmpipe Driver][mesa]. Unlike other docker containers with Gource, this container does not eat up 100's of gigabytes of disk space, nor does it require an actual GPU to run. The process runs the Gource simulation concurrently with the FFmpeg encoding process using a set of named pipes. There is a slight trade off in performance, but this makes it very easy to run in any environment such as AWS, without the need to provision large amounts of storage or run any cleanup.
+This container is 100% headless, it does this by leveraging [Xvfb][xvfb] combined with the [Mesa 3D Gallium LLVMPipe Driver][mesa]. Unlike other docker containers with Gource, this container does not eat up 100's of gigabytes of disk space, nor does it require an actual GPU to run. The process runs the Gource simulation concurrently with the FFmpeg encoding process using a set of named pipes. There is a slight trade off in performance, but this makes it very easy to run in any environment such as AWS, without the need to provision large amounts of storage or run any cleanup.
+
+Envisaged Redux is a fork of the [Envisaged][envisaged] docker container.
 
 ## Example Scripts
 
@@ -139,12 +140,9 @@ You can also make `preview.sh` run for the whole duration by removing the `-e GO
   ```
   This means the image logo passed into the docker container is not compatible with the image converter onboard. Try using another format or image.
 
-[alpine linux image]: https://github.com/gliderlabs/docker-alpine
 [gource]: https://github.com/acaudwell/Gource
 [envisaged]: https://github.com/utensils/Envisaged
 [ffmpeg_home]: https://www.ffmpeg.org/
 [xvfb]: https://www.x.org/archive/X11R7.6/doc/man/man1/Xvfb.1.xhtml
 [mesa]: https://www.mesa3d.org/llvmpipe.html
 [ffmpeg_h265]: https://trac.ffmpeg.org/wiki/Encode/H.265
-[utensils/opengl]: https://github.com/utensils/docker-opengl
-[elixir-school]: https://github.com/elixirschool/elixirschool

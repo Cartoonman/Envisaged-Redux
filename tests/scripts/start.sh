@@ -19,8 +19,6 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
-echo "Initializing Test Environment"
-
 docker run --rm -it \
     --name test-envisaged-redux \
     ${HOST_MOUNT} \
