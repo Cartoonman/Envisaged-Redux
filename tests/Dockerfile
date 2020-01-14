@@ -6,7 +6,7 @@
 FROM alpine:3.11 as wdiff-build
 
 RUN apk add --update --no-cache --virtual .build-deps alpine-sdk autoconf texinfo ncurses-dev libxml2-dev diffutils bash \
-&& wget http://ftp.gnu.org/gnu/wdiff/wdiff-1.2.2.tar.gz -O wdiff.tar.gz \
+&& wget http://ftp.gnu.org/gnu/wdiff/wdiff-1.2.2.tar.gz -q -O wdiff.tar.gz \
 && tar xf wdiff.tar.gz \
 && rm wdiff.tar.gz \
 && cd wdiff* \

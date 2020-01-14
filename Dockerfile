@@ -44,7 +44,6 @@ RUN set -xe; \
         zlib-dev;
 
 
-ARG MESA_VERSION
 RUN set -xe; \
     mkdir -p /var/tmp/build; \
     cd /var/tmp/build; \
@@ -79,7 +78,6 @@ COPY --from=gource-nightly-builder /usr/local/share/gource /usr/local/share/gour
 RUN set -xe; \
     apk --update add --no-cache --virtual .runtime-deps \
         bash \
-        ffmpeg \
         expat \
         llvm9-libs \
         xdpyinfo \
@@ -95,7 +93,12 @@ RUN set -xe; \
         wget; \
     mkdir -p /visualization/html; \
     curl -L https://github.com/video-dev/hls.js/releases/download/v0.13.1/hls.light.min.js > /visualization/html/hls.light.min.js; \
-    curl -L https://github.com/video-dev/hls.js/releases/download/v0.13.1/hls.light.min.js.map > /visualization/html/hls.light.min.js.map;
+    curl -L https://github.com/video-dev/hls.js/releases/download/v0.13.1/hls.light.min.js.map > /visualization/html/hls.light.min.js.map; \
+    wget https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-4.1.4-amd64-static.tar.xz -q -O ffmpeg.tar.xz; \
+    tar xf ffmpeg.tar.xz; \
+    rm ffmpeg.tar.xz; \
+    mv ffmpeg*/ffmpeg /usr/local/bin/ffmpeg; \
+    rm -r ffmpeg*;
 
 
 # Copy our assets
