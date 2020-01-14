@@ -10,7 +10,7 @@ declare -r CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&
 
 parse_args "$@"
 
-# Training Wheels
+# Training Wheels. Remove or modify this section if using this script in your own setups.
 if [ "${GIT_REPO_URI}" = "" ]; then
     echo "No git repo directory specified, using Envisaged-Redux repo..."
     GIT_REPO_URI="--mount type=bind,src=${CUR_DIR_PATH}/../,dst=/visualization/git_repo,readonly"
