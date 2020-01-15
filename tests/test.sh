@@ -6,7 +6,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # Entry Point into testing.
-declare -r CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 set -e
 
 export SAVE=0

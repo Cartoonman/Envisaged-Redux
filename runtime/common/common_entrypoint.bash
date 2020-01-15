@@ -7,11 +7,11 @@
 
 inc_dir_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source "${inc_dir_path}/common.bash"
-declare -r ER_VERSION=$( cat "${inc_dir_path}/../../VERSION" )
+ER_VERSION=$( cat "${inc_dir_path}/../../VERSION" )
 unset inc_dir_path
 
-declare -r XVFB_TIMEOUT=60
-declare -r HTTPD_TIMEOUT=15
+XVFB_TIMEOUT=60
+HTTPD_TIMEOUT=15
 
 function print_intro
 {
