@@ -301,22 +301,21 @@ readonly start_render
 
 function handle_output
 {
-    # Handle output (if this wasn't a test run)
-    if (( CFG_TEST != 1 )); then
-        if [ -f "${ER_ROOT_DIRECTORY}"/video/output.mp4 ]; then
-            chmod 666 "${ER_ROOT_DIRECTORY}"/video/output.mp4
-            log_success "Visualization process is complete."
-        else
-            log_error "Visualization process failed."
-        fi
-
-        if (( CFG_LOCAL_OUTPUT != 1 )); then
-            # Wait for httpd process to end.
-            while kill -0 ${_HTTPD_PID} >/dev/null 2>&1; do
-                wait
-            done
-        fi
+    # Handle output
+    if [ -f "${ER_ROOT_DIRECTORY}"/video/output.mp4 ]; then
+        chmod 666 "${ER_ROOT_DIRECTORY}"/video/output.mp4
+        log_success "Visualization process is complete."
+    else
+        log_error "Visualization process failed."
     fi
+
+    if (( CFG_LOCAL_OUTPUT != 1 )); then
+        # Wait for httpd process to end.
+        while kill -0 ${_HTTPD_PID} >/dev/null 2>&1; do
+            wait
+        done
+    fi
+    
 }
 readonly handle_output
 
@@ -348,7 +347,7 @@ function main
     start_render
 
     # Handle the output
-    handle_output
+    (( CFG_NO_RUN != 1 )) && handle_output
 
 
 
