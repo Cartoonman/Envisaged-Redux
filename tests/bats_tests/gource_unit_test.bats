@@ -41,19 +41,19 @@ load common/bats_common
 
 
 @test "Test Gource Args Caption" {
-    local -r CTRL_ARGS_STD=("USE_CAPTIONS" "--caption-file" "/visualization/captions.txt")
+    local -r CTRL_ARGS_STD=("CFG_CAPTIONS" "--caption-file" "/visualization/captions.txt")
     gource_test_entrypoint_2 "var" "GOURCE_CAPTION_SIZE" "--caption-size" "${CTRL_ARGS_STD[@]}"
     gource_test_entrypoint_2 "var" "GOURCE_CAPTION_COLOR" "--caption-colour" "${CTRL_ARGS_STD[@]}"
     gource_test_entrypoint_2 "var" "GOURCE_CAPTION_DURATION" "--caption-duration" "${CTRL_ARGS_STD[@]}"
 }
 
 @test "Test Gource Args Nightly" {
-    local -r CTRL_ARGS_STD=("USE_NIGHTLY")
+    local -r CTRL_ARGS_STD=("CFG_NIGHTLY")
     gource_test_entrypoint_2 "bool" "GOURCE_FILE_EXT_FALLBACK" "--file-extension-fallback" "${CTRL_ARGS_STD[@]}"
 }
 
 
 @test "Test Gource Args Avatars" {
-    local -r CTRL_ARGS_STD=("USE_AVATARS" "--user-image-dir" "/visualization/avatars")
+    local -r CTRL_ARGS_STD=("CFG_AVATARS" "--user-image-dir" "/visualization/avatars")
     gource_test_avatars "${CTRL_ARGS_STD[@]}"
 }

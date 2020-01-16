@@ -6,33 +6,32 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # Constants
-ER_COLOR_ERROR='\e[31m'
-ER_COLOR_WARN='\e[33m'
-ER_COLOR_INFO='\e[96m'
-ER_COLOR_OK='\e[92m'
-ER_COLOR_NOTICE='\e[93m'
-ER_NO_COLOR='\e[0m'
-ER_ROOT_DIRECTORY="/visualization"
+readonly ER_ROOT_DIRECTORY="/visualization"
 
 function log_error
 {
-    >&2 printf "${ER_COLOR_ERROR}[ERROR]${ER_NO_COLOR} ${1}\n"
+    declare -r red="\e[31m"
+    >&2 printf "%b %s\n" "${red}[ERROR]\e[0m" "${1}"
 }
 function log_warn
 {
-    printf "${ER_COLOR_WARN}[WARN]${ER_NO_COLOR} ${1}\n"
+    declare -r orange="\e[31m"
+    printf "%b %s\n" "${orange}[WARN]\e[0m" "${1}"
 }
 function log_notice
 {
-    printf "${ER_COLOR_NOTICE}[NOTE]${ER_NO_COLOR} ${1}\n"
+    declare -r yellow="\e[93m"
+    printf "%b %s\n" "${yellow}[NOTE]\e[0m" "${1}"
 }
 function log_info
 {
-    printf "${ER_COLOR_INFO}[INFO]${ER_NO_COLOR} ${1}\n"
+    declare -r cyan="\e[96m"
+    printf "%b %s\n" "${cyan}[INFO]\e[0m" "${1}"
 }
 function log_success
 {
-    printf "${ER_COLOR_OK}[OK]${ER_NO_COLOR} ${1}\n"
+    declare -r green="\e[92m"
+    printf "%b %s\n" "${green}[OK]\e[0m" "${1}"
 }
 
 readonly -f log_error
@@ -42,4 +41,4 @@ readonly -f log_info
 readonly -f log_success
 
 # Set the common global flag
-ER_COMMON_GLOBAL=1
+readonly ER_COMMON_GLOBAL=1

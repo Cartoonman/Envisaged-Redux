@@ -28,7 +28,7 @@ unset inc_dir_path
 #   forward to Gource.
 function gen_gource_args
 {
-    gource_arg_array=()
+    declare -ga gource_arg_array=()
 
     [ -n "${GOURCE_TITLE}" ]                    && gource_arg_array+=("--title" "${GOURCE_TITLE}")
     [ -n "${GOURCE_CAMERA_MODE}" ]              && gource_arg_array+=("--camera-mode" "${GOURCE_CAMERA_MODE}")
@@ -61,18 +61,18 @@ function gen_gource_args
     [ "${GOURCE_SHOW_KEY}" = "1" ]              && gource_arg_array+=("--key")
 
     # Captions
-    [ "${USE_CAPTIONS}" = "1" ]                 && gource_arg_array+=("--caption-file" "/visualization/captions.txt")
-    if [ "${USE_CAPTIONS}" = "1" ]; then
+    (( CFG_CAPTIONS == 1 ))                     && gource_arg_array+=("--caption-file" "/visualization/captions.txt")
+    if (( CFG_CAPTIONS == 1 )); then
         [ -n "${GOURCE_CAPTION_SIZE}" ]         && gource_arg_array+=("--caption-size" "${GOURCE_CAPTION_SIZE}")
         [ -n "${GOURCE_CAPTION_COLOR}" ]        && gource_arg_array+=("--caption-colour" "${GOURCE_CAPTION_COLOR}")
         [ -n "${GOURCE_CAPTION_DURATION}" ]     && gource_arg_array+=("--caption-duration" "${GOURCE_CAPTION_DURATION}")
     fi
 
     # Avatars
-    [ "${USE_AVATARS}" = "1" ]                  && gource_arg_array+=("--user-image-dir" "/visualization/avatars")
+    (( CFG_AVATARS == 1 ))                      && gource_arg_array+=("--user-image-dir" "/visualization/avatars")
 
     # Nightly
-    if [ "${USE_NIGHTLY}" = "1" ]; then
+    if (( CFG_NIGHTLY == 1 )); then
         [ "${GOURCE_FILE_EXT_FALLBACK}" = "1" ] && gource_arg_array+=("--file-extension-fallback")
     fi
 }
@@ -101,31 +101,32 @@ readonly -f gen_gource_args
 function gen_ffmpeg_flags
 {
     if [ "${INVERT_COLORS}" == "1" ]; then
-        invert_filter=",lutrgb=r=negval:g=negval:b=negval"
+        declare -gr invert_filter=",lutrgb=r=negval:g=negval:b=negval"
     fi
 
     # Default map
     declare -g primary_map_label="[default]"
-    if [ "${LOGO}" != "" ]; then
-        declare -g logo_filter_graph
+    if [ -n "${CFG_LOGO}" ]; then
         [ -z "${logo_ffmpeg_label+x}" ] && log_error "Error: logo_ffmpeg_label variable must be set when using logo for ffmpeg (internal error)." && exit 1
-        logo_filter_graph=";${primary_map_label}${logo_ffmpeg_label}overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
+        declare -gr logo_filter_graph=";${primary_map_label}${logo_ffmpeg_label}overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
         primary_map_label="[with_logo]"
     fi
 
-    if [ "${LIVE_PREVIEW}" = "1" ]; then
+    if (( CFG_LIVE_PREVIEW == 1 )); then
         declare -g live_preview_splitter live_preview_args
         : "${PREVIEW_SLOWDOWN_FACTOR:=1}"
-        local lp_fps=$((${FPS} / ${PREVIEW_SLOWDOWN_FACTOR}))
+        declare -i lp_fps=$((${FPS} / ${PREVIEW_SLOWDOWN_FACTOR}))
 
-        live_preview_splitter=";${primary_map_label}split[original_feed][time_scaler]; \
+        declare -gr live_preview_splitter=";${primary_map_label}split[original_feed][time_scaler]; \
             [time_scaler]setpts=${PREVIEW_SLOWDOWN_FACTOR}*PTS[live_preview]"
         primary_map_label="[original_feed]"
-        live_preview_args=" -map [live_preview] -c:v libx264 -pix_fmt yuv420p -maxrate 40M -bufsize 5M \
+        declare -gr live_preview_args=" -map [live_preview] -c:v libx264 -pix_fmt yuv420p -maxrate 40M -bufsize 5M \
             -profile:v high -level:v 5.2 -y -r ${lp_fps} -preset ultrafast -crf 1 \
-            -tune zerolatency -x264-params keyint=$((${lp_fps} * 3)):min-keyint=${lp_fps} \
+            -tune zerolatency -x264-params keyint=$((lp_fps * 3)):min-keyint=${lp_fps} \
             -vsync vfr -hls_flags independent_segments+delete_segments -hls_allow_cache 1 \
             -hls_time 1 -hls_list_size 10 -start_number 0 ./html/preview.m3u8"
     fi
+
+    readonly primary_map_label
 }
 readonly -f gen_ffmpeg_flags

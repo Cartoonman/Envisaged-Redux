@@ -6,6 +6,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+readonly CUR_DIR_PATH
 
 while [[ $# -gt 0 ]]; do
     k="$1"

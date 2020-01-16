@@ -25,12 +25,12 @@ load common/bats_common
     output=$("${ffmpeg_flags_logo_filter_graph[@]}")
     assert_equal "$output" ""
 
-    refute [ "$(export LOGO=/path/to/logo.image; "${ffmpeg_flags_status[@]}")" = "0" ]
-    assert [ "$(export LOGO=/path/to/logo.image; export logo_ffmpeg_label=[1:v]; "${ffmpeg_flags_status[@]}")" = "0" ]
+    refute [ "$(declare -grx CFG_LOGO=/path/to/logo.image; "${ffmpeg_flags_status[@]}")" = "0" ]
+    assert [ "$(declare -grx CFG_LOGO=/path/to/logo.image; export logo_ffmpeg_label=[1:v]; "${ffmpeg_flags_status[@]}")" = "0" ]
 
-    output=$(export LOGO=/path/to/logo.image; export logo_ffmpeg_label=[1:v]; "${ffmpeg_flags_prim_map_label[@]}")
+    output=$(declare -grx CFG_LOGO=/path/to/logo.image; export logo_ffmpeg_label=[1:v]; "${ffmpeg_flags_prim_map_label[@]}")
     assert_equal "$output" "[with_logo]"
-    output=$(export LOGO=/path/to/logo.image; export logo_ffmpeg_label=[1:v]; "${ffmpeg_flags_logo_filter_graph[@]}")
+    output=$(declare -grx CFG_LOGO=/path/to/logo.image; export logo_ffmpeg_label=[1:v]; "${ffmpeg_flags_logo_filter_graph[@]}")
     assert_equal "$output" ";[default][1:v]overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
 }
 
@@ -48,24 +48,24 @@ load common/bats_common
     output=$("${ffmpeg_flags_live_prev_args[@]}")
     assert_equal "$output" ""
     
-    output=$(export LIVE_PREVIEW=1; "${ffmpeg_flags_live_prev_split[@]}")
+    output=$(declare -grix CFG_LIVE_PREVIEW=1; "${ffmpeg_flags_live_prev_split[@]}")
     assert_equal "$output" ";[default]split[original_feed][time_scaler]; \
             [time_scaler]setpts=1*PTS[live_preview]"
-    output=$(export LIVE_PREVIEW=1; "${ffmpeg_flags_prim_map_label[@]}")
+    output=$(declare -grix CFG_LIVE_PREVIEW=1; "${ffmpeg_flags_prim_map_label[@]}")
     assert_equal "$output" "[original_feed]"
-    output=$(export LIVE_PREVIEW=1; "${ffmpeg_flags_live_prev_args[@]}")
+    output=$(declare -grix CFG_LIVE_PREVIEW=1; "${ffmpeg_flags_live_prev_args[@]}")
     assert_equal "$output" " -map [live_preview] -c:v libx264 -pix_fmt yuv420p -maxrate 40M -bufsize 5M \
             -profile:v high -level:v 5.2 -y -r 30 -preset ultrafast -crf 1 \
             -tune zerolatency -x264-params keyint=90:min-keyint=30 \
             -vsync vfr -hls_flags independent_segments+delete_segments -hls_allow_cache 1 \
             -hls_time 1 -hls_list_size 10 -start_number 0 ./html/preview.m3u8"
 
-    output=$(export LIVE_PREVIEW=1; export PREVIEW_SLOWDOWN_FACTOR=3; "${ffmpeg_flags_live_prev_split[@]}")
+    output=$(declare -grix CFG_LIVE_PREVIEW=1; export PREVIEW_SLOWDOWN_FACTOR=3; "${ffmpeg_flags_live_prev_split[@]}")
     assert_equal "$output" ";[default]split[original_feed][time_scaler]; \
             [time_scaler]setpts=3*PTS[live_preview]"
-    output=$(export LIVE_PREVIEW=1; export PREVIEW_SLOWDOWN_FACTOR=3; "${ffmpeg_flags_prim_map_label[@]}")
+    output=$(declare -grix CFG_LIVE_PREVIEW=1; export PREVIEW_SLOWDOWN_FACTOR=3; "${ffmpeg_flags_prim_map_label[@]}")
     assert_equal "$output" "[original_feed]"
-    output=$(export LIVE_PREVIEW=1; export PREVIEW_SLOWDOWN_FACTOR=3; "${ffmpeg_flags_live_prev_args[@]}")
+    output=$(declare -grix CFG_LIVE_PREVIEW=1; export PREVIEW_SLOWDOWN_FACTOR=3; "${ffmpeg_flags_live_prev_args[@]}")
     assert_equal "$output" " -map [live_preview] -c:v libx264 -pix_fmt yuv420p -maxrate 40M -bufsize 5M \
             -profile:v high -level:v 5.2 -y -r 10 -preset ultrafast -crf 1 \
             -tune zerolatency -x264-params keyint=30:min-keyint=10 \
