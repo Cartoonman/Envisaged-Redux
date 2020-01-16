@@ -133,7 +133,7 @@ g1_cmd=( \
     )
 
 (( CFG_TEST == 1 )) && printf "%s " "${g1_cmd[@]}" >> /visualization/cmd_test_data.txt
-(( CFG_NORUN != 1 )) && "${g1_cmd[@]}" - >/visualization/tmp/gource.pipe &
+(( CFG_NO_RUN != 1 )) && "${g1_cmd[@]}" - >/visualization/tmp/gource.pipe &
 
 # Start Gource for the overlay elements.
 log_notice "Starting Gource secondary for overlay components"
@@ -150,7 +150,7 @@ g2_cmd=( \
     )
 
 (( CFG_TEST == 1 )) && printf "%s " "${g2_cmd[@]}" >> /visualization/cmd_test_data.txt
-(( CFG_NORUN != 1 )) && "${g2_cmd[@]}" - >/visualization/tmp/overlay.pipe &
+(( CFG_NO_RUN != 1 )) && "${g2_cmd[@]}" - >/visualization/tmp/overlay.pipe &
 
 
 # Start ffmpeg to merge the two video outputs.
@@ -174,7 +174,7 @@ f_cmd=( \
     )
 
 (( CFG_TEST == 1 )) && printf "%s " "${f_cmd[@]}" >> /visualization/cmd_test_data.txt
-(( CFG_NORUN != 1 )) && "${f_cmd[@]}"
+(( CFG_NO_RUN != 1 )) && "${f_cmd[@]}"
 (( CFG_TEST == 1 )) && log_success "Test Files Written!" && rm -rf /visualization/tmp && exit 0
 
 log_success "FFmpeg video render completed!"

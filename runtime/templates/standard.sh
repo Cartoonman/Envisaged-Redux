@@ -63,7 +63,7 @@ g_cmd=( \
     )
 
 (( CFG_TEST == 1 )) && printf "%s " "${g_cmd[@]}" >> /visualization/cmd_test_data.txt
-(( CFG_NORUN != 1 )) && "${g_cmd[@]}" - >/visualization/tmp/gource.pipe &
+(( CFG_NO_RUN != 1 )) && "${g_cmd[@]}" - >/visualization/tmp/gource.pipe &
 
 # Start ffmpeg
 log_notice "Rendering video pipe.."
@@ -78,7 +78,7 @@ f_cmd=( \
     )
 
 (( CFG_TEST == 1 )) && printf "%s " "${f_cmd[@]}" >> /visualization/cmd_test_data.txt
-(( CFG_NORUN != 1 )) && "${f_cmd[@]}"
+(( CFG_NO_RUN != 1 )) && "${f_cmd[@]}"
 (( CFG_TEST == 1 )) && log_success "Test Files Written!" && rm -rf /visualization/tmp && exit 0
 
 log_success "FFmpeg video render completed!"

@@ -146,7 +146,7 @@ integration_run()
         shift
     done
     printf "Test ${COUNT}\r" >&3
-    local log_output=$(eval "${ENV_ARGS[@]}" /visualization/runtime/entrypoint.sh TEST NORUN 2>&1) runtime_exit_code=$?
+    local log_output=$(eval "${ENV_ARGS[@]}" /visualization/runtime/entrypoint.sh TEST NO_RUN 2>&1) runtime_exit_code=$?
     [ ! $runtime_exit_code -eq 0 ] && echo -e "${log_output}" && fail "Failure detected on test #${COUNT}"
     if [ "${SAVE}" = "1" ]; then
         printf "\n" >> /visualization/cmd_test_data.txt
@@ -166,7 +166,7 @@ repo_run()
         shift
     done
     printf "Test ${COUNT}\r" >&3
-    local log_output=$(eval "${ENV_ARGS[@]}" /visualization/runtime/entrypoint.sh TEST NORUN 2>&1) runtime_exit_code=$?
+    local log_output=$(eval "${ENV_ARGS[@]}" /visualization/runtime/entrypoint.sh TEST NO_RUN 2>&1) runtime_exit_code=$?
     [ ! $runtime_exit_code -eq 0 ] && echo -e "${log_output}" && fail "Failure detected on test #${COUNT}"
     if [ "${SAVE}" = "1" ]; then
         cp /visualization/development.log /hostdir/r_"${COUNT}".log

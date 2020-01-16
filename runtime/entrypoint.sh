@@ -44,9 +44,9 @@ function parse_args
                 declare -grix CFG_TEST=1
                 log_warn "TEST Flag Invoked"
                 ;;
-            NORUN)
-                declare -grix CFG_NORUN=1
-                log_warn "NORUN Flag Invoked"
+            NO_RUN)
+                declare -grix CFG_NO_RUN=1
+                log_warn "NO_RUN Flag Invoked"
                 ;;
         esac
         shift
