@@ -265,7 +265,8 @@ function start_services
     # Trap the services so we can shut them down properly later.
     trap 'echo "Stopping proccesses PIDs: (${_XVFB_PID}, ${_HTTPD_PID})";\
         [ -n "${_XVFB_PID}" ] && [ -e /proc/${_XVFB_PID} ] && kill ${_XVFB_PID};\
-        [ -n "${_HTTPD_PID}" ] && [ -e /proc/${_HTTPD_PID} ] && kill ${_HTTPD_PID}' SIGINT SIGTERM
+        [ -n "${_HTTPD_PID}" ] && [ -e /proc/${_HTTPD_PID} ] && kill ${_HTTPD_PID};\
+        exit ${_EXIT_CODE};' SIGINT SIGTERM
 }
 readonly start_services
 
@@ -287,7 +288,8 @@ function start_render
                 ;;
             *)
                 log_error "Unknown template option ${TEMPLATE}"
-                exit 1
+                _EXIT_CODE=1
+                kill -TERM $$
                 ;;
         esac
     else
@@ -307,6 +309,7 @@ function handle_output
         log_success "Visualization process is complete."
     else
         log_error "Visualization process failed."
+        _EXIT_CODE=1
     fi
 
     if (( CFG_LOCAL_OUTPUT != 1 )); then
