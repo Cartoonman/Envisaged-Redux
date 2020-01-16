@@ -302,7 +302,6 @@ readonly start_render
 function handle_output
 {
     # Handle output (if this wasn't a test run)
-
     if (( CFG_TEST != 1 )); then
         if [ -f "${ER_ROOT_DIRECTORY}"/video/output.mp4 ]; then
             chmod 666 "${ER_ROOT_DIRECTORY}"/video/output.mp4
@@ -343,7 +342,7 @@ function main
     process_repos
 
     # Activate services
-    start_services
+    (( CFG_NO_RUN != 1 )) && start_services
 
     # Start visualization rendering process
     start_render
