@@ -10,6 +10,18 @@ CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 readonly CUR_DIR_PATH
 source "${CUR_DIR_PATH}/../common/common_templates.bash"
 
+exit_handler()
+{
+    # Remove our temporary files.
+    log_notice "Removing temporary files."
+    rm -rf "${ER_ROOT_DIRECTORY}"/tmp
+    # Exit Gource if still alive.
+    [ -n "${G_PID}" ] && [ -e /proc/${G_PID} ] && kill ${G_PID}
+    log_notice "Render process returning with code ${EXIT_CODE}"
+    exit ${EXIT_CODE}
+}
+readonly -f exit_handler
+
 # Predefined resolutions and settings.
 case ${VIDEO_RESOLUTION} in
     2160p)
@@ -34,59 +46,68 @@ case ${VIDEO_RESOLUTION} in
         ;;
     *)
         log_error "${VIDEO_RESOLUTION} is not a valid/supported video resolution."
-        exit 1
+        EXIT_CODE=1
+        exit_handler
         ;;
 esac
 
 # Generate ffmpeg flags
 logo_ffmpeg_label="[1:v]" && gen_ffmpeg_flags
+(( $? != 0 )) && EXIT_CODE=1 && exit_handler
 
 # Create our temp directory
-mkdir -p /visualization/tmp
+mkdir -p "${ER_ROOT_DIRECTORY}"/tmp
 
 # Create our named pipes.
-mkfifo /visualization/tmp/gource.pipe
+mkfifo "${ER_ROOT_DIRECTORY}"/tmp/gource.pipe
 
 # Generate our Gource args
 gen_gource_args
 
-
-log_notice "Starting Gource primary with title: ${GOURCE_TITLE}"
+log_notice "Starting Gource primary with title [${GOURCE_TITLE}]"
 g_cmd=( \
-        ${CFG_GOURCE_EXEC} \
+        ${RT_GOURCE_EXEC} \
         --${gource_res} \
         "${gource_arg_array[@]}" \
         --stop-at-end \
-        /visualization/development.log \
+        "${ER_ROOT_DIRECTORY}"/development.log \
         -r ${FPS} \
         -o \
     )
 
-(( CFG_TEST == 1 )) && printf "%s " "${g_cmd[@]}" >> /visualization/cmd_test_data.txt
-(( CFG_NO_RUN != 1 )) && "${g_cmd[@]}" - >/visualization/tmp/gource.pipe &
+(( RT_TEST == 1 )) && printf "%s " "${g_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
+if (( RT_NO_RUN != 1 )); then
+    "${g_cmd[@]}" - >"${ER_ROOT_DIRECTORY}"/tmp/gource.pipe &
+    declare -ig G_PID=$!
+fi
 
 # Start ffmpeg
 log_notice "Rendering video pipe.."
-mkdir -p /visualization/video
+mkdir -p "${ER_ROOT_DIRECTORY}"/video
 # [0:v]: gource, [1:v]: logo
 f_cmd=( \
         ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
-        ${CFG_LOGO} \
+        ${RT_LOGO} \
         -filter_complex "[0:v]select${invert_filter}[default]${logo_filter_graph}${live_preview_splitter}" \
         -map ${primary_map_label} -vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} \
-        /visualization/video/output.mp4 ${live_preview_args} \
+        "${ER_ROOT_DIRECTORY}"/video/output.mp4 ${live_preview_args} \
     )
 
-(( CFG_TEST == 1 )) && printf "%s " "${f_cmd[@]}" >> /visualization/cmd_test_data.txt
-(( CFG_NO_RUN != 1 )) && "${f_cmd[@]}"
-(( CFG_TEST == 1 )) && log_success "Test Files Written!" && rm -rf /visualization/tmp && exit 0
+(( RT_TEST == 1 )) && printf "%s " "${f_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
+if (( RT_NO_RUN != 1 )); then
+    "${f_cmd[@]}" 
+    (( $? != 0 )) && EXIT_CODE=1
+fi
+(( RT_TEST == 1 )) && log_success "Test Files Written!" && rm -rf "${ER_ROOT_DIRECTORY}"/tmp && exit 0
 
-log_success "FFmpeg video render completed!"
-# Remove our temporary files.
-echo "Removing temporary files."
-rm -rf /visualization/tmp
+if (( EXIT_CODE != 0 )); then
+    log_error "FFmpeg video render failed!"
+else
+    log_success "FFmpeg video render completed!"
 
-# Update html and link new video.
-filesize="$(du -sh /visualization/video/output.mp4 | cut -f 1)"
-printf "$(cat /visualization/html/completed.html)" $filesize >/visualization/html/index.html
-ln -sf /visualization/video/output.mp4 /visualization/html/output.mp4
+    # Update html and link new video.
+    filesize="$(du -sh "${ER_ROOT_DIRECTORY}"/video/output.mp4 | cut -f 1)"
+    printf "$(cat "${ER_ROOT_DIRECTORY}"/html/completed.html)" $filesize >"${ER_ROOT_DIRECTORY}"/html/index.html
+    ln -sf "${ER_ROOT_DIRECTORY}"/video/output.mp4 "${ER_ROOT_DIRECTORY}"/html/output.mp4
+fi
+exit_handler

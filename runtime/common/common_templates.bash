@@ -26,7 +26,7 @@ unset inc_dir_path
 # Outputs:
 #   gource_arg_array - indexed array with gource args to 
 #   forward to Gource.
-function gen_gource_args
+gen_gource_args()
 {
     declare -ga gource_arg_array=()
 
@@ -61,18 +61,18 @@ function gen_gource_args
     [ "${GOURCE_SHOW_KEY}" = "1" ]              && gource_arg_array+=("--key")
 
     # Captions
-    (( CFG_CAPTIONS == 1 ))                     && gource_arg_array+=("--caption-file" "/visualization/captions.txt")
-    if (( CFG_CAPTIONS == 1 )); then
+    (( RT_CAPTIONS == 1 ))                      && gource_arg_array+=("--caption-file" ""${ER_ROOT_DIRECTORY}"/captions.txt")
+    if (( RT_CAPTIONS == 1 )); then
         [ -n "${GOURCE_CAPTION_SIZE}" ]         && gource_arg_array+=("--caption-size" "${GOURCE_CAPTION_SIZE}")
         [ -n "${GOURCE_CAPTION_COLOR}" ]        && gource_arg_array+=("--caption-colour" "${GOURCE_CAPTION_COLOR}")
         [ -n "${GOURCE_CAPTION_DURATION}" ]     && gource_arg_array+=("--caption-duration" "${GOURCE_CAPTION_DURATION}")
     fi
 
     # Avatars
-    (( CFG_AVATARS == 1 ))                      && gource_arg_array+=("--user-image-dir" "/visualization/avatars")
+    (( RT_AVATARS == 1 ))                       && gource_arg_array+=("--user-image-dir" ""${ER_ROOT_DIRECTORY}"/avatars")
 
     # Nightly
-    if (( CFG_NIGHTLY == 1 )); then
+    if (( RT_NIGHTLY == 1 )); then
         [ "${GOURCE_FILE_EXT_FALLBACK}" = "1" ] && gource_arg_array+=("--file-extension-fallback")
     fi
 }
@@ -98,7 +98,7 @@ readonly -f gen_gource_args
 #   logo_filter_graph (depend -> LOGO)
 #   live_preview_args (depend -> LIVE_PREVIEW)
 #   live_preview_splitter (depend -> LIVE_PREVIEW)
-function gen_ffmpeg_flags
+gen_ffmpeg_flags()
 {
     if [ "${INVERT_COLORS}" == "1" ]; then
         declare -gr invert_filter=",lutrgb=r=negval:g=negval:b=negval"
@@ -106,17 +106,23 @@ function gen_ffmpeg_flags
 
     # Default map
     declare -g primary_map_label="[default]"
-    if [ -n "${CFG_LOGO}" ]; then
-        [ -z "${logo_ffmpeg_label+x}" ] && log_error "Error: logo_ffmpeg_label variable must be set when using logo for ffmpeg (internal error)." && exit 1
+    if [ -n "${RT_LOGO}" ]; then
+        if [ ! -n "${logo_ffmpeg_label}" ]; then
+            log_error "Error: logo_ffmpeg_label variable must be set when using logo for ffmpeg (internal error)."
+            return 1
+        fi
         declare -gr logo_filter_graph=";${primary_map_label}${logo_ffmpeg_label}overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
         primary_map_label="[with_logo]"
     fi
 
-    if (( CFG_LIVE_PREVIEW == 1 )); then
+    if (( RT_LIVE_PREVIEW == 1 )); then
         declare -g live_preview_splitter live_preview_args
         : "${PREVIEW_SLOWDOWN_FACTOR:=1}"
         declare -i lp_fps=$((${FPS} / ${PREVIEW_SLOWDOWN_FACTOR}))
-
+        if (( lp_fps == 0 )); then
+            log_error "Error: PREVIEW_SLOWDOWN_FACTOR is too large for given FPS."
+            return 1
+        fi
         declare -gr live_preview_splitter=";${primary_map_label}split[original_feed][time_scaler]; \
             [time_scaler]setpts=${PREVIEW_SLOWDOWN_FACTOR}*PTS[live_preview]"
         primary_map_label="[original_feed]"
@@ -128,5 +134,6 @@ function gen_ffmpeg_flags
     fi
 
     readonly primary_map_label
+    return 0
 }
 readonly -f gen_ffmpeg_flags

@@ -12,7 +12,7 @@ readonly CUR_DIR_PATH
 source "${CUR_DIR_PATH}/common/common.bash"
 
 
-function print_intro
+print_intro()
 {
     cat << "EOF"
  _____            _                          _    ____          _
@@ -24,11 +24,11 @@ function print_intro
 EOF
     local version
     version=$( cat "${CUR_DIR_PATH}/../VERSION" )
-    printf "%s\n\n" "Version ${version}"
+    printf "%b%s%b\n\n" "\033[1m\033[4m" "Version ${version}" "\033[0m"
 }
 readonly -f print_intro
 
-function parse_args
+parse_args()
 {
     while [[ $# -gt 0 ]]; do
         local k
@@ -41,11 +41,11 @@ function parse_args
                 exit 0
                 ;;
             TEST)
-                declare -grix CFG_TEST=1
+                declare -grix RT_TEST=1
                 log_warn "TEST Flag Invoked"
                 ;;
             NO_RUN)
-                declare -grix CFG_NO_RUN=1
+                declare -grix RT_NO_RUN=1
                 log_warn "NO_RUN Flag Invoked"
                 ;;
         esac
@@ -54,63 +54,69 @@ function parse_args
 }
 readonly -f parse_args
 
-function parse_configs
+parse_configs()
 {
     # Check runtime mode.
-    echo 0 > /visualization/html/live_preview
+    echo 0 > "${ER_ROOT_DIRECTORY}"/html/live_preview
     if [[ "${ENABLE_LIVE_PREVIEW}" == "1" ]]; then
-        declare -grix CFG_LIVE_PREVIEW=1
-        echo 1 > /visualization/html/live_preview
+        declare -grix RT_LIVE_PREVIEW=1
+        echo 1 > "${ER_ROOT_DIRECTORY}"/html/live_preview
     fi
 
     # Check for video saving mode
-    if [ -d /visualization/video ]; then
-        declare -grix CFG_LOCAL_OUTPUT=1
+    if [ -d "${ER_ROOT_DIRECTORY}"/video ]; then
+        declare -grix RT_LOCAL_OUTPUT=1
     else
-        mkdir -p /visualization/video
+        mkdir -p "${ER_ROOT_DIRECTORY}"/video
     fi
 
     # Check which gource release is chosen
     if [[ "${USE_GOURCE_NIGHTLY}" == "1" ]]; then
-        declare -grx CFG_GOURCE_EXEC='gource_nightly'
-        log_notice "Using $("${CFG_GOURCE_EXEC}" -h | head -n 1) Nightly Release"
-        declare -grix CFG_NIGHTLY=1
+        declare -grx RT_GOURCE_EXEC='gource_nightly'
+        log_notice "Using $("${RT_GOURCE_EXEC}" -h | head -n 1) Nightly Release"
+        declare -grix RT_NIGHTLY=1
     else
-        declare -grx CFG_GOURCE_EXEC='gource'
-        log_info "Using $("${CFG_GOURCE_EXEC}" -h | head -n 1) Stable Release "
+        declare -grx RT_GOURCE_EXEC='gource'
+        log_info "Using $("${RT_GOURCE_EXEC}" -h | head -n 1) Stable Release "
     fi
 
     # Check for avatar directory mount.
-    if [ -d /visualization/avatars ]; then
+    if [ -d "${ER_ROOT_DIRECTORY}"/avatars ]; then
         log_info "Using avatars directory"
-        declare -grix CFG_AVATARS=1
+        declare -grix RT_AVATARS=1
     fi
 
     # Check for captions
-    if [ -f /visualization/captions.txt ]; then
+    if [ -f "${ER_ROOT_DIRECTORY}"/captions.txt ]; then
         log_info "Using captions file"
-        declare -grix CFG_CAPTIONS=1
+        declare -grix RT_CAPTIONS=1
     fi
 
     # Check for logo
-    if [ -f /visualization/logo.image ]; then
+    if [ -f "${ER_ROOT_DIRECTORY}"/logo.image ]; then
         log_notice "Possible logo file detected. Attempting to transform..."
-        convert -geometry x160 /visualization/logo.image /visualization/logo_txfrmed.image
-        log_success "Success. Using logo file"
-        declare -grx CFG_LOGO=" -i /visualization/logo_txfrmed.image "
+        set +e
+        convert -geometry x160 "${ER_ROOT_DIRECTORY}"/logo.image "${ER_ROOT_DIRECTORY}"/logo_txfrmed.image
+        if (( $? != 0 )); then
+            log_error "Error: ImageMagick failed to convert the supplied logo file. Please check image file passed or convert to another format."
+            exit 1
+        else
+            log_success "Success. Using logo file"
+            declare -grx RT_LOGO=" -i "${ER_ROOT_DIRECTORY}"/logo_txfrmed.image "
+        fi
     fi
 
 
     # Check if repo exists
-    if [ ! -d /visualization/git_repo ]
+    if [ ! -d "${ER_ROOT_DIRECTORY}"/git_repo ]
     then
-        log_error "Error: git repo not found: /visualization/git_repo does not exist."
+        log_error "Error: git repo not found: "${ER_ROOT_DIRECTORY}"/git_repo does not exist."
         exit 1
     fi
 }
 readonly -f parse_configs
 
-function process_single_repo
+process_single_repo()
 {
     declare -i submod_count=0
     if [[ "${RECURSE_SUBMODULES}" == "1" ]]; then
@@ -128,7 +134,7 @@ function process_single_repo
         submod_paths+=('') # include parent of course
         for submod_path in "${submod_paths[@]}"; do
             ((++submod_count))
-            "${CFG_GOURCE_EXEC}" --output-custom-log development"${submod_count}".log "${ER_ROOT_DIRECTORY}"/git_repo/"${submod_path}"
+            "${RT_GOURCE_EXEC}" --output-custom-log development"${submod_count}".log "${ER_ROOT_DIRECTORY}"/git_repo/"${submod_path}"
             if [ -n "${submod_path}" ]; then
                 sed -i -r "s#(.+)\|#\1|/${submod_path}#" development"${submod_count}".log
             fi
@@ -139,13 +145,13 @@ function process_single_repo
         rm "${logs[@]}"
     else
         # Single repo no submods - simple case.
-        "${CFG_GOURCE_EXEC}" --output-custom-log development.log "${ER_ROOT_DIRECTORY}"/git_repo
+        "${RT_GOURCE_EXEC}" --output-custom-log development.log "${ER_ROOT_DIRECTORY}"/git_repo
     fi
     log_success "Processed 1 repo and ${submod_count} submodules."
 }
 readonly -f process_single_repo
 
-function process_multi_repo
+process_multi_repo()
 {
     declare -i total_count=0
     declare -i submod_count=0
@@ -170,7 +176,7 @@ function process_multi_repo
             submod_paths+=('') # include parent of course
             for submod_path in "${submod_paths[@]}"; do
                 ((++total_count))
-                "${CFG_GOURCE_EXEC}" --output-custom-log development"${total_count}".log "${ER_ROOT_DIRECTORY}"/git_repo/"${dir}"/"${submod_path}"
+                "${RT_GOURCE_EXEC}" --output-custom-log development"${total_count}".log "${ER_ROOT_DIRECTORY}"/git_repo/"${dir}"/"${submod_path}"
                 if [ -n "${submod_path}" ]; then
                     sed -i -r "s#(.+)\|#\1|/${dir}/${submod_path}#" development${total_count}.log
                     ((++submod_count))
@@ -181,7 +187,7 @@ function process_multi_repo
             done
         else
             ((++total_count))
-            "${CFG_GOURCE_EXEC}" --output-custom-log development"${total_count}".log "${ER_ROOT_DIRECTORY}"/git_repo/"${dir}"
+            "${RT_GOURCE_EXEC}" --output-custom-log development"${total_count}".log "${ER_ROOT_DIRECTORY}"/git_repo/"${dir}"
             sed -i -r "s#(.+)\|#\1|/${dir}#" development${total_count}.log
             logs+=("development${total_count}.log")
         fi
@@ -192,7 +198,7 @@ function process_multi_repo
 }
 readonly -f process_multi_repo
 
-function process_repos
+process_repos()
 {
     # Check if this is a single or multi repo
     if [ ! -d "${ER_ROOT_DIRECTORY}"/git_repo/.git ]; then
@@ -206,7 +212,7 @@ function process_repos
 }
 readonly -f process_repos
 
-function start_httpd
+start_httpd()
 {
     log_notice "Starting httpd..."
     cp "${ER_ROOT_DIRECTORY}"/html/processing_gource.html "${ER_ROOT_DIRECTORY}"/html/index.html
@@ -228,7 +234,7 @@ function start_httpd
 }
 readonly start_httpd
 
-function start_xvfb
+start_xvfb()
 {
     log_notice "Starting Xvfb..."
     Xvfb :99 -ac -screen 0 "${XVFB_WHD}" -nocursor -noreset -nolisten tcp &
@@ -250,7 +256,7 @@ function start_xvfb
 }
 readonly start_xvfb
 
-function start_services
+start_services()
 {
     # Disable strict error handling during this method.
     set +e
@@ -259,49 +265,56 @@ function start_services
 
     start_xvfb
 
-    # Enable strict error handling
+    # Re-enable strict error handling
     set -e
 
     # Trap the services so we can shut them down properly later.
-    trap 'echo "Stopping proccesses PIDs: (${_XVFB_PID}, ${_HTTPD_PID})";\
-        [ -n "${_XVFB_PID}" ] && [ -e /proc/${_XVFB_PID} ] && kill ${_XVFB_PID};\
+    trap '[ -n "${_XVFB_PID}" ] && [ -e /proc/${_XVFB_PID} ] && kill ${_XVFB_PID};\
         [ -n "${_HTTPD_PID}" ] && [ -e /proc/${_HTTPD_PID} ] && kill ${_HTTPD_PID};\
-        exit ${_EXIT_CODE};' SIGINT SIGTERM
+        log_notice "Exiting with code ${EXIT_CODE} ";\
+        exit ${EXIT_CODE};' SIGINT SIGTERM
 }
 readonly start_services
 
 
-function start_render
+start_render()
 {
+    # Disable strict error handling during this method.
+    set +e
     # Start the visualization render based on template chosen
     if [ -n "${TEMPLATE}" ]; then
         case ${TEMPLATE} in
             border)
                 log_info "Using ${TEMPLATE} template..."
                 "${ER_ROOT_DIRECTORY}"/runtime/templates/border.sh
-                _EXIT_CODE=$?
+                EXIT_CODE=$?
                 ;;
             standard)
                 log_info "Using ${TEMPLATE} template..."
                 "${ER_ROOT_DIRECTORY}"/runtime/templates/standard.sh
-                _EXIT_CODE=$?
+                EXIT_CODE=$?
                 ;;
             *)
                 log_error "Unknown template option ${TEMPLATE}"
-                _EXIT_CODE=1
+                EXIT_CODE=1
                 kill -TERM $$
                 ;;
         esac
     else
         log_info "No template choice provided, Defaulting to standard template..."
         "${ER_ROOT_DIRECTORY}"/runtime/templates/standard.sh
-        _EXIT_CODE=$?
+        EXIT_CODE=$?
     fi
+
+    (( EXIT_CODE != 0 )) && kill -TERM $$
+
+    # Re-enable strict error handling
+    set -e
 }
 readonly start_render
 
 
-function handle_output
+handle_output()
 {
     # Handle output
     if [ -f "${ER_ROOT_DIRECTORY}"/video/output.mp4 ]; then
@@ -309,10 +322,11 @@ function handle_output
         log_success "Visualization process is complete."
     else
         log_error "Visualization process failed."
-        _EXIT_CODE=1
+        EXIT_CODE=1
+        kill -TERM $$
     fi
 
-    if (( CFG_LOCAL_OUTPUT != 1 )); then
+    if (( RT_LOCAL_OUTPUT != 1 )); then
         # Wait for httpd process to end.
         while kill -0 ${_HTTPD_PID} >/dev/null 2>&1; do
             wait
@@ -322,7 +336,7 @@ function handle_output
 }
 readonly handle_output
 
-function main
+main()
 {
     # Print Banner
     print_intro
@@ -332,7 +346,7 @@ function main
     declare -gri _HTTPD_TIMEOUT=15
 
     # Set exit code
-    declare -gi _EXIT_CODE=0
+    declare -gix EXIT_CODE=0
 
     # Parse input args if any
     parse_args "$@"
@@ -344,21 +358,20 @@ function main
     process_repos
 
     # Activate services
-    (( CFG_NO_RUN != 1 )) && start_services
+    (( RT_NO_RUN != 1 )) && start_services
 
     # Start visualization rendering process
     start_render
 
     # Handle the output
-    (( CFG_NO_RUN != 1 )) && handle_output
+    (( RT_NO_RUN != 1 )) && handle_output
 
 
 
     # Exit
     [ -n "${_XVFB_PID}" ] && [ -e /proc/${_XVFB_PID} ] && kill ${_XVFB_PID}
     [ -n "${_HTTPD_PID}" ] && [ -e /proc/${_HTTPD_PID} ] && kill ${_HTTPD_PID}
-    echo "Exiting with code ${_EXIT_CODE}"
-    exit "${_EXIT_CODE}"
+    exit "${EXIT_CODE}"
 
 }
 readonly main

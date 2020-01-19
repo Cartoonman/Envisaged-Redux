@@ -8,30 +8,30 @@
 # Constants
 readonly ER_ROOT_DIRECTORY="/visualization"
 
-function log_error
+log_error()
 {
     declare -r red="\e[31m"
-    >&2 printf "%b %s\n" "${red}[ERROR]\e[0m" "${1}"
+    >&2 printf "%b %s\n" "${red}\033[1m[ERROR]\e[0m" "${1}"
 }
-function log_warn
+log_warn()
 {
     declare -r orange="\e[31m"
-    printf "%b %s\n" "${orange}[WARN]\e[0m" "${1}"
+    printf "%b  %s\n" "${orange}\033[1m[WARN]\e[0m" "${1}"
 }
-function log_notice
+log_notice()
 {
     declare -r yellow="\e[93m"
-    printf "%b %s\n" "${yellow}[NOTE]\e[0m" "${1}"
+    printf "%b  %s\n" "${yellow}\033[1m[NOTE]\e[0m" "${1}"
 }
-function log_info
+log_info()
 {
     declare -r cyan="\e[96m"
-    printf "%b %s\n" "${cyan}[INFO]\e[0m" "${1}"
+    printf "%b  %s\n" "${cyan}\033[1m[INFO]\e[0m" "${1}"
 }
-function log_success
+log_success()
 {
     declare -r green="\e[92m"
-    printf "%b %s\n" "${green}[OK]\e[0m" "${1}"
+    printf "%b  %s\n" "${green}\033[1m[OKAY]\e[0m" "${1}"
 }
 
 readonly -f log_error

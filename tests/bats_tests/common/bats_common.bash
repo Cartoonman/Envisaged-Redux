@@ -7,13 +7,14 @@
 
 CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 readonly CUR_DIR_PATH
+readonly ER_ROOT_DIRECTORY=/visualization
 source "${CUR_DIR_PATH}/helpers/output.bash"
 source "${CUR_DIR_PATH}/helpers/error.bash"
 source "${CUR_DIR_PATH}/helpers/lang.bash"
 source "${CUR_DIR_PATH}/helpers/assert.bash"
 
 
-gource_args_test=("bash" "-c"  "source /visualization/runtime/common/common_templates.bash; gen_gource_args; echo \"\${gource_arg_array[@]}\";")
+gource_args_test=("bash" "-c"  "source ${ER_ROOT_DIRECTORY}/runtime/common/common_templates.bash; gen_gource_args; echo \"\${gource_arg_array[@]}\";")
 
 gource_test_entrypoint_1() {
     local -r TYPE="$1" 
@@ -141,40 +142,58 @@ gource_test_avatars() {
 
 integration_run()
 {
+    local env_args=()
     while [[ $# -ne 0 ]]; do
-        local ENV_ARGS+=("$1")
+        env_args+=("$1")
         shift
     done
     printf "Test ${COUNT}\r" >&3
-    local log_output=$(eval "${ENV_ARGS[@]}" /visualization/runtime/entrypoint.sh TEST NO_RUN 2>&1) runtime_exit_code=$?
-    [ ! $runtime_exit_code -eq 0 ] && echo -e "${log_output}" && fail "Failure detected on test #${COUNT}"
+    local log_output=$( eval "${env_args[@]}" "${ER_ROOT_DIRECTORY}"/runtime/entrypoint.sh TEST NO_RUN 2>&1 ) runtime_exit_code=$?
+    (( runtime_exit_code != 0 )) && echo -e "${log_output}" && fail "Failure detected on test #${COUNT}"
     if [ "${SAVE}" = "1" ]; then
-        printf "\n" >> /visualization/cmd_test_data.txt
+        printf "\n" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
     else
-        local actual_result=$(cat /visualization/cmd_test_data.txt)
-        local expected_result=$(awk "NR==${COUNT}" /visualization/tests/test_data/cmd_test_data.txt)
+        local actual_result=$(cat "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt)
+        local expected_result=$(awk "NR==${COUNT}" "${ER_ROOT_DIRECTORY}"/tests/test_data/cmd_test_data.txt)
         assert_equal "${actual_result}" "${expected_result}" || wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m' <(echo "${expected_result}") <(echo "${actual_result}") || fail "Failure detected on test #${COUNT}"
-        rm /visualization/cmd_test_data.txt
+        rm "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
     fi
     (( ++COUNT ))
 }
+readonly -f integration_run
 
 repo_run()
 {
+    local env_args=()
     while [[ $# -ne 0 ]]; do
-        local ENV_ARGS+=("$1")
+        env_args+=("$1")
         shift
     done
     printf "Test ${COUNT}\r" >&3
-    local log_output=$(eval "${ENV_ARGS[@]}" /visualization/runtime/entrypoint.sh TEST NO_RUN 2>&1) runtime_exit_code=$?
-    [ ! $runtime_exit_code -eq 0 ] && echo -e "${log_output}" && fail "Failure detected on test #${COUNT}"
+    local log_output=$( eval "${env_args[@]}" "${ER_ROOT_DIRECTORY}"/runtime/entrypoint.sh TEST NO_RUN 2>&1 ) runtime_exit_code=$?
+    (( runtime_exit_code != 0 )) && echo -e "${log_output}" && fail "Failure detected on test #${COUNT}"
     if [ "${SAVE}" = "1" ]; then
-        cp /visualization/development.log /hostdir/r_"${COUNT}".log
+        cp "${ER_ROOT_DIRECTORY}"/development.log /hostdir/r_"${COUNT}".log
     else
-        local actual_result=$(cat /visualization/development.log)
-        local expected_result=$(cat /visualization/tests/test_data/repo/r_${COUNT}.log)
+        local actual_result=$(cat "${ER_ROOT_DIRECTORY}"/development.log)
+        local expected_result=$(cat "${ER_ROOT_DIRECTORY}"/tests/test_data/repo/r_${COUNT}.log)
         assert_equal "${actual_result}" "${expected_result}" || wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m' <(echo "${expected_result}") <(echo "${actual_result}") || fail "Failure detected on test #${COUNT}"
-        rm /visualization/development.log
+        rm "${ER_ROOT_DIRECTORY}"/development.log
     fi
     (( ++COUNT ))
 }
+readonly -f repo_run
+
+entrypoint_failure_run()
+{
+    local env_args=()
+    while [[ $# -ne 0 ]]; do
+        env_args+=("$1")
+        shift
+    done
+    printf "Test ${COUNT}\r" >&3
+    local log_output=$( eval "${env_args[@]}" "${ER_ROOT_DIRECTORY}"/runtime/entrypoint.sh 2>&1 ) runtime_exit_code=$?
+    (( runtime_exit_code == 0 )) && echo -e "${log_output}" && fail "Expected failure but command succeeded on test #${COUNT}"
+    (( ++COUNT ))
+}
+readonly -f entrypoint_failure_run

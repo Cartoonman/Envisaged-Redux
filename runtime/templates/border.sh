@@ -10,6 +10,19 @@ CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 readonly CUR_DIR_PATH
 source "${CUR_DIR_PATH}/../common/common_templates.bash"
 
+exit_handler()
+{
+    # Remove our temporary files.
+    log_notice "Removing temporary files."
+    rm -rf "${ER_ROOT_DIRECTORY}"/tmp
+    # Exit Gource(s) if still alive.
+    [ -n "${G1_PID}" ] && [ -e /proc/${G1_PID} ] && kill ${G1_PID}
+    [ -n "${G2_PID}" ] && [ -e /proc/${G2_PID} ] && kill ${G2_PID}
+    log_notice "Render process returning with code ${EXIT_CODE}"
+    exit ${EXIT_CODE}
+}
+readonly -f exit_handler
+
 # Predefined resolutions and settings.
 case ${VIDEO_RESOLUTION} in
     2160p)
@@ -69,20 +82,22 @@ case ${VIDEO_RESOLUTION} in
         ;;
     *)
         log_error "${VIDEO_RESOLUTION} is not a valid/supported video resolution."
-        exit 1
+        EXIT_CODE=1
+        exit_handler
         ;;
 esac
 
 
 # Generate ffmpeg flags
 logo_ffmpeg_label="[2:v]" && gen_ffmpeg_flags
+(( $? != 0 )) && EXIT_CODE=1 && exit_handler
 
 # Create our temp directory
-mkdir -p /visualization/tmp
+mkdir -p "${ER_ROOT_DIRECTORY}"/tmp
 
 # Create our named pipes.
-mkfifo /visualization/tmp/gource.pipe
-mkfifo /visualization/tmp/overlay.pipe
+mkfifo "${ER_ROOT_DIRECTORY}"/tmp/gource.pipe
+mkfifo "${ER_ROOT_DIRECTORY}"/tmp/overlay.pipe
 
 
 # Save backup of Env Vars to be overridden
@@ -121,46 +136,51 @@ GOURCE_BACKGROUND_COLOR="${gource_background_color_backup}"
 
 
 # Start Gource for visualization.
-log_notice "Starting Gource primary with title: ${GOURCE_TITLE}"
+log_notice "Starting Gource primary with title [${GOURCE_TITLE}]"
 g1_cmd=( \
-        ${CFG_GOURCE_EXEC} \
+        ${RT_GOURCE_EXEC} \
         --${gource_res} \
         "${gource_primary_args[@]}" \
         --stop-at-end \
-        /visualization/development.log \
+        "${ER_ROOT_DIRECTORY}"/development.log \
         -r ${FPS} \
         -o \
     )
 
-(( CFG_TEST == 1 )) && printf "%s " "${g1_cmd[@]}" >> /visualization/cmd_test_data.txt
-(( CFG_NO_RUN != 1 )) && "${g1_cmd[@]}" - >/visualization/tmp/gource.pipe &
+(( RT_TEST == 1 )) && printf "%s " "${g1_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
+if (( RT_NO_RUN != 1 )); then
+    "${g1_cmd[@]}" - >"${ER_ROOT_DIRECTORY}"/tmp/gource.pipe &
+    declare -ig G1_PID=$!
+fi
 
 # Start Gource for the overlay elements.
 log_notice "Starting Gource secondary for overlay components"
 g2_cmd=( \
-        ${CFG_GOURCE_EXEC} \
+        ${RT_GOURCE_EXEC} \
         --${overlay_res} \
         "${gource_secondary_args[@]}" \
         --transparent \
         --background-colour 202021 \
         --stop-at-end \
-        /visualization/development.log \
+        "${ER_ROOT_DIRECTORY}"/development.log \
         -r ${FPS} \
         -o \
     )
 
-(( CFG_TEST == 1 )) && printf "%s " "${g2_cmd[@]}" >> /visualization/cmd_test_data.txt
-(( CFG_NO_RUN != 1 )) && "${g2_cmd[@]}" - >/visualization/tmp/overlay.pipe &
-
+(( RT_TEST == 1 )) && printf "%s " "${g2_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
+if (( RT_NO_RUN != 1 )); then
+    "${g2_cmd[@]}" - >"${ER_ROOT_DIRECTORY}"/tmp/overlay.pipe &
+    declare -ig G2_PID=$!
+fi
 
 # Start ffmpeg to merge the two video outputs.
 log_notice "Combining videos pipes and rendering..."
-mkdir -p /visualization/video
+mkdir -p "${ER_ROOT_DIRECTORY}"/video
 # [0:v]: gource, [1:v]: overlay, [2:v]: logo
 f_cmd=( \
-        ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i /visualization/tmp/gource.pipe \
-        -y -r ${FPS} -f image2pipe -probesize 100M -i /visualization/tmp/overlay.pipe \
-        ${CFG_LOGO} \
+        ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i "${ER_ROOT_DIRECTORY}"/tmp/gource.pipe \
+        -y -r ${FPS} -f image2pipe -probesize 100M -i "${ER_ROOT_DIRECTORY}"/tmp/overlay.pipe \
+        ${RT_LOGO} \
         -filter_complex "[0:v]pad=${gource_pad}${invert_filter}[center];\
                     [1:v]scale=${output_res}[key_scale];\
                     [1:v]scale=${output_res}[date_scale];\
@@ -169,20 +189,25 @@ f_cmd=( \
                     [key][center]hstack[with_key];\
                     [date][with_key]vstack[default]\
         ${logo_filter_graph}${live_preview_splitter}" -map ${primary_map_label} \
-        -vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} /visualization/video/output.mp4 \
+        -vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} "${ER_ROOT_DIRECTORY}"/video/output.mp4 \
         ${live_preview_args} \
     )
 
-(( CFG_TEST == 1 )) && printf "%s " "${f_cmd[@]}" >> /visualization/cmd_test_data.txt
-(( CFG_NO_RUN != 1 )) && "${f_cmd[@]}"
-(( CFG_TEST == 1 )) && log_success "Test Files Written!" && rm -rf /visualization/tmp && exit 0
+(( RT_TEST == 1 )) && printf "%s " "${f_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
+if (( RT_NO_RUN != 1 )); then
+    "${f_cmd[@]}" 
+    (( $? != 0 )) && EXIT_CODE=1
+fi
+(( RT_TEST == 1 )) && log_success "Test Files Written!" && rm -rf "${ER_ROOT_DIRECTORY}"/tmp && exit 0
 
-log_success "FFmpeg video render completed!"
-# Remove our temporary files.
-log_notice "Removing temporary files."
-rm -rf /visualization/tmp
+if (( EXIT_CODE != 0 )); then
+    log_error "FFmpeg video render failed!"
+else
+    log_success "FFmpeg video render completed!"
 
-# Update html and link new video.
-filesize="$(du -sh /visualization/video/output.mp4 | cut -f 1)"
-printf "$(cat /visualization/html/completed.html)" $filesize >/visualization/html/index.html
-ln -sf /visualization/video/output.mp4 /visualization/html/output.mp4
+    # Update html and link new video.
+    filesize="$(du -sh "${ER_ROOT_DIRECTORY}"/video/output.mp4 | cut -f 1)"
+    printf "$(cat "${ER_ROOT_DIRECTORY}"/html/completed.html)" $filesize >"${ER_ROOT_DIRECTORY}"/html/index.html
+    ln -sf "${ER_ROOT_DIRECTORY}"/video/output.mp4 "${ER_ROOT_DIRECTORY}"/html/output.mp4
+fi
+exit_handler

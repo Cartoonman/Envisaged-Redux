@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Race condition fixed in preview.html when intervalFn is null when not expected.
 - Typo during Xvfb check that ran xdpyinfo in the background.
 - Fixed hanging background processes if failure occurs during bootup of httpd or xvfb (before the traps are set).
+- Fixed bug where gource background processes are not explicitly killed upon exit, hanging fd 1 if an error occurred.
 
 ### Removed
 - swr libraries (Will be added back in later when further testing occurs with swr. Does not affect LLVMPipe).

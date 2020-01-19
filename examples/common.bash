@@ -5,7 +5,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-function print_help
+print_help()
 {
     echo "Args:"
     echo "  --git-repo-dir [absolute/path/to/repo(s)_dir]       Required"
@@ -32,7 +32,7 @@ function print_help
 }
 readonly -f print_help
 
-function parse_args
+parse_args()
 {
     ARGS=""
     while [[ $# -gt 0 ]]; do
