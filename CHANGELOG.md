@@ -238,7 +238,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Initial fork from [Envisaged].
 
 [unreleased]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.11.0...master
-[0.11.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.11.0...v0.11.0
+[0.11.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.10.0...v0.11.0
 [0.10.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.9.1...v0.10.0
 [0.9.1]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.9.0...v0.9.1
 [0.9.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.8.0...v0.9.0
