@@ -5,16 +5,17 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-. "$DIR/common.bash"
+CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+readonly CUR_DIR_PATH
+. "${CUR_DIR_PATH}/common.bash"
 
 parse_args "$@"
 
-# Training Wheels
+# Training Wheels. Remove or modify this section if using this script in your own setups.
 if [ "${GIT_REPO_URI}" = "" ]; then
     echo "No git repo directory specified, using Envisaged-Redux repo..."
-    GIT_REPO_URI="--mount type=bind,src=${DIR}/../,dst=/visualization/git_repo,readonly"
-    CAPTION_URI="--mount type=bind,src=${DIR}/data/quick_start_captions.txt,dst=/visualization/captions.txt,readonly"
+    GIT_REPO_URI="--mount type=bind,src=${CUR_DIR_PATH}/../,dst=/visualization/git_repo,readonly"
+    CAPTION_URI="--mount type=bind,src=${CUR_DIR_PATH}/data/quick_start_captions.txt,dst=/visualization/captions.txt,readonly"
 fi
 
 docker run --rm -it \

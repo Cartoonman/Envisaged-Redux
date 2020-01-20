@@ -5,7 +5,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+readonly CUR_DIR_PATH
 
 while [[ $# -gt 0 ]]; do
     k="$1"
@@ -18,8 +19,6 @@ while [[ $# -gt 0 ]]; do
     esac
     shift
 done
-
-echo "Initializing Test Environment"
 
 docker run --rm -it \
     --name test-envisaged-redux \

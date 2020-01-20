@@ -5,7 +5,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-function print_help
+print_help()
 {
     echo "Args:"
     echo "  --git-repo-dir [absolute/path/to/repo(s)_dir]       Required"
@@ -30,9 +30,9 @@ function print_help
     echo "  Other args will be passed through to docker run command.    "
     echo "          e.g. -e H265_CRF=\"0\" "
 }
+readonly -f print_help
 
-
-function parse_args
+parse_args()
 {
     ARGS=""
     while [[ $# -gt 0 ]]; do
@@ -74,3 +74,4 @@ function parse_args
         shift
     done
 }
+readonly -f print_help

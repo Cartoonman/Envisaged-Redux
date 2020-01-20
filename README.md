@@ -1,15 +1,16 @@
 # Envisaged-Redux - Dockerized Gource Visualizations, Reborn
+**Powered by Gource, FFMpeg, and the Gallium LLVMPipe Driver**
 
-A fork of James Brink's excellent [Envisaged][envisaged] docker container.
-
-Built on top of Alpine 3.10. **No GPU is required**, this will run on any machine, such as a standard EC2 instance or any other VPS.
+Built on top of Alpine 3.11. **No GPU is required**, this will run on any machine, such as a standard EC2 instance or any other VPS.
 
 ## About
 
 Painless data visualizations from git history showing a repositories development progression over time.
 This container combines the awesome [Gource][gource] program with the power of [FFmpeg][ffmpeg_home] and the H.265/HEVC codec to bring you high resolution (up to 4k at 60fps) video visualizations.
 
-This container is 100% headless, it does this by leveraging [Xvfb][xvfb] combined with the [Mesa 3d Gallium llvmpipe Driver][mesa]. Unlike other docker containers with Gource, this container does not eat up 100's of gigabytes of disk space, nor does it require an actual GPU to run. The process runs the Gource simulation concurrently with the FFmpeg encoding process using a set of named pipes. There is a slight trade off in performance, but this makes it very easy to run in any environment such as AWS, without the need to provision large amounts of storage or run any cleanup.
+This container is 100% headless, it does this by leveraging [Xvfb][xvfb] combined with the [Mesa 3D Gallium LLVMPipe Driver][mesa]. Unlike other docker containers with Gource, this container does not eat up 100's of gigabytes of disk space, nor does it require an actual GPU to run. The process runs the Gource simulation concurrently with the FFmpeg encoding process using a set of named pipes. There is a slight trade off in performance, but this makes it very easy to run in any environment such as AWS, without the need to provision large amounts of storage or run any cleanup.
+
+Envisaged Redux is a fork of the [Envisaged][envisaged] docker container.
 
 ## Example Scripts
 
@@ -24,13 +25,13 @@ This container is configurable through docker runtime args and environment varia
 
 ### Docker Runtime Mounts
 
-| Purpose  | Example                                                                                               | Description                                                                                                                                                                                                                          |
-| -------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Repo(s)  | `-v /path/on/host/to/git_repo(s)_dir:/visualization/git_repo:ro`                                      | Required. Mounts the path to a single git repo, or a directory of multiple git repos for multi-repo visualizations. (Recommended for multi-repo: add _root_ to GOURCE_HIDE_ITEMS list argument to visually separate multiple repos.) |
-| Captions | `--mount type=bind,source=/path/on/host/to/captions.txt,target=/visualization/captions.txt,readonly"` | Optional. Gource will try given captions.txt file to render captions on video. See [gource] docs for supported caption format.                                                                                                       |
-| Avatars  | `--mount type=bind,source=/path/on/host/to/avatars_dir,target=/visualization/avatars,readonly"`       | Optional. Gource will try given avatars directory to render user avatars on video. See [gource] docs for naming rules and supported image types.                                                                                     |
-| Logo     | `--mount type=bind,source=/path/on/host/to/image.png,target=/visualization/logo.image,readonly"`      | Optional. Gource will try given logo image file to render the logo in the lower right hand corner of the video.                                                                                                                      |
-| Output   | `--mount type=bind,source=/path/on/host/to/output_dir,target=/visualization/video"`                   | Optional. If this mount is made, Envisaged Redux will save the rendered video in the mounted directory and immediately exit once rendering completes.                                                                                |
+| Purpose  | Example                                                                                | Description                                                                                                                                                                                                                          |
+| -------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Repo(s)  | `--mount type=bind,src=/path/to/git_repo(s)_dir,dst=/visualization/git_repo,readonly`  | Required. Mounts the path to a single git repo, or a directory of multiple git repos for multi-repo visualizations. (Recommended for multi-repo: add _root_ to GOURCE_HIDE_ITEMS list argument to visually separate multiple repos.) |
+| Captions | `--mount type=bind,src=/path/to/captions.txt,dst=/visualization/captions.txt,readonly` | Optional. Gource will try given captions.txt file to render captions on video. See [gource] docs for supported caption format.                                                                                                       |
+| Avatars  | `--mount type=bind,src=/path/to/avatars_dir,dst=/visualization/avatars,readonly`       | Optional. Gource will try given avatars directory to render user avatars on video. See [gource] docs for naming rules and supported image types.                                                                                     |
+| Logo     | `--mount type=bind,src=/path/to/image.png,dst=/visualization/logo.image,readonly`      | Optional. Gource will try given logo image file to render the logo in the lower right hand corner of the video.                                                                                                                      |
+| Output   | `--mount type=bind,src=/path/to/output_dir,dst=/visualization/video`                   | Optional. If this mount is made, Envisaged Redux will save the rendered video in the mounted directory and immediately exit once rendering completes.                                                                                |
 
 ### Environment Variables
 
@@ -64,14 +65,14 @@ You can also make `preview.sh` run for the whole duration by removing the `-e GO
 
 #### Render Settings
 
-| Variable         | Default Value | Description                                                                                                             |
-| ---------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| H265_PRESET      | medium        | h.265 encoding preset. Refer to [FFmpeg's wiki][ffmpeg_h265].                                                           |
-| H265_CRF         | 21            | The Constant Rate Factor (CRF). Refer to [FFmpeg's wiki][ffmpeg_h265].                                                  |
-| VIDEO_RESOLUTION | 1080p         | Output video resolution, options are **2160p, 1440p, 1080p, 720p, 480p**                                                |
-| FPS              | 60            | Output video Frames per Second. Supported framerates are 25,30, or 60 only.                                             |
-| TEMPLATE         |               | Specify a template to use. Only 1 custom template currently exists: **border**. If not specified, will use no template. |
-| INVERT_COLORS    | 0             | Inverts the colors on the visualization.                                                                                |
+| Variable         | Default Value | Description                                                                                                                          |
+| ---------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| H265_PRESET      | medium        | h.265 encoding preset. Refer to [FFmpeg's wiki][ffmpeg_h265].                                                                        |
+| H265_CRF         | 21            | The Constant Rate Factor (CRF). Refer to [FFmpeg's wiki][ffmpeg_h265].                                                               |
+| VIDEO_RESOLUTION | 1080p         | Output video resolution, options are **2160p, 1440p, 1080p, 720p, 480p**                                                             |
+| FPS              | 30            | Output video Frames per Second. Supported framerates are 25,30, or 60 only.                                                          |
+| TEMPLATE         |               | Specify a template to use. Two templates currently exist: **standard** and **border**. If not specified, will use standard template. |
+| INVERT_COLORS    | 0             | Inverts the colors on the visualization.                                                                                             |
 
 ##### General Gource Settings
 
@@ -139,12 +140,9 @@ You can also make `preview.sh` run for the whole duration by removing the `-e GO
   ```
   This means the image logo passed into the docker container is not compatible with the image converter onboard. Try using another format or image.
 
-[alpine linux image]: https://github.com/gliderlabs/docker-alpine
 [gource]: https://github.com/acaudwell/Gource
 [envisaged]: https://github.com/utensils/Envisaged
 [ffmpeg_home]: https://www.ffmpeg.org/
 [xvfb]: https://www.x.org/archive/X11R7.6/doc/man/man1/Xvfb.1.xhtml
 [mesa]: https://www.mesa3d.org/llvmpipe.html
 [ffmpeg_h265]: https://trac.ffmpeg.org/wiki/Encode/H.265
-[utensils/opengl]: https://github.com/utensils/docker-opengl
-[elixir-school]: https://github.com/elixirschool/elixirschool

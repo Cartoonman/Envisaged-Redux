@@ -6,8 +6,10 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # Entry Point into testing.
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+readonly CUR_DIR_PATH
 set -e
+readonly ER_ROOT_DIRECTORY="/visualization"
 
 export SAVE=0
 while [[ $# -gt 0 ]]; do
@@ -21,33 +23,34 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Set up git test repo
-GIT_PARENT_DIR="/visualization/git_sandbox"
+GIT_PARENT_DIR="${ER_ROOT_DIRECTORY}/git_sandbox"
 mkdir -p ${GIT_PARENT_DIR}
 echo "---Initializing Git Test Sandbox---"
-${DIR}/git_testbed.sh ${GIT_PARENT_DIR} > /dev/null 2>&1
+${CUR_DIR_PATH}/git_testbed.sh ${GIT_PARENT_DIR} > /dev/null 2>&1
 
 
 # Unit tests
 echo "---Starting Unit Tests---"
-bats ${DIR}/bats_tests/gource_unit_test.bats
-bats ${DIR}/bats_tests/ffmpeg_unit_test.bats
+bats ${CUR_DIR_PATH}/bats_tests/gource_unit_test.bats
+bats ${CUR_DIR_PATH}/bats_tests/ffmpeg_unit_test.bats
 
 # Integration tests
 echo "---Starting Integration Tests---"
 
-# TODO Test log creation (revursive, multi, etc)
 
 # Test Gource x ffmpeg args
 
 
 # Set up environment
-mkdir -p /visualization/video
-ln -sf /visualization/git_sandbox/repo1 /visualization/git_repo
+mkdir -p "${ER_ROOT_DIRECTORY}"/video
+ln -sf "${ER_ROOT_DIRECTORY}"/git_sandbox/repo1 "${ER_ROOT_DIRECTORY}"/git_repo
 
-bats ${DIR}/bats_tests/integration_args.bats
+bats ${CUR_DIR_PATH}/bats_tests/entrypoint_test.bats
 
-[ "${SAVE}" = "1" ] && mv /visualization/cmd_test_data.txt /hostdir/cmd_test_data.txt
+bats ${CUR_DIR_PATH}/bats_tests/integration_args.bats
 
-bats ${DIR}/bats_tests/repo_parse.bats
+[ "${SAVE}" = "1" ] && mv "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt /hostdir/cmd_test_data.txt
+
+bats ${CUR_DIR_PATH}/bats_tests/repo_parse.bats
 
 echo "---Test Complete---"
