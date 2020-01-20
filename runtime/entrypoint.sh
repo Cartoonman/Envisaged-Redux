@@ -34,6 +34,10 @@ parse_args()
         local k
         k="$1"
         case $k in
+            DEBUG)
+                declare -grix RT_DEBUG=1
+                log_warn "DEBUG Flag Invoked"
+                ;;
             HOLD)
                 log_info "Test mode enabled. Spinning main thread. Run docker stop on container when complete."
                 trap 'exit 143' SIGTERM # exit = 128 + 15 (SIGTERM)
@@ -113,6 +117,7 @@ parse_configs()
         log_error "Error: git repo not found: "${ER_ROOT_DIRECTORY}"/git_repo does not exist."
         exit 1
     fi
+    return 0
 }
 readonly -f parse_configs
 
@@ -148,6 +153,7 @@ process_single_repo()
         "${RT_GOURCE_EXEC}" --output-custom-log development.log "${ER_ROOT_DIRECTORY}"/git_repo
     fi
     log_success "Processed 1 repo and ${submod_count} submodules."
+    return 0
 }
 readonly -f process_single_repo
 
@@ -195,6 +201,7 @@ process_multi_repo()
     log_success "Processed $((total_count-submod_count)) repos and ${submod_count} submodules."
     sort -n "${logs[@]}" > development.log
     rm "${logs[@]}"
+    return 0
 }
 readonly -f process_multi_repo
 
@@ -209,6 +216,7 @@ process_repos()
         process_single_repo
     fi
     log_info "Git logs Parsed."
+    return 0
 }
 readonly -f process_repos
 
@@ -227,10 +235,11 @@ start_httpd()
     done
     if (( SECONDS - watch_start > _HTTPD_TIMEOUT )); then
         log_error "Timeout: httpd failed to start after ${_HTTPD_TIMEOUT} seconds. Observed error code ${curl_exit_code}."
-        [ -n "${_HTTPD_PID}" ] && [ -e /proc/${_HTTPD_PID} ] && kill ${_HTTPD_PID}
+        stop_process ${_HTTPD_PID}
         exit 1
     fi
     log_success "httpd started successfully."
+    return 0
 }
 readonly start_httpd
 
@@ -248,11 +257,12 @@ start_xvfb()
     done
     if (( SECONDS - watch_start > _XVFB_TIMEOUT )); then
         log_error "Timeout: Xvfb failed to start after ${_XVFB_TIMEOUT} seconds. Observed error code ${xdpy_exit_code}."
-        [ -n "${_HTTPD_PID}" ] && [ -e /proc/${_HTTPD_PID} ] && kill ${_HTTPD_PID}
-        [ -n "${_XVFB_PID}" ] && [ -e /proc/${_XVFB_PID} ] && kill ${_XVFB_PID}
+        stop_process ${_HTTPD_PID}
+        stop_process ${_XVFB_PID}
         exit 1
     fi
     log_success "Xvfb started successfully."
+    return 0
 }
 readonly start_xvfb
 
@@ -269,10 +279,11 @@ start_services()
     set -e
 
     # Trap the services so we can shut them down properly later.
-    trap '[ -n "${_XVFB_PID}" ] && [ -e /proc/${_XVFB_PID} ] && kill ${_XVFB_PID};\
-        [ -n "${_HTTPD_PID}" ] && [ -e /proc/${_HTTPD_PID} ] && kill ${_HTTPD_PID};\
-        log_notice "Exiting with code ${EXIT_CODE} ";\
+    trap 'stop_process ${_XVFB_PID};\
+        stop_process ${_HTTPD_PID};\
+        log_debug "Exiting with code ${EXIT_CODE} ";\
         exit ${EXIT_CODE};' SIGINT SIGTERM
+    return 0
 }
 readonly start_services
 
@@ -310,6 +321,7 @@ start_render()
 
     # Re-enable strict error handling
     set -e
+    return 0
 }
 readonly start_render
 
@@ -332,7 +344,7 @@ handle_output()
             wait
         done
     fi
-    
+    return 0
 }
 readonly handle_output
 
@@ -369,10 +381,10 @@ main()
 
 
     # Exit
-    [ -n "${_XVFB_PID}" ] && [ -e /proc/${_XVFB_PID} ] && kill ${_XVFB_PID}
-    [ -n "${_HTTPD_PID}" ] && [ -e /proc/${_HTTPD_PID} ] && kill ${_HTTPD_PID}
+    stop_process ${_XVFB_PID}
+    stop_process ${_HTTPD_PID}
+    log_debug "Exiting at end with code ${EXIT_CODE}"
     exit "${EXIT_CODE}"
-
 }
 readonly main
 

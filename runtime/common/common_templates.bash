@@ -75,6 +75,7 @@ gen_gource_args()
     if (( RT_NIGHTLY == 1 )); then
         [ "${GOURCE_FILE_EXT_FALLBACK}" = "1" ] && gource_arg_array+=("--file-extension-fallback")
     fi
+    return 0
 }
 readonly -f gen_gource_args
 

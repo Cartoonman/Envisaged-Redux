@@ -16,9 +16,9 @@ exit_handler()
     log_notice "Removing temporary files."
     rm -rf "${ER_ROOT_DIRECTORY}"/tmp
     # Exit Gource(s) if still alive.
-    [ -n "${G1_PID}" ] && [ -e /proc/${G1_PID} ] && kill ${G1_PID}
-    [ -n "${G2_PID}" ] && [ -e /proc/${G2_PID} ] && kill ${G2_PID}
-    log_notice "Render process returning with code ${EXIT_CODE}"
+    stop_process ${G1_PID}
+    stop_process ${G2_PID}
+    log_debug "Render process returning with code ${EXIT_CODE}"
     exit ${EXIT_CODE}
 }
 readonly -f exit_handler
@@ -198,7 +198,6 @@ if (( RT_NO_RUN != 1 )); then
     "${f_cmd[@]}" 
     (( $? != 0 )) && EXIT_CODE=1
 fi
-(( RT_TEST == 1 )) && log_success "Test Files Written!" && rm -rf "${ER_ROOT_DIRECTORY}"/tmp && exit 0
 
 if (( EXIT_CODE != 0 )); then
     log_error "FFmpeg video render failed!"
@@ -206,8 +205,10 @@ else
     log_success "FFmpeg video render completed!"
 
     # Update html and link new video.
-    filesize="$(du -sh "${ER_ROOT_DIRECTORY}"/video/output.mp4 | cut -f 1)"
-    printf "$(cat "${ER_ROOT_DIRECTORY}"/html/completed.html)" $filesize >"${ER_ROOT_DIRECTORY}"/html/index.html
-    ln -sf "${ER_ROOT_DIRECTORY}"/video/output.mp4 "${ER_ROOT_DIRECTORY}"/html/output.mp4
+    if (( RT_TEST != 1 )); then
+        filesize="$(du -sh "${ER_ROOT_DIRECTORY}"/video/output.mp4 | cut -f 1)"
+        printf "$(cat "${ER_ROOT_DIRECTORY}"/html/completed.html)" $filesize >"${ER_ROOT_DIRECTORY}"/html/index.html
+        ln -sf "${ER_ROOT_DIRECTORY}"/video/output.mp4 "${ER_ROOT_DIRECTORY}"/html/output.mp4
+    fi
 fi
 exit_handler
