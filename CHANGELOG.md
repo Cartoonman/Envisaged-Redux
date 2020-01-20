@@ -20,7 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated Mesa to 19.2.8.
 - Updated hls.js to 13.1.
 - Ported the deprecated autotools-based build of Mesa to Meson.
-- Updated to LLVM 9.
+- Updated to LLVM 5.
+- Affixed gource_stable to v0.49 and built from source.
 - Replaced upstream reference to utensils/opengl with local build of mesa library for direct control and to keep it up to date.
 - Migrated project to Apache 2 License (from MIT).
 - Refactored template runtime command args for Gource and ffmpeg for better observation thru tests.

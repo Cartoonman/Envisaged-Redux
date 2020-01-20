@@ -5,13 +5,24 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND MIT
 
-FROM alpine:3.11 as gource-nightly-builder
+FROM alpine:3.11 as gource-builder
+
+ENV GOURCE_STABLE_VERSION 0.49
 
 RUN apk add --update --no-cache --virtual .build-deps alpine-sdk git sdl2-dev sdl2_image-dev pcre-dev freetype-dev glew-dev glm-dev boost-dev libpng-dev tinyxml-dev autoconf automake \
-    && git clone --branch master --depth 1 https://github.com/acaudwell/Gource.git \
+    && mkdir -p /opt/gource_nightly /opt/gource_stable \
+    && git clone --branch master https://github.com/acaudwell/Gource.git \
     && cd Gource \
     && ./autogen.sh \
-    && ./configure \
+    && ./configure --prefix=/opt/gource_nightly \
+    && make -j"$(nproc)" \
+    && make install \
+    && mv /opt/gource_nightly/bin/gource /opt/gource_nightly/bin/gource_nightly \
+    && rm -rf * \
+    && git checkout gource-"${GOURCE_STABLE_VERSION}" \
+    && git checkout . \
+    && ./autogen.sh \
+    && ./configure -prefix=/opt/gource_stable \
     && make -j"$(nproc)" \
     && make install \
     && cd .. \
@@ -19,11 +30,12 @@ RUN apk add --update --no-cache --virtual .build-deps alpine-sdk git sdl2-dev sd
     && apk del .build-deps
 
 
-# Note the below section is based on:
+# Note the below section is derived from:
 # https://github.com/utensils/docker-opengl/
 
 FROM alpine:3.11 as mesa_builder
 ENV MESA_VERSION 19.2.8
+ENV LLVM_VERSION llvm5
 
 # Install all needed build deps for Mesa
 RUN set -xe; \
@@ -37,8 +49,9 @@ RUN set -xe; \
         gettext \
         glproto \
         libtool \
-        llvm9 \
-        llvm9-dev \
+        ${LLVM_VERSION} \
+        ${LLVM_VERSION}-dev \
+        ${LLVM_VERSION}-libs \
         py-mako \
         xorg-server-dev python-dev \
         zlib-dev;
@@ -51,7 +64,10 @@ RUN set -xe; \
     tar xf mesa-"${MESA_VERSION}".tar.xz; \
     rm mesa-"${MESA_VERSION}".tar.xz; \
     cd mesa-"${MESA_VERSION}"; \
+    printf "[binaries]\nllvm-config = '/usr/lib/${LLVM_VERSION}/bin/llvm-config'" \
+		> "/var/tmp/build/llvm.ini"; \
     meson build/ \
+        --native-file "/var/tmp/build/llvm.ini" \
         -D prefix=/usr/local \
         -D osmesa=gallium \
         -D dri-drivers=[] \
@@ -68,18 +84,23 @@ RUN set -xe; \
     rm -rf /var/tmp/build; \
     apk del .mesa_build_deps
 
+# End Derivation
 
 FROM alpine:3.11
 
 COPY --from=mesa_builder /usr/local /usr/local
-COPY --from=gource-nightly-builder /usr/local/bin/gource /usr/local/bin/gource_nightly
-COPY --from=gource-nightly-builder /usr/local/share/gource /usr/local/share/gource
+COPY --from=gource-builder /opt/gource_nightly /opt/gource_nightly
+COPY --from=gource-builder /opt/gource_stable /opt/gource_stable
+
+ENV PATH="/opt/gource_stable/bin:/opt/gource_nightly/bin:${PATH}"
+ENV LLVM_VERSION llvm5
 
 RUN set -xe; \
     apk --update add --no-cache --virtual .runtime-deps \
+        boost-filesystem freetype glew glu libgcc libpng libstdc++ mesa-gl musl pcre sdl2 sdl2_image \
         bash \
         expat \
-        llvm9-libs \
+        ${LLVM_VERSION}-libs \
         xdpyinfo \
         xvfb \
         git \
