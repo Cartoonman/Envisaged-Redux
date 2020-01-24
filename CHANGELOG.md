@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Added System tests, but disabled by default. Pending updates to Gource and further testing to see if reproducible behavior exists.
+
 ## [0.11.0] - 2020-01-19
 
 ### Added

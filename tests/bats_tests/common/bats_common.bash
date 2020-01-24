@@ -173,7 +173,8 @@ repo_run()
     local log_output=$( eval "${env_args[@]}" "${ER_ROOT_DIRECTORY}"/runtime/entrypoint.sh TEST NO_RUN 2>&1 ) runtime_exit_code=$?
     (( runtime_exit_code != 0 )) && echo -e "${log_output}" && fail "Failure detected on test #${COUNT}"
     if [ "${SAVE}" = "1" ]; then
-        cp "${ER_ROOT_DIRECTORY}"/development.log /hostdir/r_"${COUNT}".log
+        mkdir -p /hostdir/repo
+        cp "${ER_ROOT_DIRECTORY}"/development.log /hostdir/repo/r_"${COUNT}".log
     else
         local actual_result=$(cat "${ER_ROOT_DIRECTORY}"/development.log)
         local expected_result=$(cat "${ER_ROOT_DIRECTORY}"/tests/test_data/repo/r_${COUNT}.log)
@@ -197,3 +198,27 @@ entrypoint_failure_run()
     (( ++COUNT ))
 }
 readonly -f entrypoint_failure_run
+
+system_run()
+{
+    while [[ $# -ne 0 ]]; do
+        local env_args+=("$1")
+        shift
+    done
+    printf "Test ${COUNT}\r" >&3
+    local log_output=$( eval "${env_args[@]}" "${ER_ROOT_DIRECTORY}"/runtime/entrypoint.sh 2>&1 ) runtime_exit_code=$?
+    (( runtime_exit_code != 0 )) && echo -e "${log_output}" && fail "Failure on test #${COUNT}"
+    local actual_result=$(sha512sum /visualization/video/output.mp4 | awk '{ print $1 }')
+    if [ "${SAVE}" = "1" ]; then
+        cp /visualization/video/output.mp4 /hostdir/v_"${COUNT}".mp4
+        printf "${actual_result}\n" >> /hostdir/video_hashes.txt
+    else
+        # Check 512 sum matches
+        local expected_result=$(awk "NR==${COUNT}" "${ER_ROOT_DIRECTORY}"/tests/test_data/video_hashes.txt)
+        assert_equal "${actual_result}" "${expected_result}" || fail "Failure detected on test #${COUNT}"
+    fi
+    rm -f "${ER_ROOT_DIRECTORY}"/video/output.mp4
+    rm -f "${ER_ROOT_DIRECTORY}"/development.log
+    (( ++COUNT ))
+}
+readonly -f system_run
