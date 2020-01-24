@@ -8,7 +8,15 @@ Built on top of Alpine 3.11. **No GPU is required**, this will run on any machin
 Painless data visualizations from git history showing a repositories development progression over time.
 This container combines the awesome [Gource][gource] program with the power of [FFmpeg][ffmpeg_home] and the H.265/HEVC codec to bring you high resolution (up to 4k at 60fps) video visualizations.
 
-This container is 100% headless, it does this by leveraging [Xvfb][xvfb] combined with the [Mesa 3D Gallium LLVMPipe Driver][mesa]. Unlike other docker containers with Gource, this container does not eat up 100's of gigabytes of disk space, nor does it require an actual GPU to run. The process runs the Gource simulation concurrently with the FFmpeg encoding process using a set of named pipes. There is a slight trade off in performance, but this makes it very easy to run in any environment such as AWS, without the need to provision large amounts of storage or run any cleanup.
+This container is 100% headless, it does this by leveraging [Xvfb][xvfb] combined with the [Mesa 3D Gallium LLVMPipe Driver][mesa]. 
+Unlike other docker containers with Gource, this container does not eat up 100's of gigabytes of disk space, nor does it require an actual GPU to run. 
+The process runs the Gource simulation concurrently with the FFmpeg encoding process using a set of named pipes. 
+There is a slight trade off in performance, but this makes it very easy to run in any environment such as AWS, without the need to provision large amounts of storage or run any cleanup.
+
+This project uses FFmpeg, libx264, libx265, and Gource, which are licensed under GPL of their respective copyright owners.
+They are compiled from source and the source code is bundled with each image under `/gpl_sources`.
+Compile-time configurations are derivable from the Dockerfile.
+If there is any issue regarding GPL compliance, reach out to the maintainer of this project.
 
 Envisaged Redux is a fork of the [Envisaged][envisaged] docker container.
 
@@ -47,11 +55,14 @@ This is the current list of supported environment runtime variables that you can
 
 ##### Regarding Live Preview
 
-Live preview requires H.264 codec support and JavaScript enabled in your browser. Has been confirmed working on the latest versions of Firefox, Chromium, and Edge, with likely support on Chrome, Safari and Opera. Since this works through the browser, it is inherently platform agnostic.
+Live preview requires H.264 codec support and JavaScript enabled in your browser. 
+Has been confirmed working on the latest versions of Firefox, Chromium, and Edge, with likely support on Chrome, Safari and Opera. 
+Since this works through the browser, it is inherently platform agnostic.
 
 Live preview works concurrently with the normal video rendering process, so at the end of the render you will have the original video available to save.
 
-The PREVIEW_SLOWDOWN_FACTOR option is used to slow the preview stream to reduce buffer hangs from slow renders. This setting only affects the preview, and will not affect the resultant `output.mp4`.
+The PREVIEW_SLOWDOWN_FACTOR option is used to slow the preview stream to reduce buffer hangs from slow renders. 
+This setting only affects the preview, and will not affect the resultant `output.mp4`.
 
 Excluding H265_PRESET, H265_CRF, and PREVIEW_SLOWDOWN_FACTOR > 1, all other render settings, Gource effects, and templates represented in the live_preview are exactly shown as what is rendered to `output.mp4`.
 Of the given exclusions, the CRF config is the configuration with the biggest impact on visual differences between the saved video and the live preview.

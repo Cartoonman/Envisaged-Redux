@@ -5,14 +5,25 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND MIT
 
-FROM alpine:3.11 as gource-builder
+FROM alpine:3.11 as alpine-base
 
-ENV GOURCE_STABLE_VERSION 0.49
+ENV GOURCE_STABLE_VERSION="0.49" \
+    MESA_VERSION="19.2.8" \
+    LLVM_VERSION="llvm5" \
+    FFMPEG_VERSION="4.2.2" \
+    NASM_VERSION="2.14.02" \
+    YASM_VERSION="1.3.0" \
+    X264_VERSION="20191217-2245" \
+    X265_VERSION="3.2.1"
+
+FROM alpine-base as gource-builder
 
 RUN apk add --update --no-cache --virtual .build-deps alpine-sdk git sdl2-dev sdl2_image-dev pcre-dev freetype-dev glew-dev glm-dev boost-dev libpng-dev tinyxml-dev autoconf automake \
-    && mkdir -p /opt/gource_nightly /opt/gource_stable \
+    && mkdir -p /opt/gource_nightly /opt/gource_stable /sources \
     && git clone --branch master https://github.com/acaudwell/Gource.git \
     && cd Gource \
+    && git archive -9 --format=tar.gz -o /sources/gource-nightly.tar.gz --prefix=gource-nightly/ master \
+    && git archive -9 --format=tar.gz -o /sources/gource-"${GOURCE_STABLE_VERSION}".tar.gz --prefix=gource-"${GOURCE_STABLE_VERSION}"/ gource-"${GOURCE_STABLE_VERSION}" \
     && ./autogen.sh \
     && ./configure --prefix=/opt/gource_nightly \
     && make -j"$(nproc)" \
@@ -30,16 +41,9 @@ RUN apk add --update --no-cache --virtual .build-deps alpine-sdk git sdl2-dev sd
     && apk del .build-deps
 
 
-# Note the below section is derived from:
-# https://github.com/utensils/docker-opengl/
+FROM alpine-base as mesa-builder
 
-FROM alpine:3.11 as mesa_builder
-ENV MESA_VERSION 19.2.8
-ENV LLVM_VERSION llvm5
-
-# Install all needed build deps for Mesa
-RUN set -xe; \
-    apk add --no-cache --virtual .mesa_build_deps  \
+RUN apk add --no-cache --virtual .mesa_build_deps  \
         cmake \
         meson \
         bison \
@@ -49,24 +53,22 @@ RUN set -xe; \
         gettext \
         glproto \
         libtool \
-        ${LLVM_VERSION} \
-        ${LLVM_VERSION}-dev \
-        ${LLVM_VERSION}-libs \
+        "${LLVM_VERSION}"-dev \
         py-mako \
-        xorg-server-dev python-dev \
-        zlib-dev;
+        xorg-server-dev \
+        python-dev \
+        zlib-dev
 
 
-RUN set -xe; \
-    mkdir -p /var/tmp/build; \
-    cd /var/tmp/build; \
-    wget -q "https://mesa.freedesktop.org/archive/mesa-${MESA_VERSION}.tar.xz"; \
-    tar xf mesa-"${MESA_VERSION}".tar.xz; \
-    rm mesa-"${MESA_VERSION}".tar.xz; \
-    cd mesa-"${MESA_VERSION}"; \
-    printf "[binaries]\nllvm-config = '/usr/lib/${LLVM_VERSION}/bin/llvm-config'" \
-		> "/var/tmp/build/llvm.ini"; \
-    meson build/ \
+RUN mkdir -p /var/tmp/build \
+    && cd /var/tmp/build \
+    && wget -q "https://mesa.freedesktop.org/archive/mesa-${MESA_VERSION}.tar.xz" \
+    && tar xf mesa-"${MESA_VERSION}".tar.xz \
+    && rm mesa-"${MESA_VERSION}".tar.xz \
+    && cd mesa-"${MESA_VERSION}" \
+    && printf "[binaries]\nllvm-config = '/usr/lib/${LLVM_VERSION}/bin/llvm-config'" \
+		> "/var/tmp/build/llvm.ini" \
+    && meson build/ \
         --native-file "/var/tmp/build/llvm.ini" \
         -D prefix=/usr/local \
         -D osmesa=gallium \
@@ -78,25 +80,124 @@ RUN set -xe; \
         -D gbm=false \
         -D egl=false \
         -D llvm=true \
-        -D glx=gallium-xlib; \
-    ninja -C build/; \
-    ninja -C build/ install; \
-    rm -rf /var/tmp/build; \
-    apk del .mesa_build_deps
+        -D glx=gallium-xlib \
+    && ninja -C build/ \
+    && ninja -C build/ install \
+    && rm -rf /var/tmp/build \
+    && apk del .mesa_build_deps
 
-# End Derivation
 
-FROM alpine:3.11
+FROM alpine-base as ffmpeg-builder
 
-COPY --from=mesa_builder /usr/local /usr/local
+RUN apk add --update --no-cache \
+        build-base \
+        autoconf \
+        automake \
+        wget \
+        tar \
+        bash \
+        cmake \
+        git \
+        pkgconfig \
+    && mkdir -p /opt/install /build_dir /sources/
+
+WORKDIR /build_dir
+
+# Build nasm from source
+RUN mkdir -p nasm \
+    && cd nasm \
+    && wget -q https://www.nasm.us/pub/nasm/releasebuilds/"${NASM_VERSION}"/nasm-"${NASM_VERSION}".tar.xz \
+    && tar --strip-components=1 -xf nasm-"${NASM_VERSION}".tar.xz \
+    && rm nasm-"${NASM_VERSION}".tar.xz \
+    && ./autogen.sh \
+    && ./configure \
+    && make -j"$(nproc)" \
+    && make install
+
+# Build yasm from source
+RUN mkdir -p yasm \
+    && cd yasm \
+    && wget -q http://www.tortall.net/projects/yasm/releases/yasm-"${YASM_VERSION}".tar.gz \
+    && tar --strip-components=1 -xf yasm-"${YASM_VERSION}".tar.gz \
+    && rm yasm-"${YASM_VERSION}".tar.gz \
+    && ./configure \
+    && make -j"$(nproc)" \
+    && make install
+
+
+# Build libx264 from source
+RUN mkdir -p x264 \
+    && cd x264 \
+    && wget -q http://download.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-"${X264_VERSION}"-stable.tar.bz2  \
+    && tar --strip-components=1 -xf x264-snapshot-"${X264_VERSION}"-stable.tar.bz2 \
+    && mv x264-snapshot-"${X264_VERSION}"-stable.tar.bz2 /sources/ \
+    && ./configure \
+        --disable-cli \
+        --enable-shared \
+        --enable-pic \
+        --prefix=/opt/install \
+        --bit-depth=all \
+        --chroma-format=all \
+    && make -j"$(nproc)" \
+    && make install
+
+
+# Build libx265 from source
+RUN mkdir -p x265 \
+    && cd x265 \
+    && wget -q http://download.videolan.org/pub/videolan/x265/x265_"${X265_VERSION}".tar.gz  \
+    && tar --strip-components=1 -xf x265_"${X265_VERSION}".tar.gz \
+    && mv x265_"${X265_VERSION}".tar.gz /sources/ \
+    && cd build \
+    && cmake ../source \
+        -DENABLE_CLI:bool=OFF \
+        -DHIGH_BIT_DEPTH:bool=ON \
+        -DCMAKE_INSTALL_PREFIX=/opt/install \
+        -DCMAKE_BUILD_TYPE="Release" \
+        -DMAIN12:bool=ON \
+        -DENABLE_ASSEMBLY:bool=ON \
+        -DENABLE_PIC:bool=ON \
+        -DENABLE_SVT_HEVC:bool=ON \
+        -DENABLE_LIBNUMA:bool=OFF \
+    && make -j"$(nproc)" \
+    && make install
+
+# Build ffmpeg from source.
+RUN mkdir -p ffmpeg \
+    && cd ffmpeg \
+    && cp -r /opt/install/* /usr/local/ \
+    && wget -q https://www.ffmpeg.org/releases/ffmpeg-"${FFMPEG_VERSION}".tar.xz \
+    && tar --strip-components=1 -xf ffmpeg-"${FFMPEG_VERSION}".tar.xz \
+    && mv ffmpeg-"${FFMPEG_VERSION}".tar.xz /sources/ \
+    && ./configure \
+        --prefix=/opt/install \
+        --enable-gpl \
+        --disable-static --enable-shared \
+        --disable-ffplay \
+        --disable-ffprobe \
+        --disable-devices \
+        --disable-doc \
+        --disable-network \
+        --disable-debug \
+        --enable-libx265 \
+        --enable-libx264 \
+        --enable-demuxer=image2pipe \
+    && make -j"$(nproc)" \
+    && make install
+
+
+FROM alpine-base
+
+COPY --from=mesa-builder /usr/local /usr/local
 COPY --from=gource-builder /opt/gource_nightly /opt/gource_nightly
 COPY --from=gource-builder /opt/gource_stable /opt/gource_stable
+COPY --from=gource-builder /sources /gpl_sources
+COPY --from=ffmpeg-builder /opt/install /usr/local
+COPY --from=ffmpeg-builder /sources /gpl_sources
 
 ENV PATH="/opt/gource_stable/bin:/opt/gource_nightly/bin:${PATH}"
-ENV LLVM_VERSION llvm5
 
-RUN set -xe; \
-    apk --update add --no-cache --virtual .runtime-deps \
+RUN apk --update add --no-cache --virtual .runtime-deps \
         boost-filesystem freetype glew glu libgcc libpng libstdc++ mesa-gl musl pcre sdl2 sdl2_image \
         bash \
         expat \
@@ -111,15 +212,10 @@ RUN set -xe; \
         subversion \
         findutils \
         curl \
-        wget; \
-    mkdir -p /visualization/html; \
-    curl -L https://github.com/video-dev/hls.js/releases/download/v0.13.1/hls.light.min.js > /visualization/html/hls.light.min.js; \
-    curl -L https://github.com/video-dev/hls.js/releases/download/v0.13.1/hls.light.min.js.map > /visualization/html/hls.light.min.js.map; \
-    wget https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-4.1.4-amd64-static.tar.xz -q -O ffmpeg.tar.xz; \
-    tar xf ffmpeg.tar.xz; \
-    rm ffmpeg.tar.xz; \
-    mv ffmpeg*/ffmpeg /usr/local/bin/ffmpeg; \
-    rm -r ffmpeg*;
+        wget \
+    && mkdir -p /visualization/html \
+    && curl -L -s https://github.com/video-dev/hls.js/releases/download/v0.13.1/hls.light.min.js > /visualization/html/hls.light.min.js \
+    && curl -L -s https://github.com/video-dev/hls.js/releases/download/v0.13.1/hls.light.min.js.map > /visualization/html/hls.light.min.js.map;
 
 
 # Copy our assets
@@ -135,7 +231,7 @@ ENV GALLIUM_DRIVER="llvmpipe" \
     LIBGL_ALWAYS_SOFTWARE="1" \
     LP_NO_RAST="false" \
     XVFB_WHD="3840x2160x24" \
-    DISPLAY=":99" 
+    DISPLAY=":99"
 
 # Labels and metadata.
 ARG VCS_REF
