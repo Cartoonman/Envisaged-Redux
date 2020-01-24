@@ -16,6 +16,9 @@ while [[ $# -gt 0 ]]; do
             ARGS+=('-s')
             shift
             ;;
+        --system-test)
+            ARGS+=('--system')
+            ;;
     esac
     shift
 done

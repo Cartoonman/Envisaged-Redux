@@ -18,6 +18,9 @@ while [[ $# -gt 0 ]]; do
         -s)
             SAVE=1
         ;;
+        --system)
+            RUN_SYSTEM_TESTS=1
+        ;;
     esac
     shift
 done
@@ -52,5 +55,14 @@ bats ${CUR_DIR_PATH}/bats_tests/integration_args.bats
 [ "${SAVE}" = "1" ] && mv "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt /hostdir/cmd_test_data.txt
 
 bats ${CUR_DIR_PATH}/bats_tests/repo_parse.bats
+
+
+# System tests
+if (( RUN_SYSTEM_TESTS == 1 )); then
+    echo "---Starting System Tests---"
+
+    mkdir -p "${ER_ROOT_DIRECTORY}"/video
+    bats ${CUR_DIR_PATH}/bats_tests/system_test.bats
+fi
 
 echo "---Test Complete---"
