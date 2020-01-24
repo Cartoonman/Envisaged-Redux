@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Sources placed under /gpl_sources to comply with GPL.
 - Added System tests, but disabled by default. Pending updates to Gource and further testing to see if reproducible behavior exists.
+
+### Updated
+
+- Replaced static build of FFmpeg with local source build.
 
 ## [0.11.0] - 2020-01-19
 
