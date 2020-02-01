@@ -7,27 +7,32 @@
 
 CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 readonly CUR_DIR_PATH
-. "${CUR_DIR_PATH}/common.bash"
+source "${CUR_DIR_PATH}/common.bash"
 
 parse_args "$@"
+
+
+# Declare Environment Variables to configure Envisaged Redux
+env_vars_declare \
+    GOURCE_STOP_AT_TIME         "5" \
+    FPS                         "25" \
+    TEMPLATE                    "standard" \
+    VIDEO_RESOLUTION            "480p" \
+    GOURCE_TITLE                "Fast Preview Example" \
+    H265_PRESET                 "ultrafast" \
+    H265_CRF                    "0" \
+    GOURCE_FONT_SIZE            "35" \
+    GOURCE_PADDING              "1.5"
 
 
 docker run --rm -i -t \
     -p 8080:80 \
     --name envisaged-redux \
-    ${GIT_REPO_URI} \
-    ${LOCAL_OUTPUT_URI} \
-    ${CAPTION_URI} \
-    ${AVATARS_URI} \
-    ${LOGO_URI} \
-    -e GOURCE_STOP_AT_TIME="5" \
-    -e FPS="25" \
-    -e VIDEO_RESOLUTION="480p" \
-    -e GOURCE_TITLE="Fast Preview Example" \
-    -e H265_PRESET="ultrafast" \
-    -e H265_CRF="0" \
-    -e GOURCE_DATE_FONT_SIZE="35" \
-    -e GOURCE_TITLE_FONT_SIZE="25" \
-    -e GOURCE_PADDING="1.5" \
-    ${ARGS} \
+    "${git_repo_uri[@]}" \
+    "${local_output_uri[@]}" \
+    "${caption_uri[@]}" \
+    "${avatars_uri[@]}" \
+    "${logo_uri[@]}" \
+    "${env_vars[@]}" \
+    "${args[@]}" \
     cartoonman/envisaged-redux:latest

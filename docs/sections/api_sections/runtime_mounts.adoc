@@ -1,0 +1,99 @@
+=== Runtime Mounts
+
+In *Envisaged Redux*, mounts act both as a data source/sink, as well as a trigger to enable certain features. 
+This section will describe some of the mounts that *Envisaged Redux* supports, as well as an example of a proper mount.
+
+For safety reasons, all mounts that provide data to *Envisaged Redux* should be marked as `readonly` when using the `--mount` directive in Docker. 
+This will be reflected in the examples.
+
+[discrete]
+===== Repo(s)
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+
+| **<<MountType>>**
+| <<Read>>
+
+| **<<Required>>**
+| Yes
+
+| **<<MountExample>>**
+a| `--mount type=bind,src=#/path/to/git_repo(s)_dir#,dst=/visualization/git_repo,readonly`
+
+| **<<Description>>**
+a| Mounts the path to a single git repo, or a directory of multiple git repos for multi-repo visualizations. 
+
+TIP: When running a multi-repo scenario, add `root` to <<_gource_hide_items,GOURCE_HIDE_ITEMS>> to visually separate multiple repos.
+|===
+
+[discrete]
+===== Captions
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+
+| **<<MountType>>**
+| <<Read>>
+
+| **<<Required>>**
+| No
+
+| **<<MountExample>>**
+a| `--mount type=bind,src=#/path/to/captions.txt#,dst=/visualization/captions.txt,readonly`
+
+| **<<Description>>**
+| Gource will try given captions.txt file to render captions on video. See {uri-gource-docs}[gource docs] for supported caption format.
+|===
+
+[discrete]
+===== Avatars
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+
+| **<<MountType>>**
+| <<Read>>
+
+| **<<Required>>**
+| No
+
+| **<<MountExample>>**
+a| `--mount type=bind,src=#/path/to/avatars_dir#,dst=/visualization/avatars,readonly`
+
+| **<<Description>>**
+| Gource will try given avatars directory to render user avatars on video. See {uri-gource-docs}[gource docs] for naming rules and supported image types.
+|===
+
+[discrete]
+===== Logo
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+
+| **<<MountType>>**
+| <<Read>>
+
+| **<<Required>>**
+| No
+
+| **<<MountExample>>**
+a| `--mount type=bind,src=#/path/to/image.png#,dst=/visualization/logo.image,readonly`
+
+| **<<Description>>**
+| Gource will try given logo image file to render the logo in the lower right hand corner of the video.
+|===
+
+[discrete]
+===== Output
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+
+| **<<MountType>>**
+| <<Write>>
+
+| **<<Required>>**
+| No
+
+| **<<MountExample>>**
+a| `--mount type=bind,src=#/path/to/output_dir#,dst=/visualization/video`
+
+| **<<Description>>**
+| If this mount is made, *Envisaged Redux* will save the rendered video in the mounted directory and immediately exit once rendering completes.
+|===

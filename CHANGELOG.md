@@ -11,17 +11,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Sources placed under /gpl_sources to comply with GPL.
 - Added System tests, but disabled by default. Pending updates to Gource and further testing to see if reproducible behavior exists.
+- Asciidoc Documentation.
 
 ### Updated
 
 - Replaced static build of FFmpeg with local source build.
+- Additional functionality and refactoring to example scripts.
+
+### Fixed
+
+- Improper string handling in example's arg parser.
+- Typo where GOURCE_BORDER_DATE_SIZE was not propagated to the border template correctly.
 
 ## [0.11.0] - 2020-01-19
 
 ### Added
 
 - Unit and Integration Test Suite with Dockerfile and start script.
-- quick_start.sh script and suite for new users to become familiar with using Envisaged-Redux and it's capabilities.
+- quick_start.sh script and suite for new users to become familiar with using Envisaged-Redux and its capabilities.
 - Version file
 - Added correctness check for httpd startup with curl.
 

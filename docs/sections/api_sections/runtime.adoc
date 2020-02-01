@@ -1,0 +1,76 @@
+=== Runtime Environment Variables
+
+These are general settings that configure and enable certain features of *Envisaged Redux*.
+
+[discrete]
+===== RECURSE_SUBMODULES
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>**
+| Flag to enable recursing through the repo(s) submodules
+|===
+
+[discrete]
+===== VIDEO_RESOLUTION
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<String>>
+
+| **<<ExampleValue>>**
+a| `2160p`
+
+| **<<Default>>**
+a| `1080p`
+
+| **<<Description>>**
+| Output video resolution. 
+Supported options are `480p`, `720p`, `1080p`, `1440p`, and `2160p`.
+|===
+
+[discrete]
+===== FPS
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<String>>
+
+| **<<ExampleValue>>**
+a| `60`
+
+| **<<Default>>**
+a| `30`
+
+| **<<Description>>**
+| Output video Frames per Second. Supported framerates are `25`, `30`, or `60` only.
+|===
+
+[discrete]
+===== TEMPLATE
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<String>>
+
+| **<<ExampleValue>>**
+a| `border`
+
+| **<<Default>>**
+a| `standard`
+
+| **<<Description>>**
+a| Specify a template to use. The implemented templates are:
+
+* <<template_standard,standard>>
+* <<template_border,border>>
+|===

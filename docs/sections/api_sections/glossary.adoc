@@ -1,0 +1,155 @@
+=== API Glossary
+
+The following is a detailed description of the labels used in the API documentation. 
+
+[#Assignment]
+[reftext="Assignment"]
+Assignment::
++
+--
+This denotes the equivalent or assigned Gource runtime argument for the given Environment Variable.
+
+For example, the Environment Variable GOURCE_TITLE has the assignment of `--title`.
+This means that when the user provides the input of `GOURCE_TITLE="My Project"`, then the argument that is forwarded to Gource is `--title "My Project"`. 
+
+This serves as a easy reference for further exploration if a user is curious what the details of a given configuration are. All Gource assignments can be looked up on the official {uri-gource-docs}[Gource docs]
+--
+
+[#Type]
+[reftext="Type"]
+Type::
++
+--
+This denotes the expected datatype of the variable. 
+By default all Environment Variables exist in an unset state save a few exceptions.
+If a Gource variable is unset, the Gource executable will use its own internal default handler. See {uri-gource}[Gource's source code] for more details on the default assignments and handling of configuration variables. 
+
+In general, configuration variables will either be set to a default value, or remain unset in Gource.
+
+The datatypes are: 
+
+[#Boolean]
+[reftext="Boolean"]
+Boolean:::
++
+If set, they must be assigned the value `1` to be considered __true__.
++
+If assigned any value other than `1`, it will be considered __false__.
++
+By default, the state of being unset is equivalent to __false__.
++
+Example boolean input: `GOURCE_SHOW_KEY="1"`. 
+
+[#String]
+[reftext="String"]
+String:::
++
+String or string-based equivalent. May include whitespace.
++
+Example string input: `GOURCE_TITLE="My Project Title"`
+
+[#List]
+[reftext="List"]
+List:::
++
+Identical to String, except may not include whitespace.
+Typically delimited with commas.
++
+Example list input: `GOURCE_HIDE_ITEMS="mouse,date,filenames"`
+
+[#Integer]
+[reftext="Integer"]
+Integer:::
++
+Integer number. The range bounds if known will be described. 
++
+Example integer input: `GOURCE_DIR_DEPTH="3"`
+
+[#Float]
+[reftext="Float"]
+Float:::
++
+Floating point number. The range bounds if known will be described. 
++
+Example float input: `GOURCE_BLOOM_INTENSITY="0.75"`
+
+[#Hexadecimal]
+[reftext="Hexadecimal"]
+Hexadecimal:::
++
+6 digit Hexadecimal represented as 3 groups of 256 bit values.
++
+For example, 030201 = <3,2,1>. AABBCC = <170, 187, 204>.
++
+This is often used to represent 256 level RGB color space (0-255).
++
+Example hexadecimal input: `GOURCE_FONT_COLOR="FFCC45"`
+--
+
+[#MountType]
+[reftext="Mount Type"]
+Mount Type::
++
+--
+This specifies the type of mount the user should be expected to assign.
+
+The mount types are: 
+
+[#Read]
+[reftext="Read"]
+Read:::
++
+Read only mounts should be given then `readonly` specifier. This will guarantee that files that are passed to *Envisaged Redux* cannot be modified or overwritten by *Envisaged Redux*. 
+
+While *Envisaged Redux* has no reason to write anything to the repositories, it is best to be safe and restrict write access to the host mount.
+
+[#Write]
+[reftext="Write"]
+Write:::
++
+These are mounts that are expected to be written to. Generally it is a good idea to mount an empty directory to *Envisaged Redux* so it is clear to the user what files were written as a result of *Envisaged Redux*.
+--
+
+[#ExampleValue]
+[reftext="Example Value"]
+Example Value(s)::
+One or more example values that are considered valid inputs for the given Environment Variable.
+
+[#MountExample]
+[reftext="Mount Example"]
+Mount Example::
++
+--
+An example of the syntax to have docker mount a directory to a specified location within *Envisaged Redux*. The highlighted portion is the section that the user must replace with their own file/folder paths, leaving the rest of the `--mount` flag the same.
+
+It is important that the mount points within the container match the given example. *Envisaged Redux* will perform checks for these directory or file paths and will only enable functionality if the mount points are made at the right paths.
+--
+
+[#Required]
+[reftext="Required"]
+Required::
+Whether or not the mount point is required in order to run *Envisaged Redux*.
+
+[#Default]
+[reftext="Default"]
+Default::
++
+--
+If this is specified, the Environment Variable will use this assigned default value when not explicitly set at runtime.
+
+For example, <<_fps,FPS>> has a default value of `30`. This means that if *Envisaged Redux* is launched without the FPS variable set, it will automatically assign `30` as the value of FPS.
+
+If `FPS=60` is set at runtime, the FPS variable will be `60` instead of the default `30`.
+
+Environment Variables which do not have a default remain as an unset variable when not declared at runtime.
+--
+
+[#OverriddenBy]
+[reftext="Overridden By"]
+Overridden By::
+A list of one or more templates that fully or partially overrides the specified Environment Variable when used.
+
+[#Description]
+[reftext="Description"]
+Description::
+A general description of what the variable configures. 

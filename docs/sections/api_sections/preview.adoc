@@ -1,0 +1,54 @@
+=== Live Preview Environment Variables
+
+These are general settings that enable and configure the Live Preview feature in *Envisaged Redux*. In order to use Live Preview, you must run the *Envisaged Redux* docker container with port 80 accessible or mapped to the host.
+
+[discrete]
+===== ENABLE_LIVE_PREVIEW
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>**
+| Flag to enable Live Gource preview through the web interface. Read section below for details.
+|===
+
+[discrete]
+===== PREVIEW_SLOWDOWN_FACTOR
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<Integer>>
+
+| **<<ExampleValue>>**
+a| `2`
+
+| **<<Description>>**
+| Slowdown Factor for easing buffer hangs from slow renders. 1 means no slowdown. Supported values are integers >= 1.
+|===
+
+==== Live Preview Details
+
+Live preview requires H.264 codec support and JavaScript enabled in your browser. 
+Has been confirmed working on the latest versions of Firefox, Chromium, and Edge, with likely support on Chrome, Safari and Opera. 
+Since this works through the browser, it is inherently platform agnostic.
+
+Live preview works concurrently with the normal video rendering process, so at the end of the render you will have the original video available to save.
+
+The PREVIEW_SLOWDOWN_FACTOR option is used to slow the preview stream to reduce buffer hangs from slow renders. 
+This setting only affects the preview, and will not affect the resultant `output.mp4`.
+
+Excluding H265_PRESET, H265_CRF, and PREVIEW_SLOWDOWN_FACTOR > 1, all other render settings, Gource effects, and templates represented in the live_preview are exactly shown as what is rendered to `output.mp4`.
+Of the given exclusions, the CRF config is the configuration with the biggest impact on visual differences between the saved video and the live preview.
+The live preview uses a CRF of 1 and a fixed max bitrate ceiling.
+Because of this, visual artifacts seen in the live preview may not manifest in `output.mp4` and vice versa.
+
+If you want to ensure the video will look like what you expect from a visual quality point of view, it is recommended you run a separate run with a small time segment and view the rendered video.
+
+If you are unable to use live preview, the `preview.sh` script is the best alternative to quickly check the effects of your configs before rendering a longer run.
+You can also make `preview.sh` run for the whole duration by removing the `-e GOURCE_STOP_AT_TIME="5"` argument from the `docker run` step.
