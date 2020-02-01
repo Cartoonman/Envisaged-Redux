@@ -14,7 +14,8 @@ ENV GOURCE_STABLE_VERSION="0.49" \
     NASM_VERSION="2.14.02" \
     YASM_VERSION="1.3.0" \
     X264_VERSION="20191217-2245" \
-    X265_VERSION="3.2.1"
+    X265_VERSION="3.2.1" \
+    HLS_JS_VERSION="0.13.1"
 
 FROM alpine-base as gource-builder
 
@@ -151,18 +152,57 @@ RUN mkdir -p x265 \
     && wget -q http://download.videolan.org/pub/videolan/x265/x265_"${X265_VERSION}".tar.gz  \
     && tar --strip-components=1 -xf x265_"${X265_VERSION}".tar.gz \
     && mv x265_"${X265_VERSION}".tar.gz /sources/ \
-    && cd build \
+    && mkdir -p build_8 build_10 build_12 \
+    && cd build_12 \
     && cmake ../source \
         -DENABLE_CLI:bool=OFF \
+        -DCMAKE_BUILD_TYPE="Release" \
+        -DENABLE_ASSEMBLY:bool=ON \
+        -DENABLE_LIBNUMA:bool=OFF \
+        -DENABLE_SHARED:bool=OFF \
+        -DEXPORT_C_API:bool=OFF \
         -DHIGH_BIT_DEPTH:bool=ON \
+        -DMAIN12:bool=ON; \
+    make -j"$(nproc)" & \
+    p12_build=$!; \
+    cd ../build_10 \
+    && cmake ../source \
+        -DENABLE_CLI:bool=OFF \
+        -DCMAKE_BUILD_TYPE="Release" \
+        -DENABLE_ASSEMBLY:bool=ON \
+        -DENABLE_LIBNUMA:bool=OFF \
+        -DENABLE_SHARED:bool=OFF \
+        -DEXPORT_C_API:bool=OFF \
+        -DHIGH_BIT_DEPTH:bool=ON; \
+    make -j"$(nproc)" & \
+    p10_build=$!; \
+    wait "${p12_build}" "${p10_build}" \
+    && cd ../build_8 \
+    && mv ../build_12/libx265.a libx265_main12.a \
+    && mv ../build_10/libx265.a libx265_main10.a \
+    && cmake ../source \
+        -DENABLE_CLI:bool=OFF \
         -DCMAKE_INSTALL_PREFIX=/opt/install \
         -DCMAKE_BUILD_TYPE="Release" \
-        -DMAIN12:bool=ON \
         -DENABLE_ASSEMBLY:bool=ON \
         -DENABLE_PIC:bool=ON \
         -DENABLE_SVT_HEVC:bool=ON \
         -DENABLE_LIBNUMA:bool=OFF \
+        -DEXTRA_LIB="libx265_main12.a;libx265_main10.a" \
+        -DEXTRA_LINK_FLAGS=-L. \
+        -DLINKED_10BIT:bool=ON \
+        -DLINKED_12BIT:bool=ON \
+        -DENABLE_SHARED:bool=OFF \
     && make -j"$(nproc)" \
+    && mv libx265.a libx265_main.a \
+    && printf "%s\n" \
+        "CREATE libx265.a" \
+        "ADDLIB libx265_main.a" \
+        "ADDLIB libx265_main10.a" \
+        "ADDLIB libx265_main12.a" \
+        "SAVE" \
+        "END" > ar_cmd.mri \
+    && ar -M <ar_cmd.mri \
     && make install
 
 # Build ffmpeg from source.
@@ -174,6 +214,8 @@ RUN mkdir -p ffmpeg \
     && mv ffmpeg-"${FFMPEG_VERSION}".tar.xz /sources/ \
     && ./configure \
         --prefix=/opt/install \
+        --pkg-config-flags="--static" \
+        --extra-libs="-lpthread -lm" \
         --enable-gpl \
         --disable-static --enable-shared \
         --disable-ffplay \
@@ -204,7 +246,7 @@ RUN apk --update add --no-cache --virtual .runtime-deps \
         boost-filesystem freetype glew glu libgcc libpng libstdc++ mesa-gl musl pcre sdl2 sdl2_image \
         bash \
         expat \
-        ${LLVM_VERSION}-libs \
+        "${LLVM_VERSION}"-libs \
         xdpyinfo \
         xvfb \
         git \
@@ -217,8 +259,9 @@ RUN apk --update add --no-cache --virtual .runtime-deps \
         curl \
         wget \
     && mkdir -p /visualization/html \
-    && curl -L -s https://github.com/video-dev/hls.js/releases/download/v0.13.1/hls.light.min.js > /visualization/html/hls.light.min.js \
-    && curl -L -s https://github.com/video-dev/hls.js/releases/download/v0.13.1/hls.light.min.js.map > /visualization/html/hls.light.min.js.map;
+    && cd /visualization/html \
+    && wget -q https://github.com/video-dev/hls.js/releases/download/v"${HLS_JS_VERSION}"/hls.light.min.js \
+    && wget -q https://github.com/video-dev/hls.js/releases/download/v"${HLS_JS_VERSION}"/hls.light.min.js.map
 
 
 # Copy our assets
@@ -247,7 +290,7 @@ LABEL maintainer="Carl Colena, carl.colena@gmail.com" \
     org.label-schema.vcs-ref="${VCS_REF}" \
     org.label-schema.vcs-url="https://gitlab.com/Cartoonman/Envisaged-Redux" \
     org.label-schema.vendor="Carl Colena" \
-    org.label-schema.version="0.12.0"
+    org.label-schema.version="${BUILD_VERSION}"
 
 # Expose port 80 to serve mp4 video over HTTP
 EXPOSE 80
