@@ -23,7 +23,7 @@ print_intro()
 ******************************|___/******************************************
 EOF
     local version
-    version=$( cat "${CUR_DIR_PATH}/../VERSION" )
+    version="$( cat "${CUR_DIR_PATH}/../VERSION" )"
     printf "%b%s%b\n\n" "\033[1m\033[4m" "Version ${version}" "\033[0m"
 }
 readonly -f print_intro

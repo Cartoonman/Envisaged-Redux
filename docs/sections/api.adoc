@@ -1,0 +1,39 @@
+== API Documentation
+:uri-gource-docs: https://github.com/acaudwell/Gource/blob/master/README
+:uri-gource: https://github.com/acaudwell/Gource
+:uri-ffmpeg-h265: https://trac.ffmpeg.org/wiki/Encode/H.265
+:xrefstyle: basic
+
+
+This is the documentation detailing the API for *Envisaged Redux*.
+Environment Variables are passed as inputs into *Envisaged Redux* through the `--env` or `-e` flag in `docker run`.
+For mount points, the examples provided give you the exact syntax needed.
+Through a combination of Environment Variables and Mounts, there is a wide array of configurations you can use to customize how *Envisaged Redux* renders your visualization.
+
+'''
+
+include::api_sections/runtime_mounts.adoc[]
+
+'''
+
+include::api_sections/templates.adoc[]
+
+'''
+
+include::api_sections/runtime.adoc[]
+
+'''
+
+include::api_sections/preview.adoc[]
+
+'''
+
+include::api_sections/render.adoc[]
+
+'''
+
+include::api_sections/gource.adoc[]
+
+'''
+
+include::api_sections/glossary.adoc[]

@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "build": "asciidoctor docs/index.adoc --destination-dir public && cp -r docs/resources public/resources"
+  },
+  "dependencies": {
+    "@asciidoctor/core": "latest",
+    "@asciidoctor/cli": "latest"
+  }
+}

@@ -1,0 +1,699 @@
+=== Gource Environment Variables
+
+These variables give user access to Gource's runtime settings.
+
+The currently supported Gource build is **v0.49**.
+
+==== Variables: Gource General API
+These are general variables that apply to all templates.
+There are certain templates however that will override some of these values.
+If applicable, a list of these templates will be noted in the <<OverriddenBy>> field.
+
+[discrete]
+===== GOURCE_TITLE
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a|`--title` 
+
+| **<<Type>>**
+| <<String>>
+
+| **<<ExampleValue>>**
+a| `"Software Development"`
+
+| **<<Description>>**
+| Title displayed at the lower left corner of the video
+|===
+
+[discrete]
+===== GOURCE_CAMERA_MODE
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a|`--camera-mode` 
+
+| **<<Type>>**
+| <<String>>
+
+| **<<ExampleValue>>**
+a| `overview`
+
+| **<<Description>>**
+| Camera mode (Valid options are '`overview`' or '`track`').
+|===
+
+[discrete]
+===== GOURCE_START_DATE
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--start-date`
+
+| **<<Type>>**
+| <<String>>
+
+| **<<ExampleValue, Example Values>>**
+a| 
+* `"2016-01-30"`
+* `"2004-09-22 04:15:00"`
+* `"2012-11-15 13:00:00 +8"`
+
+| **<<Description>>** 
+| Start after given date (and optional time) (see {uri-gource-docs}[gource docs] for formats)
+|===
+
+[discrete]
+===== GOURCE_STOP_DATE
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--stop-date`
+
+| **<<Type>>**
+| <<String>>
+
+| **<<ExampleValue, Example Values>>**
+a| 
+* `"2016-01-30"`
+* `"2004-09-22 04:15:00"`
+* `"2012-11-15 13:00:00 +8"`
+
+| **<<Description>>** 
+| Stop after given date (and optional time) (see {uri-gource-docs}[gource docs] for formats)
+|===
+
+[discrete]
+===== GOURCE_START_POSITION
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--start-position`
+
+| **<<Type>>**
+| <<Float>> OR <<String>>
+
+| **<<ExampleValue, Example Values>>**
+a| * `0.25`
+   * `random`
+
+| **<<Description>>** 
+| Begin at some position in the log (between 0.0 and 1.0 or 'random').
+|===
+
+[discrete]
+===== GOURCE_STOP_POSITION
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--stop-position`
+
+| **<<Type>>**
+| <<Float>>
+
+| **<<ExampleValue>>**
+a| `0.75`
+
+| **<<Description>>** 
+| Stop at some position in the log (between 0.0 and 1.0) 
+|===
+
+[discrete]
+===== GOURCE_STOP_AT_TIME
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--stop-at-time`
+
+| **<<Type>>**
+| <<Integer>>
+
+| **<<ExampleValue>>**
+a| `20`
+
+| **<<Description>>** 
+| Stop after a specified number of seconds.
+|===
+
+[discrete]
+===== GOURCE_SECONDS_PER_DAY
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--seconds-per-day`
+
+| **<<Type>>**
+| <<Float>>
+
+| **<<ExampleValue>>**
+a| `0.1`
+
+| **<<Description>>** 
+| Speed of simulation in seconds per day.
+|===
+
+[discrete]
+===== GOURCE_AUTO_SKIP_SECONDS
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--auto-skip-seconds`
+
+| **<<Type>>**
+| <<Float>>
+
+| **<<ExampleValue>>**
+a| `3.0`
+
+| **<<Description>>** 
+| Skip to next entry if nothing happens for a number of seconds.
+|===
+
+[discrete]
+===== GOURCE_TIME_SCALE
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--time-scale`
+
+| **<<Type>>**
+| <<Float>>
+
+| **<<ExampleValue>>**
+a| `1.0`
+
+| **<<Description>>** 
+| Change simulation time scale. 
+|===
+
+[discrete]
+===== GOURCE_USER_SCALE
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--user-scale`
+
+| **<<Type>>**
+| <<Float>>
+
+| **<<ExampleValue>>**
+a| `1.0`
+
+| **<<Description>>** 
+| Change scale of user avatars.
+|===
+
+[discrete]
+===== GOURCE_MAX_USER_SPEED
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--max-user-speed`
+
+| **<<Type>>**
+| <<Integer>>
+
+| **<<ExampleValue>>**
+a| `500`
+
+| **<<Description>>** 
+| Max speed users can travel per second.   
+|===
+
+[discrete]
+===== GOURCE_HIDE_ITEMS
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--hide`
+
+| **<<Type>>**
+| <<List>>
+
+| **<<ExampleValue, Example Values>>**
+a| * `date` 
+   * `date,users,filenames`
+
+| **<<OverriddenBy>>**
+a| * border
+** Only overrides `date` (Forces `date` to be set).
+User can set all other options.
+
+| **<<Description>>** 
+a| Hide one or more display elements from the list below:
+
+    bloom     - bloom effect
+    date      - current date
+    dirnames  - names of directories
+    files     - file icons
+    filenames - names of files
+    mouse     - mouse cursor
+    progress  - progress bar widget
+    root      - root directory of tree
+    tree      - animated tree structure
+    users     - user avatars
+    usernames - names of users
+
+For *Envisaged Redux*, mouse and progress have no effect.
+|===
+
+[discrete]
+===== GOURCE_FILE_IDLE_TIME
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--file-idle-time`
+
+| **<<Type>>**
+| <<Float>>
+
+| **<<ExampleValue>>**
+a| `0.0`
+
+| **<<Description>>** 
+| Time in seconds files remain idle before they are removed or 0 for no limit.
+|===
+
+[discrete]
+===== GOURCE_MAX_FILES
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--max-files`
+
+| **<<Type>>**
+| <<Integer>>
+
+| **<<ExampleValue>>**
+a| `0`
+
+| **<<Description>>** 
+| Set the maximum number of files or 0 for no limit. Excess files will be discarded.
+|===
+
+[discrete]
+===== GOURCE_MAX_FILE_LAG
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--max-file-lag`
+
+| **<<Type>>**
+| <<Float>>
+
+| **<<ExampleValue>>**
+a| `5.0`
+
+| **<<Description>>** 
+| Max time files of a commit can take to appear. Use -1 for no limit.
+|===
+
+[discrete]
+===== GOURCE_FILENAME_TIME
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--filename-time`
+
+| **<<Type>>**
+| <<Integer>>
+
+| **<<ExampleValue>>**
+a| `2`
+
+| **<<Description>>** 
+| Duration to keep filenames on screen (>= 2.0). 
+|===
+
+[discrete]
+===== GOURCE_FONT_SIZE
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--font-size`
+
+| **<<Type>>**
+| <<Integer>>
+
+| **<<ExampleValue>>**
+a| `48`
+
+| **<<OverriddenBy>>**
+a| * border
+** Superseded by <<_gource_border_title_size,GOURCE_BORDER_TITLE_SIZE>> and <<_gource_border_date_size,GOURCE_BORDER_DATE_SIZE>>.
+
+| **<<Description>>** 
+| Font size for title and date. 
+|===
+
+[discrete]
+===== GOURCE_FONT_COLOR
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--font-colour`
+
+| **<<Type>>**
+| <<Hexadecimal>>
+
+| **<<ExampleValue>>**
+a| `FFFFFF`
+
+| **<<OverriddenBy>>**
+a| * border
+** Superseded by <<_gource_border_title_color,GOURCE_BORDER_TITLE_COLOR>> and <<_gource_border_date_color,GOURCE_BORDER_DATE_COLOR>>.
+
+| **<<Description>>** 
+| Font color for title and date in hex.
+|===
+
+[discrete]
+===== GOURCE_BACKGROUND_COLOR
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--background-colour`
+
+| **<<Type>>**
+| <<Hexadecimal>>
+
+| **<<ExampleValue>>**
+a| `000000`
+
+| **<<Description>>** 
+| Background color in hex.
+|===
+
+[discrete]
+===== GOURCE_DATE_FORMAT
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--date-format`
+
+| **<<Type>>**
+| <<String>>
+
+| **<<ExampleValue>>**
+a| `"%m/%d/%Y %H:%M:%S"`
+
+| **<<Description>>** 
+| Date Format (based on strftime format)
+|===
+
+[discrete]
+===== GOURCE_DIR_DEPTH
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--dir-name-depth`
+
+| **<<Type>>**
+| <<Integer>>
+
+| **<<ExampleValue>>**
+a| `3`
+
+| **<<Description>>** 
+| Draw names of directories down to a specific depth in the tree.
+|===
+
+[discrete]
+===== GOURCE_BLOOM_MULTIPLIER
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--bloom-multiplier`
+
+| **<<Type>>**
+| <<Float>>
+
+| **<<ExampleValue>>**
+a| `1.2`
+
+| **<<Description>>** 
+| Adjust the amount of bloom. (>= 0.0)
+|===
+
+[discrete]
+===== GOURCE_BLOOM_INTENSITY
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--bloom-intensity`
+
+| **<<Type>>**
+| <<Float>>
+
+| **<<ExampleValue>>**
+a| `0.75`
+
+| **<<Description>>** 
+| Adjust the intensity of the bloom. (>= 0.0)
+|===
+
+[discrete]
+===== GOURCE_PADDING
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--padding`
+
+| **<<Type>>**
+| <<Float>>
+
+| **<<ExampleValue>>**
+a| `1.1`
+
+| **<<Description>>** 
+| Camera view padding (between 0.0-2.0 exclusive)
+|===
+
+[discrete]
+===== GOURCE_HIGHLIGHT_ALL_USERS
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--highlight-users`
+
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>** 
+| Keeps all user's names visible.
+|===
+
+[discrete]
+===== GOURCE_MULTI_SAMPLING
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--multi-sampling`
+
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>** 
+| Enables anti-aliasing multi-sampling for smoother edges
+|===
+
+[discrete]
+===== GOURCE_SHOW_KEY
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--key`
+
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<OverriddenBy>>**
+a| * border
+** Always enabled.
+
+| **<<Description>>** 
+| Enables the file extension key legend
+|===
+
+'''
+
+==== Variables: Gource Caption API
+
+These are specific Gource Variables that will only be used if a caption file was provided to *Envisaged Redux* at runtime. These settings allow the user to configure the effects of the captions displayed.
+
+[discrete]
+===== GOURCE_CAPTION_SIZE
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--caption-size`
+
+| **<<Type>>**
+| <<Integer>>
+
+| **<<ExampleValue>>**
+a| `48`
+
+| **<<Description>>** 
+| Caption font size.
+|===
+
+[discrete]
+===== GOURCE_CAPTION_COLOR
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--caption-colour`
+
+| **<<Type>>**
+| <<Hexadecimal>>
+
+| **<<ExampleValue>>**
+a| `FFFFFF`
+
+| **<<Description>>** 
+| Caption color in hex.
+|===
+
+[discrete]
+===== GOURCE_CAPTION_DURATION
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--caption-duration`
+
+| **<<Type>>**
+| <<Float>>
+
+| **<<ExampleValue>>**
+a| `5.0`
+
+| **<<Description>>** 
+| The duration in seconds each caption will appear for.
+|===
+
+'''
+
+==== Variables: Gource Nightly API
+
+These are features that have been added to the master branch of Gource, but has either not been made a new release, or is not yet supported by Envisaged as a stable version of Gource.
+
+WARNING: These variables are highly subject to change, and variables may come and go. This particular API is considered *strictly* experimental and cannot ever be considered stable, the only exception being <<_use_gource_nightly, USE_GOURCE_NIGHTLY>>.
+
+
+[discrete]
+===== USE_GOURCE_NIGHTLY
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>**
+| Flag to use nightly (master branch) {uri-gource}[gource]. Enables pre-release configs in this table. 
+It is required that this be set to 1 for all following settings to have any effect.
+Otherwise, all following settings for Gource Nightly will be ignored.
+|===
+
+[discrete]
+===== GOURCE_FILE_EXT_FALLBACK
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--file-extension-fallback`
+
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>** 
+| Use filename as extension if the extension is missing or empty.
+    This applies for the file extension key legend.
+|===
+
+'''
+
+==== Gource Variables for Templates: Border
+
+For the Border template, these are specialized Environment Variables for configuring Gource. These will only have an effect when used with the Border template, and will have no effect otherwise.
+
+[discrete]
+===== GOURCE_BORDER_TITLE_SIZE
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--font-size`
+
+| **<<Type>>**
+| <<Integer>>
+
+| **<<ExampleValue>>**
+a| `48`
+
+| **<<Description>>** 
+| Font size for title.
+|===
+
+[discrete]
+===== GOURCE_BORDER_DATE_SIZE
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--font-size` __(overlay)__
+
+| **<<Type>>**
+| <<Integer>>
+
+| **<<ExampleValue>>**
+a| `60`
+
+| **<<Description>>** 
+| Font size for date.
+|===
+
+[discrete]
+===== GOURCE_BORDER_TITLE_COLOR
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--font-colour`
+
+| **<<Type>>**
+| <<Hexadecimal>>
+
+| **<<ExampleValue>>**
+a| `FFFFFF`
+
+| **<<Description>>** 
+| Font color for title.
+|===
+
+[discrete]
+===== GOURCE_BORDER_DATE_COLOR
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--font-colour` __(overlay)__
+
+| **<<Type>>**
+| <<Hexadecimal>>
+
+| **<<ExampleValue>>**
+a| `FFFFFF`
+
+| **<<Description>>** 
+| Font color for date.
+|===

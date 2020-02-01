@@ -1,0 +1,22 @@
+Args:
+    --git-repo-dir [absolute/path/to/repo(s)_dir]       Required
+        The git repo (or directory of git repos) you want
+        Gource to render.
+
+    --caption-file [absolute/path/to/caption_file]      Optional
+        The path to a caption file for Gource to display
+        captions during the video at predefined timestamps.
+
+    --avatars-dir  [absolute/path/to/avatars_dir]       Optional
+        A directory of images with filenames matching that of
+        users in the git history.
+
+    --logo-file    [absolute/path/to/logo_image]        Optional
+        A logo image file to be rendered in the video.
+
+    --output-dir   [path/to/dir]                        Optional
+        If given, the video will be saved into this directory
+        instead of avaliable for download through web server.
+
+    Other args will be passed through to docker run command.
+        e.g. -e H265_CRF="0"

@@ -95,6 +95,9 @@ RUN apk add --update --no-cache \
         automake \
         wget \
         tar \
+        xz \
+        bzip2 \
+        gzip \
         bash \
         cmake \
         git \
@@ -244,7 +247,7 @@ LABEL maintainer="Carl Colena, carl.colena@gmail.com" \
     org.label-schema.vcs-ref="${VCS_REF}" \
     org.label-schema.vcs-url="https://gitlab.com/Cartoonman/Envisaged-Redux" \
     org.label-schema.vendor="Carl Colena" \
-    org.label-schema.version="0.11.0"
+    org.label-schema.version="0.12.0"
 
 # Expose port 80 to serve mp4 video over HTTP
 EXPOSE 80

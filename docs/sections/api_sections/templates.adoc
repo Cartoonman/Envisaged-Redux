@@ -1,0 +1,42 @@
+=== Templates
+
+Templates are predefined structural configurations within *Envisaged Redux* that change the way Gource and FFmpeg work together.
+
+By selecting a template, *Envisaged Redux* will use it to render the output video. Certain templates may restrict, add, or modify the behavior of other configs.
+
+Templates are configured through the <<_template,TEMPLATE>> Environment Variable.
+
+[#template_standard]
+[discrete]
+==== Standard
+
+This is the default template. The standard template is the simplest template. It does not employ any overlays or filters, and renders the Gource environment in full.
+
+****
+[discrete]
+[.text-center]
+===== Standard Template Example
+image::standard.jpg[Standard Template Example,align="center"]
+****
+
+[#template_border]
+[discrete]
+==== Border
+
+The border template adds a border overlay with a dedicated left panel for the Gource file extension key. Due to the overlay, the user can individually set the Title and Date font sizes and colors.
+
+The border template overrides or supercedes the following variables:
+
+* <<_gource_font_size,GOURCE_FONT_SIZE>>
+* <<_gource_font_color,GOURCE_FONT_COLOR>>
+* <<_gource_hide_items,GOURCE_HIDE_ITEMS>>
+* <<_gource_show_key,GOURCE_SHOW_KEY>>
+
+See link:#_gource_variables_for_templates_border[Gource Variables for Templates: Border] for details on Border Template specific variables.
+
+****
+[discrete]
+[.text-center]
+===== Border Template Example
+image::border.jpg[Border Template Example,align="center"]
+****
