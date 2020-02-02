@@ -282,9 +282,10 @@ ENV GALLIUM_DRIVER="llvmpipe" \
 # Labels and metadata.
 ARG VCS_REF
 ARG BUILD_DATE
+ARG BUILD_VERSION
 LABEL maintainer="Carl Colena, carl.colena@gmail.com" \
     org.label-schema.build-date="${BUILD_DATE}" \
-    org.label-schema.decription="Envisaged Redux - Dockerized Gource Visualizations, Reborn" \
+    org.label-schema.decription="Containerized Gource + FFmpeg Visualizations" \
     org.label-schema.name="Envisaged Redux" \
     org.label-schema.schema-version="1.0" \
     org.label-schema.vcs-ref="${VCS_REF}" \

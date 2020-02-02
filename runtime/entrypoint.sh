@@ -241,7 +241,7 @@ start_httpd()
     log_success "httpd started successfully."
     return 0
 }
-readonly start_httpd
+readonly -f start_httpd
 
 start_xvfb()
 {
@@ -264,7 +264,7 @@ start_xvfb()
     log_success "Xvfb started successfully."
     return 0
 }
-readonly start_xvfb
+readonly -f start_xvfb
 
 start_services()
 {
@@ -285,7 +285,7 @@ start_services()
         exit ${EXIT_CODE};' SIGINT SIGTERM
     return 0
 }
-readonly start_services
+readonly -f start_services
 
 
 start_render()
@@ -323,7 +323,7 @@ start_render()
     set -e
     return 0
 }
-readonly start_render
+readonly -f start_render
 
 
 handle_output()
@@ -346,7 +346,7 @@ handle_output()
     fi
     return 0
 }
-readonly handle_output
+readonly -f handle_output
 
 main()
 {
@@ -386,7 +386,7 @@ main()
     log_debug "Exiting at end with code ${EXIT_CODE}"
     exit "${EXIT_CODE}"
 }
-readonly main
+readonly -f main
 
 
 # Run main

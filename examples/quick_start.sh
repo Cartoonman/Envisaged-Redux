@@ -73,3 +73,5 @@ docker run --rm -it \
     "${env_vars[@]}" \
     "${args[@]}" \
     cartoonman/envisaged-redux:latest
+
+[ -n "${web_pid}" ] && [ -e /proc/"${web_pid}" ] && kill ${web_pid};
