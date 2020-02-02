@@ -135,6 +135,20 @@ GOURCE_SHOW_KEY="${gource_show_key_backup}"
 GOURCE_BACKGROUND_COLOR="${gource_background_color_backup}"
 
 
+declare -ig _G1_PID _G2_PID _F_PID
+
+trap 'stop_process ${_G1_PID};\
+    stop_process ${_G2_PID};\
+    stop_process ${_F_PID};\
+    log_error "Error occured during render stage.";\
+    exit 1;' SIGTRAP
+
+trap 'stop_process ${_G1_PID};\
+    stop_process ${_G2_PID};\
+    stop_process ${_F_PID};\
+    log_notice "Received SIGINT";\
+    exit 1;' SIGINT
+
 # Start Gource for visualization.
 log_notice "Starting Gource primary with title [${GOURCE_TITLE}]"
 g1_cmd=( \
@@ -149,8 +163,15 @@ g1_cmd=( \
 
 (( RT_TEST == 1 )) && printf "%s " "${g1_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
 if (( RT_NO_RUN != 1 )); then
-    "${g1_cmd[@]}" - >"${ER_ROOT_DIRECTORY}"/tmp/gource.pipe &
-    declare -ig G1_PID=$!
+    (
+        "${g1_cmd[@]}" - >"${ER_ROOT_DIRECTORY}"/tmp/gource.pipe
+        g1_exit_code=$?
+        if (( g1_exit_code != 0 )); then
+            log_error "Gource encountered an error. ${g1_exit_code}"
+            kill -s SIGTRAP $$
+        fi
+    ) &
+    _G1_PID=$!
 fi
 
 # Start Gource for the overlay elements.
@@ -169,8 +190,15 @@ g2_cmd=( \
 
 (( RT_TEST == 1 )) && printf "%s " "${g2_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
 if (( RT_NO_RUN != 1 )); then
-    "${g2_cmd[@]}" - >"${ER_ROOT_DIRECTORY}"/tmp/overlay.pipe &
-    declare -ig G2_PID=$!
+    (
+        "${g2_cmd[@]}" - >"${ER_ROOT_DIRECTORY}"/tmp/overlay.pipe
+        g2_exit_code=$?
+        if (( g2_exit_code != 0 )); then
+            log_error "Gource overlay encountered an error. ${g2_exit_code}"
+            kill -s SIGTRAP $$
+        fi
+    ) &
+    _G2_PID=$!
 fi
 
 # Start ffmpeg to merge the two video outputs.
@@ -195,8 +223,16 @@ f_cmd=( \
 
 (( RT_TEST == 1 )) && printf "%s " "${f_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
 if (( RT_NO_RUN != 1 )); then
-    "${f_cmd[@]}" 
-    (( $? != 0 )) && EXIT_CODE=1
+    (
+        "${f_cmd[@]}"
+        f_exit_code=$?
+        if (( f_exit_code != 0 )); then
+            log_error "FFmpeg encountered an error"
+            kill -s SIGTRAP $$
+        fi
+    ) &
+    _F_PID=$!
+    wait ${_F_PID} ${_G1_PID} ${_G2_PID}
 fi
 
 if (( EXIT_CODE != 0 )); then

@@ -64,6 +64,19 @@ mkfifo "${ER_ROOT_DIRECTORY}"/tmp/gource.pipe
 # Generate our Gource args
 gen_gource_args
 
+declare -ig _G_PID _F_PID
+
+trap 'stop_process ${_G_PID};\
+    stop_process ${_F_PID};\
+    log_error "Error occured during render stage.";\
+    exit 1;' SIGTRAP
+
+trap 'stop_process ${_G_PID};\
+    stop_process ${_F_PID};\
+    log_notice "Received SIGINT";\
+    exit 1;' SIGINT
+
+
 log_notice "Starting Gource primary with title [${GOURCE_TITLE}]"
 g_cmd=( \
         ${RT_GOURCE_EXEC} \
@@ -77,8 +90,15 @@ g_cmd=( \
 
 (( RT_TEST == 1 )) && printf "%s " "${g_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
 if (( RT_NO_RUN != 1 )); then
-    "${g_cmd[@]}" - >"${ER_ROOT_DIRECTORY}"/tmp/gource.pipe &
-    declare -ig G_PID=$!
+    (
+        "${g_cmd[@]}" - >"${ER_ROOT_DIRECTORY}"/tmp/gource.pipe
+        g_exit_code=$?
+        if (( g_exit_code != 0 )); then
+            log_error "Gource encountered an error."
+            kill -s SIGTRAP $$
+        fi
+    ) &
+    _G_PID=$!
 fi
 
 # Start ffmpeg
@@ -95,8 +115,16 @@ f_cmd=( \
 
 (( RT_TEST == 1 )) && printf "%s " "${f_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
 if (( RT_NO_RUN != 1 )); then
-    "${f_cmd[@]}" 
-    (( $? != 0 )) && EXIT_CODE=1
+    (
+        "${f_cmd[@]}"
+        f_exit_code=$?
+        if (( f_exit_code != 0 )); then
+            log_error "FFmpeg encountered an error"
+            kill -s SIGTRAP $$
+        fi
+    ) &
+    _F_PID=$!
+    wait ${_F_PID} ${_G_PID}
 fi
 
 if (( EXIT_CODE != 0 )); then

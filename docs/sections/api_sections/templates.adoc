@@ -25,7 +25,7 @@ image::standard.jpg[Standard Template Example,align="center"]
 
 The border template adds a border overlay with a dedicated left panel for the Gource file extension key. Due to the overlay, the user can individually set the Title and Date font sizes and colors.
 
-The border template overrides or supercedes the following variables:
+The border template overrides or supersedes the following variables:
 
 * <<_gource_font_size,GOURCE_FONT_SIZE>>
 * <<_gource_font_color,GOURCE_FONT_COLOR>>

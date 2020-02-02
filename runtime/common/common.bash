@@ -54,6 +54,7 @@ log_debug()
     (( RT_DEBUG == 1 )) && printf "%b %s\n" "${blue}\033[1m[DEBUG]\e[0m" "$1"
     return 0
 }
+readonly -f log_debug
 
 stop_process()
 {
