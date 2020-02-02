@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Envisaged Redux
-# Copyright (c) 2019 Carl Colena
+# Copyright (c) 2020 Carl Colena
 # Copyright (c) 2019 Utensils Union
 #
 # SPDX-License-Identifier: Apache-2.0 AND MIT
