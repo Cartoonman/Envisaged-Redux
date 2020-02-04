@@ -18,20 +18,6 @@ if [[ "${git_repo_uri}" == "" ]]; then
     caption_uri=("--mount" "type=bind,src=${CUR_DIR_PATH}/data/quick_start_captions.txt,dst=/visualization/captions.txt,readonly")
 fi
 
-# Kick off a subshell to open the browser.
-if [[ "$(uname)" == "Darwin" ]]; then
-    (sleep 5 && open http://localhost:8080) &
-    web_pid=$!
-elif [[ "$(uname)" == "Linux" ]]; then
-    (sleep 5 && xdg-open http://localhost:8080) &
-    web_pid=$!
-else
-    echo "Could not automatically open web browser."
-    echo "Navigate to http://localhost:8080 for web interface."
-fi
-trap '[ -n "${web_pid}" ] && [ -e /proc/"${web_pid}" ] && kill ${web_pid};' SIGINT SIGTERM
-
-
 # Declare Environment Variables to configure Envisaged Redux
 env_vars_declare \
     GOURCE_TITLE                    "Envisaged Redux" \
@@ -73,5 +59,3 @@ docker run --rm -it \
     "${env_vars[@]}" \
     "${args[@]}" \
     cartoonman/envisaged-redux:latest
-
-[ -n "${web_pid}" ] && [ -e /proc/"${web_pid}" ] && kill ${web_pid};
