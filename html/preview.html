@@ -80,19 +80,38 @@
           }, 500);
         }
         if (data.details === "levelLoadError") {
-          hls.destroy();
-          if (
-            loadSourceIntervalFn !== null &&
-            loadSourceIntervalFn.isRunning()
-          ) {
-            loadSourceIntervalFn.stop();
-          }
-          loadSourceIntervalFn = null;
-          setupHLS();
+          resetHLS();
         }
         console.log(data);
       });
+      hls.on(Hls.Events.BUFFER_EOS, function(event, data) {
+        if (checkServerStateBool === false) {
+          checkServerStateBool = true;
+          checkServerState();
+        }
+      });
     }
+
+    function checkServerState() {
+      fetch("/live_preview")
+        .then(response => {
+          setTimeout(checkServerState, 1000);
+        })
+        .catch(error => {
+          checkServerStateBool = false;
+          resetHLS();
+        });
+    }
+
+    function resetHLS() {
+      hls.destroy();
+      if (loadSourceIntervalFn !== null && loadSourceIntervalFn.isRunning()) {
+        loadSourceIntervalFn.stop();
+      }
+      loadSourceIntervalFn = null;
+      setupHLS();
+    }
+
     async function checkLivePreviewState() {
       const response = await fetch("/live_preview");
       const result = await response.json();
@@ -120,6 +139,7 @@
     }
     // Global Vars
     var loadSourceIntervalFn = null;
+    var checkServerStateBool = false;
     var video = null;
     var hls = null;
     function initPreview() {

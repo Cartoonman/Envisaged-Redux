@@ -55,12 +55,17 @@ examples/quick_start.batch
 
 --  
 
-. At this point the container should be spawned, and in a few seconds your browser should open up to `localhost:8080`. If for any reason the browser does not open, you may manually navigate to this URL [http://localhost:8080]
+. At this point the container should be spawned. Open your browser and navigate to [http://localhost:8080]
 
 . Click on `Click here for Live Preview` (or navigate to http://localhost:8080/preview.html) to view the Live Preview feature of *Envisaged Redux*. The Live Preview shows in pseudo-realtime (with a slowdown factor applied to avoid jitter) what the visualization being rendered looks like &#8224;.
 
 . When the video is finished rendering, the main page will display the link to download the video from.
 When you are done, simply press Ctrl + C in the terminal running *Envisaged Redux* and this will close the application.
+
+TIP: The Live Preview window is smart and can tell when the *Envisaged Redux* container is stopped, or when a new *Envisaged Redux* container is launched.
+A great way to experiment is to leave the Live Preview window up while playing with different runtime configurations.
+The Live Preview window will automatically show the live preview when available without requiring browser refreshes.
+
 
 &#8224; For more details on interpreting the output of Live Preview with respect to the rendered output video, see link:#_live_preview_details[Live Preview Details].
 
