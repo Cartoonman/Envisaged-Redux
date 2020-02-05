@@ -205,18 +205,21 @@ fi
 log_notice "Combining videos pipes and rendering..."
 mkdir -p "${ER_ROOT_DIRECTORY}"/video
 # [0:v]: gource, [1:v]: overlay, [2:v]: logo
+f_filter_complex="$( \
+    printf "%s" \
+        "[0:v]pad=${gource_pad}${invert_filter}[center];" \
+        "[1:v]scale=${output_res}[key_scale];" \
+        "[1:v]scale=${output_res}[date_scale];" \
+        "[key_scale]crop=${key_crop},pad=${key_pad}[key];" \
+        "[date_scale]crop=${date_crop},pad=${date_pad}[date];" \
+        "[key][center]hstack[with_key];" \
+        "[date][with_key]vstack[default]${logo_filter_graph}${live_preview_splitter}" \
+)"
 f_cmd=( \
         ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i "${ER_ROOT_DIRECTORY}"/tmp/gource.pipe \
         -y -r ${FPS} -f image2pipe -probesize 100M -i "${ER_ROOT_DIRECTORY}"/tmp/overlay.pipe \
         ${RT_LOGO} \
-        -filter_complex "[0:v]pad=${gource_pad}${invert_filter}[center];\
-                    [1:v]scale=${output_res}[key_scale];\
-                    [1:v]scale=${output_res}[date_scale];\
-                    [key_scale]crop=${key_crop},pad=${key_pad}[key];\
-                    [date_scale]crop=${date_crop},pad=${date_pad}[date];\
-                    [key][center]hstack[with_key];\
-                    [date][with_key]vstack[default]\
-        ${logo_filter_graph}${live_preview_splitter}" -map ${primary_map_label} \
+        -filter_complex "${f_filter_complex}" -map ${primary_map_label} \
         -vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} "${ER_ROOT_DIRECTORY}"/video/output.mp4 \
         ${live_preview_args} \
     )

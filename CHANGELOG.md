@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Added
+- Adding tests for Border Template variable handling.
+
 ### Fixed
 
 - Fixed handling of SIGINT in interactive mode
+- Fixed handling of end-of-stream event for HLS client.
 
 ## [0.12.0] - 2020-02-01
 

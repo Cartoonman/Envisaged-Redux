@@ -49,26 +49,16 @@ load common/bats_common
     assert_equal "$output" ""
     
     output=$(declare -grix RT_LIVE_PREVIEW=1; "${ffmpeg_flags_live_prev_split[@]}")
-    assert_equal "$output" ";[default]split[original_feed][time_scaler]; \
-            [time_scaler]setpts=1*PTS[live_preview]"
+    assert_equal "$output" ";[default]split[original_feed][time_scaler];[time_scaler]setpts=1*PTS[live_preview]"
     output=$(declare -grix RT_LIVE_PREVIEW=1; "${ffmpeg_flags_prim_map_label[@]}")
     assert_equal "$output" "[original_feed]"
     output=$(declare -grix RT_LIVE_PREVIEW=1; "${ffmpeg_flags_live_prev_args[@]}")
-    assert_equal "$output" " -map [live_preview] -c:v libx264 -pix_fmt yuv420p -maxrate 40M -bufsize 5M \
-            -profile:v high -level:v 5.2 -y -r 30 -preset ultrafast -crf 1 \
-            -tune zerolatency -x264-params keyint=90:min-keyint=30 \
-            -vsync vfr -hls_flags independent_segments+delete_segments -hls_allow_cache 1 \
-            -hls_time 1 -hls_list_size 10 -start_number 0 ./html/preview.m3u8"
+    assert_equal "$output" " -map [live_preview] -c:v libx264 -pix_fmt yuv420p -maxrate 40M -bufsize 5M -profile:v high -level:v 5.2 -y -r 30 -preset ultrafast -crf 1 -tune zerolatency -x264-params keyint=90:min-keyint=30 -vsync vfr -hls_flags independent_segments+delete_segments -hls_allow_cache 1 -hls_time 1 -hls_list_size 10 -start_number 0 ./html/preview.m3u8"
 
     output=$(declare -grix RT_LIVE_PREVIEW=1; export PREVIEW_SLOWDOWN_FACTOR=3; "${ffmpeg_flags_live_prev_split[@]}")
-    assert_equal "$output" ";[default]split[original_feed][time_scaler]; \
-            [time_scaler]setpts=3*PTS[live_preview]"
+    assert_equal "$output" ";[default]split[original_feed][time_scaler];[time_scaler]setpts=3*PTS[live_preview]"
     output=$(declare -grix RT_LIVE_PREVIEW=1; export PREVIEW_SLOWDOWN_FACTOR=3; "${ffmpeg_flags_prim_map_label[@]}")
     assert_equal "$output" "[original_feed]"
     output=$(declare -grix RT_LIVE_PREVIEW=1; export PREVIEW_SLOWDOWN_FACTOR=3; "${ffmpeg_flags_live_prev_args[@]}")
-    assert_equal "$output" " -map [live_preview] -c:v libx264 -pix_fmt yuv420p -maxrate 40M -bufsize 5M \
-            -profile:v high -level:v 5.2 -y -r 10 -preset ultrafast -crf 1 \
-            -tune zerolatency -x264-params keyint=30:min-keyint=10 \
-            -vsync vfr -hls_flags independent_segments+delete_segments -hls_allow_cache 1 \
-            -hls_time 1 -hls_list_size 10 -start_number 0 ./html/preview.m3u8"
+    assert_equal "$output" " -map [live_preview] -c:v libx264 -pix_fmt yuv420p -maxrate 40M -bufsize 5M -profile:v high -level:v 5.2 -y -r 10 -preset ultrafast -crf 1 -tune zerolatency -x264-params keyint=30:min-keyint=10 -vsync vfr -hls_flags independent_segments+delete_segments -hls_allow_cache 1 -hls_time 1 -hls_list_size 10 -start_number 0 ./html/preview.m3u8"
 }
