@@ -54,6 +54,10 @@ load common/bats_common
     integration_run TEMPLATE="border" USE_GOURCE_NIGHTLY=0
     integration_run TEMPLATE="border" USE_GOURCE_NIGHTLY=1
 
+    # Border Template Specific Testing
+    integration_run TEMPLATE="border" GOURCE_FONT_SIZE="55" GOURCE_FONT_COLOR="0F0F0F" GOURCE_SHOW_KEY="1"
+    integration_run TEMPLATE="border" GOURCE_BORDER_TITLE_SIZE="90" GOURCE_BORDER_DATE_SIZE="91" \
+        GOURCE_BORDER_TITLE_COLOR="ABCDEF" GOURCE_BORDER_DATE_COLOR="FEDCBA"
 
 
     [ "${SAVE}" = "1" ] && skip || :
