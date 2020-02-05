@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed handling of SIGINT in interactive mode
 - Fixed handling of end-of-stream event for HLS client.
+- Fixed FFmpeg thread queue blocking
 
 ## [0.12.0] - 2020-02-01
 

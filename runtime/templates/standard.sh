@@ -78,15 +78,21 @@ trap 'stop_process ${_G_PID};\
 
 
 log_notice "Starting Gource primary with title [${GOURCE_TITLE}]"
-g_cmd=( \
-        ${RT_GOURCE_EXEC} \
-        --${gource_res} \
+g_cmd_tmp=( \
+        "${RT_GOURCE_EXEC}" \
+        --"${gource_res}" \
         "${gource_arg_array[@]}" \
         --stop-at-end \
         "${ER_ROOT_DIRECTORY}"/development.log \
-        -r ${FPS} \
+        -r "${FPS}" \
         -o \
     )
+# Sanitize array
+declare -a g_cmd=()
+for var in ${g_cmd_tmp[@]}; do
+    [ -n "${var}" ] && g_cmd+=("${var}")
+done
+unset g_cmd_tmp
 
 (( RT_TEST == 1 )) && printf "%s " "${g_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
 if (( RT_NO_RUN != 1 )); then
@@ -105,15 +111,24 @@ fi
 log_notice "Rendering video pipe.."
 mkdir -p "${ER_ROOT_DIRECTORY}"/video
 # [0:v]: gource, [1:v]: logo
-f_cmd=( \
-        ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i ./tmp/gource.pipe \
-        ${RT_LOGO} \
+f_cmd_tmp=( \
+        ffmpeg -y -f image2pipe -probesize 100M -thread_queue_size 512 -i ./tmp/gource.pipe \
+        "${RT_LOGO}" \
         -filter_complex "[0:v]select${invert_filter}[default]${logo_filter_graph}${live_preview_splitter}" \
-        -map ${primary_map_label} -vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} \
-        "${ER_ROOT_DIRECTORY}"/video/output.mp4 ${live_preview_args} \
+        -map "${primary_map_label}" -vcodec libx265 -r "${FPS}" -pix_fmt yuv420p -crf "${H265_CRF}" -preset "${H265_PRESET}" \
+        "${ER_ROOT_DIRECTORY}"/video/output.mp4 "${live_preview_args}" \
     )
+# Sanitize array
+declare -a f_cmd=()
+for var in ${f_cmd_tmp[@]}; do
+    [ -n "${var}" ] && f_cmd+=("${var}")
+done
+unset f_cmd_tmp
 
-(( RT_TEST == 1 )) && printf "%s " "${f_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
+if (( RT_TEST == 1 )); then
+    tmp_output="$(printf "%s " "${f_cmd[@]}")"
+    printf "%s" "${tmp_output%?}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
+fi
 if (( RT_NO_RUN != 1 )); then
     (
         "${f_cmd[@]}"
