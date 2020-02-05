@@ -151,15 +151,21 @@ trap 'stop_process ${_G1_PID};\
 
 # Start Gource for visualization.
 log_notice "Starting Gource primary with title [${GOURCE_TITLE}]"
-g1_cmd=( \
-        ${RT_GOURCE_EXEC} \
-        --${gource_res} \
+g1_cmd_tmp=( \
+        "${RT_GOURCE_EXEC}" \
+        --"${gource_res}" \
         "${gource_primary_args[@]}" \
         --stop-at-end \
         "${ER_ROOT_DIRECTORY}"/development.log \
-        -r ${FPS} \
+        -r "${FPS}" \
         -o \
     )
+# Sanitize array
+declare -a g1_cmd=()
+for var in ${g1_cmd_tmp[@]}; do
+    [ -n "${var}" ] && g1_cmd+=("${var}")
+done
+unset g1_cmd_tmp
 
 (( RT_TEST == 1 )) && printf "%s " "${g1_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
 if (( RT_NO_RUN != 1 )); then
@@ -176,17 +182,23 @@ fi
 
 # Start Gource for the overlay elements.
 log_notice "Starting Gource secondary for overlay components"
-g2_cmd=( \
-        ${RT_GOURCE_EXEC} \
-        --${overlay_res} \
+g2_cmd_tmp=( \
+        "${RT_GOURCE_EXEC}" \
+        --"${overlay_res}" \
         "${gource_secondary_args[@]}" \
         --transparent \
         --background-colour 202021 \
         --stop-at-end \
         "${ER_ROOT_DIRECTORY}"/development.log \
-        -r ${FPS} \
+        -r "${FPS}" \
         -o \
     )
+# Sanitize array
+declare -a g2_cmd=()
+for var in ${g2_cmd_tmp[@]}; do
+    [ -n "${var}" ] && g2_cmd+=("${var}")
+done
+unset g2_cmd_tmp
 
 (( RT_TEST == 1 )) && printf "%s " "${g2_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
 if (( RT_NO_RUN != 1 )); then
@@ -215,16 +227,25 @@ f_filter_complex="$( \
         "[key][center]hstack[with_key];" \
         "[date][with_key]vstack[default]${logo_filter_graph}${live_preview_splitter}" \
 )"
-f_cmd=( \
-        ffmpeg -y -r ${FPS} -f image2pipe -probesize 100M -i "${ER_ROOT_DIRECTORY}"/tmp/gource.pipe \
-        -y -r ${FPS} -f image2pipe -probesize 100M -i "${ER_ROOT_DIRECTORY}"/tmp/overlay.pipe \
-        ${RT_LOGO} \
-        -filter_complex "${f_filter_complex}" -map ${primary_map_label} \
-        -vcodec libx265 -pix_fmt yuv420p -crf ${H265_CRF} -preset ${H265_PRESET} "${ER_ROOT_DIRECTORY}"/video/output.mp4 \
-        ${live_preview_args} \
+f_cmd_tmp=( \
+        ffmpeg -y -f image2pipe -probesize 100M -thread_queue_size 512 -i "${ER_ROOT_DIRECTORY}"/tmp/gource.pipe \
+        -f image2pipe -probesize 100M -thread_queue_size 512 -i "${ER_ROOT_DIRECTORY}"/tmp/overlay.pipe \
+        "${RT_LOGO}" \
+        -filter_complex "${f_filter_complex}" -map "${primary_map_label}" \
+        -vcodec libx265 -r "${FPS}" -pix_fmt yuv420p -crf "${H265_CRF}" -preset "${H265_PRESET}" "${ER_ROOT_DIRECTORY}"/video/output.mp4 \
+        "${live_preview_args}" \
     )
+# Sanitize array
+declare -a f_cmd=()
+for var in ${f_cmd_tmp[@]}; do
+    [ -n "${var}" ] && f_cmd+=("${var}")
+done
+unset f_cmd_tmp
 
-(( RT_TEST == 1 )) && printf "%s " "${f_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
+if (( RT_TEST == 1 )); then
+    tmp_output="$(printf "%s " "${f_cmd[@]}")"
+    printf "%s" "${tmp_output%?}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
+fi
 if (( RT_NO_RUN != 1 )); then
     (
         "${f_cmd[@]}"
