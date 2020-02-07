@@ -1,0 +1,34 @@
+== Building Envisaged Redux
+
+Prebuilt images of **Envisaged Redux** are available at https://hub.docker.com/r/cartoonman/envisaged-redux[Docker Hub].
+If you wish to build and test Envisaged Redux locally (for example, to develop on), read on.
+
+=== Auto Script
+
+There is a convenience script that will work on Linux and OSX hosts located at `dev-tools/build_script.sh`.
+Running the script will perform 3 tasks:
+
+. Build a local copy of **Envisaged Redux** under the image name and tag `cartoonman/envisaged-redux:latest`.
+. Build the testing overlay image `cartoonman/test-envisaged-redux:latest`.
+. Run the test suite.
+
+=== Manual
+
+To manually build the image, run the following command from the root directory of the **Envisaged Redux** repo:
+```
+docker build -t cartoonman/envisaged-redux:latest ./
+```
+
+To build the test image, the **Envisaged Redux** image must have been already built. The command to build it is (from the root directory of the **Envisaged Redux** repo):
+```
+docker build -f tests/Dockerfile -t cartoonman/test-envisaged-redux:latest ./
+```
+
+To run the test suite, run the `tests/scripts/start.sh` script.
+
+Alternatively, you can run the test suite with the command:
+```
+docker run --rm -t \
+    --name test-envisaged-redux \
+    cartoonman/test-envisaged-redux:latest
+```

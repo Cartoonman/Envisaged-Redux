@@ -53,6 +53,8 @@ Compile-time configurations are derivable from the `Dockerfile` at the root of t
 If there is any issue regarding GPL compliance, please reach out to the maintainer of this project.
 
 
+include::sections/building.adoc[]
+
 include::sections/getting-started.adoc[]
 
 include::sections/api.adoc[]

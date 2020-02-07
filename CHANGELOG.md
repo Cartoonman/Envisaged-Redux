@@ -7,8 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## Added
+### Added
 - Adding tests for Border Template variable handling.
+- Documentation on building Envisaged Redux
+
+### Updated
+- Cleaned up and refactored Tests suite.
 
 ### Fixed
 

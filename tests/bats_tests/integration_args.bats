@@ -60,6 +60,6 @@ load common/bats_common
         GOURCE_BORDER_TITLE_COLOR="ABCDEF" GOURCE_BORDER_DATE_COLOR="FEDCBA"
 
 
-    [ "${SAVE}" = "1" ] && skip || :
+    (( SAVE == 1 )) && skip || :
 }
 

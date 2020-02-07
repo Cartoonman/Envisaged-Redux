@@ -28,6 +28,6 @@ load common/bats_common
 
     rm "${ER_ROOT_DIRECTORY}"/git_repo
     mv "${ER_ROOT_DIRECTORY}"/old_git_repo "${ER_ROOT_DIRECTORY}"/git_repo
-    [ "${SAVE}" = "1" ] && skip || :
+    (( SAVE == 1 )) && skip || :
 }
 

@@ -14,7 +14,7 @@ readonly -f print_help
 parse_args()
 {
     declare -ag args=()
-    while [[ $# -gt 0 ]]; do
+    while (( $# > 0 )); do
         key="$1"
 
         case ${key} in

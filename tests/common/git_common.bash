@@ -7,27 +7,27 @@
 
 gen_commit()
 {
-    local -r GIT_DIR_PATH=$1 && shift
-    local -r USR_NME=$1 && shift
-    local -r USR_EML=$1 && shift
-    local -r CMT_MSG=$1 && shift
-    cd $GIT_DIR_PATH
+    local -r git_dir_path="$1" && shift
+    local -r user_name="$1" && shift
+    local -r user_email="$1" && shift
+    local -r commit_message="$1" && shift
+    cd "${git_dir_path}"
     while [[ $# -ne 0 ]]; do
         if [[ "$1" =~ '>>' ]]; then
-            SAVEIFS=$IFS && IFS='>>' && CMD_ARR=($1) && IFS=$SAVEIFS
-            FILES=$(find ${CMD_ARR[2]})
-            SAVEIFS=$IFS && IFS=$'\n' && FILES=($FILES) && IFS=$SAVEIFS
-            echo "datadatadata" | tee -a "${FILES[@]}" > /dev/null 2>&1
+            readarray -d '>>' -t cmd_arr <<< "$1"
+            files_to_write="$(find ${cmd_arr[2]})"
+            readarray -d $'\n' -t files_to_write <<< "${files_to_write}"
+            echo "datadatadata" | tee -a "${files_to_write[@]}" > /dev/null 2>&1
         else
             $1
         fi
         shift
     done
-    git config user.name "$USR_NME"
-    git config user.email "$USR_EML"
-    export GIT_AUTHOR_DATE="$TS -0000"
-    export GIT_COMMITTER_DATE="$TS +0000"
+    git config user.name "${user_name}"
+    git config user.email "${user_email}"
+    export GIT_AUTHOR_DATE="${TIMESTAMP} -0000"
+    export GIT_COMMITTER_DATE="${TIMESTAMP} +0000"
     git add .
-    git commit -m "$CMT_MSG"
-    TS=$(( $TS+$RANDOM ))
+    git commit -m "${commit_message}"
+    TIMESTAMP="$(( TIMESTAMP + RANDOM ))"
 }
