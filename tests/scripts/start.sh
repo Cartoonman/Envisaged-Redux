@@ -8,23 +8,23 @@
 CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 readonly CUR_DIR_PATH
 
-while [[ $# -gt 0 ]]; do
+while (( $# > 0 )); do
     k="$1"
     case $k in
         --save)
-            HOST_MOUNT="--mount type=bind,source=$2,target=/hostdir"
-            ARGS+=('-s')
+            host_mount=("--mount" "type=bind,source=$2,target=/hostdir")
+            args+=('-s')
             shift
             ;;
         --system-test)
-            ARGS+=('--system')
+            args+=('--system')
             ;;
     esac
     shift
 done
 
-docker run --rm -it \
+docker run --rm -t \
     --name test-envisaged-redux \
-    ${HOST_MOUNT} \
+    "${host_mount[@]}" \
     cartoonman/test-envisaged-redux:latest \
-    "${ARGS[@]}"
+    "${args[@]}"
