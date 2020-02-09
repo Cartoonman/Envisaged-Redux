@@ -15,12 +15,12 @@ parse_args "$@"
 # Declare Environment Variables to configure Envisaged Redux
 env_vars_declare \
     GOURCE_STOP_AT_TIME         "5" \
-    FPS                         "25" \
-    TEMPLATE                    "standard" \
-    VIDEO_RESOLUTION            "480p" \
+    RENDER_FPS                  "25" \
+    RUNTIME_TEMPLATE            "standard" \
+    RENDER_VIDEO_RESOLUTION     "480p" \
     GOURCE_TITLE                "Fast Preview Example" \
-    H265_PRESET                 "ultrafast" \
-    H265_CRF                    "0" \
+    RENDER_H265_PRESET          "ultrafast" \
+    RENDER_H265_CRF             "0" \
     GOURCE_FONT_SIZE            "35" \
     GOURCE_PADDING              "1.5"
 

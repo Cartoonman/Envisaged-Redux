@@ -22,8 +22,8 @@ fi
 env_vars_declare \
     GOURCE_TITLE                    "Envisaged Redux" \
     GOURCE_CAMERA_MODE              "overview" \
-    VIDEO_RESOLUTION                "720p" \
-    TEMPLATE                        "border" \
+    RENDER_VIDEO_RESOLUTION         "720p" \
+    RUNTIME_TEMPLATE                "border" \
     GOURCE_CAPTION_SIZE             "32" \
     GOURCE_CAPTION_DURATION         "2.5" \
     GOURCE_SECONDS_PER_DAY          "0.09" \
@@ -44,7 +44,7 @@ env_vars_declare \
     GOURCE_PADDING                  "1.2" \
     GOURCE_HIGHLIGHT_ALL_USERS      "1" \
     GOURCE_MULTI_SAMPLING           "1" \
-    ENABLE_LIVE_PREVIEW             "1" \
+    RUNTIME_LIVE_PREVIEW            "1" \
     PREVIEW_SLOWDOWN_FACTOR         "2"
 
 # Run Envisaged Redux

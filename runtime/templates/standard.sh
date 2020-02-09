@@ -23,29 +23,29 @@ exit_handler()
 readonly -f exit_handler
 
 # Predefined resolutions and settings.
-case ${VIDEO_RESOLUTION} in
+case ${RENDER_VIDEO_RESOLUTION} in
     2160p)
         gource_res="3840x2160"
-        log_info "Using 2160p settings. Output will be 3840x2160 at ${FPS}fps."
+        log_info "Using 2160p settings. Output will be 3840x2160 at ${RENDER_FPS}fps."
         ;;
     1440p)
         gource_res="2560x1440"
-        log_info "Using 1440p settings. Output will be 2560x1440 at ${FPS}fps."
+        log_info "Using 1440p settings. Output will be 2560x1440 at ${RENDER_FPS}fps."
         ;;
     1080p)
         gource_res="1920x1080"
-        log_info "Using 1080p settings. Output will be 1920x1080 at ${FPS}fps."
+        log_info "Using 1080p settings. Output will be 1920x1080 at ${RENDER_FPS}fps."
         ;;
     720p)
         gource_res="1280x720"
-        log_info "Using 720p settings. Output will be 1280x720 at ${FPS}fps."
+        log_info "Using 720p settings. Output will be 1280x720 at ${RENDER_FPS}fps."
         ;;
     480p)
         gource_res="854x480"
-        log_info "Using 720p settings. Output will be 1280x720 at ${FPS}fps."
+        log_info "Using 720p settings. Output will be 1280x720 at ${RENDER_FPS}fps."
         ;;
     *)
-        log_error "${VIDEO_RESOLUTION} is not a valid/supported video resolution."
+        log_error "${RENDER_VIDEO_RESOLUTION} is not a valid/supported video resolution."
         EXIT_CODE=1
         exit_handler
         ;;
@@ -84,7 +84,7 @@ g_cmd_tmp=( \
         "${gource_arg_array[@]}" \
         --stop-at-end \
         "${ER_ROOT_DIRECTORY}"/development.log \
-        -r "${FPS}" \
+        -r "${RENDER_FPS}" \
         -o \
     )
 # Sanitize array
@@ -115,7 +115,7 @@ f_cmd_tmp=( \
         ffmpeg -y -f image2pipe -probesize 100M -thread_queue_size 512 -i ./tmp/gource.pipe \
         "${RT_LOGO}" \
         -filter_complex "[0:v]select${invert_filter}[default]${logo_filter_graph}${live_preview_splitter}" \
-        -map "${primary_map_label}" -vcodec libx265 -r "${FPS}" -pix_fmt yuv420p -crf "${H265_CRF}" -preset "${H265_PRESET}" \
+        -map "${primary_map_label}" -vcodec libx265 -r "${RENDER_FPS}" -pix_fmt yuv420p -crf "${RENDER_H265_CRF}" -preset "${RENDER_H265_PRESET}" \
         "${ER_ROOT_DIRECTORY}"/video/output.mp4 "${live_preview_args}" \
     )
 # Sanitize array

@@ -1,0 +1,28 @@
+=== Live Preview
+
+==== Requirements
+In order to use Live Preview, you must run the *Envisaged Redux* docker container with port 80 accessible or mapped to the host.
+
+Live preview requires H.264 codec support and JavaScript enabled in your browser. A rough check can be done by visiting https://html5test.com/[html5test.com] to see if your browser supports H.264.
+
+It is confirmed to work on the latest versions of Firefox, Chromium, and Edge, with likely support on Chrome, Safari and Opera.
+Since this works through the browser, it is inherently platform agnostic, and will work on any host operating system.
+
+NOTE: If you are unable to use Live Preview, the `preview.sh` script is the best alternative to quickly check the effects of your configs before rendering a longer run.
+
+==== How it works
+
+Live preview works concurrently with the normal video rendering process, so at the end of the render you will still have the original video available to save.
+
+The Live Preview mechanism splits the FFmpeg video rendering stream such that the user can view the output live as FFmpeg rendered it. This lets users quickly preview how the visualization looks before settling on a configuration list.
+
+==== Caveats
+
+Excluding <<_render_h265_preset,RENDER_H265_PRESET>>, <<_render_h265_crf,RENDER_H265_CRF>>, and <<_preview_slowdown_factor,PREVIEW_SLOWDOWN_FACTOR>> > 1, all API variables will have their effects represented in Live Preview exactly as what is rendered to `output.mp4`.
+
+For the CRF and PRESET variables, the Live Preview mechanism uses a fixed CRF of 1 and does not use the PRESET variable, instead being subjected to a fixed max bitrate ceiling for performance. Because of this, visual artifacts (e.g. compression artifacts such as blockiness and fuzziness) seen in the live preview may not manifest in `output.mp4` and vice versa.
+
+For <<_preview_slowdown_factor,PREVIEW_SLOWDOWN_FACTOR>>, any value that is greater than 1 will have the Live Preview render at a slower rate, but any speed adjustments made with this variable will not affect `output.mp4`.
+At a value of 1, the Live Preview frame speed will match `output.mp4`.
+
+TIP: If you want to be absolutely sure `output.mp4` will look like what you expect from a compression artifact point of view, run a separate render with <<_gource_stop_at_time,GOURCE_STOP_AT_TIME>> set to a low number of seconds so the render process ends early. An example of this usage can be seen in `examples/preview.sh`.

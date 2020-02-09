@@ -5,22 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [Unreleased]
+
+### Added
+- RUNTIME_PRINT_VARS added to print variables.
+- Validation of Environment Variables.
+
+### Updated
+- API change: Standardizing namespaces of input variables.
+- Documentation.
 
 ## [0.12.1] - 2020-02-07
 
 ### Added
 - Adding tests for Border Template variable handling.
-- Documentation on building Envisaged Redux
+- Documentation on building Envisaged Redux.
 
 ### Updated
 - Cleaned up and refactored Tests suite.
 
 ### Fixed
 
-- Fixed handling of SIGINT in interactive mode
+- Fixed handling of SIGINT in interactive mode.
 - Fixed handling of end-of-stream event for HLS client.
-- Fixed FFmpeg thread queue blocking
+- Fixed FFmpeg thread queue blocking.
 
 ## [0.12.0] - 2020-02-01
 
@@ -46,7 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Unit and Integration Test Suite with Dockerfile and start script.
 - quick_start.sh script and suite for new users to become familiar with using Envisaged-Redux and its capabilities.
-- Version file
+- Version file.
 - Added correctness check for httpd startup with curl.
 
 ### Updated

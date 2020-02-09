@@ -10,10 +10,10 @@ source "${inc_dir_path}/common.bash"
 unset inc_dir_path
 
 # Assign defaults if not set
-: "${H265_PRESET:=medium}"
-: "${H265_CRF:=21}"
-: "${VIDEO_RESOLUTION:=1080p}"
-: "${FPS:=30}"
+: "${RENDER_H265_PRESET:=medium}"
+: "${RENDER_H265_CRF:=21}"
+: "${RENDER_VIDEO_RESOLUTION:=1080p}"
+: "${RENDER_FPS:=30}"
 
 # gen_gource_args
 # Generates an indexed array of gource args to pass to gource.
@@ -85,23 +85,23 @@ readonly -f gen_gource_args
 #
 #
 # Consumes:
-#   INVERT_COLORS
+#   RENDER_INVERT_COLORS
 #   LOGO
 #   LIVE_PREVIEW
 #   PREVIEW_SLOWDOWN_FACTOR (optional)
-#   FPS
+#   RENDER_FPS
 #   logo_ffmpeg_label
 # Arguments:
 #   none
 # Outputs:
-#   invert_filter (depend -> INVERT_COLORS)
+#   invert_filter (depend -> RENDER_INVERT_COLORS)
 #   primary_map_label
 #   logo_filter_graph (depend -> LOGO)
 #   live_preview_args (depend -> LIVE_PREVIEW)
 #   live_preview_splitter (depend -> LIVE_PREVIEW)
 gen_ffmpeg_flags()
 {
-    if [ "${INVERT_COLORS}" == "1" ]; then
+    if [ "${RENDER_INVERT_COLORS}" == "1" ]; then
         declare -gr invert_filter=",lutrgb=r=negval:g=negval:b=negval"
     fi
 
@@ -119,9 +119,9 @@ gen_ffmpeg_flags()
     if (( RT_LIVE_PREVIEW == 1 )); then
         declare -g live_preview_splitter live_preview_args
         : "${PREVIEW_SLOWDOWN_FACTOR:=1}"
-        declare -i lp_fps=$((${FPS} / ${PREVIEW_SLOWDOWN_FACTOR}))
+        declare -i lp_fps=$((${RENDER_FPS} / ${PREVIEW_SLOWDOWN_FACTOR}))
         if (( lp_fps == 0 )); then
-            log_error "Error: PREVIEW_SLOWDOWN_FACTOR is too large for given FPS."
+            log_error "Error: PREVIEW_SLOWDOWN_FACTOR is too large for given RENDER_FPS."
             return 1
         fi
         declare -gr live_preview_splitter="$( \

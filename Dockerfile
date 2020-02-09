@@ -6,17 +6,17 @@
 # SPDX-License-Identifier: Apache-2.0 AND MIT
 
 FROM alpine:3.11 as alpine-base
-
-ENV GOURCE_STABLE_VERSION="0.49" \
-    MESA_VERSION="19.2.8" \
-    LLVM_VERSION="llvm5" \
-    FFMPEG_VERSION="4.2.2" \
-    NASM_VERSION="2.14.02" \
-    YASM_VERSION="1.3.0" \
-    X264_VERSION="20191217-2245" \
-    X265_VERSION="3.2.1" \
-    HLS_JS_VERSION="0.13.1"
-
+# tag::dep_versions[]
+ENV VERSION_STABLE_GOURCE="0.49" \
+    VERSION_MESA="19.2.8" \
+    VERSION_LLVM="llvm5" \
+    VERSION_FFMPEG="4.2.2" \
+    VERSION_NASM="2.14.02" \
+    VERSION_YASM="1.3.0" \
+    VERSION_X264="20191217-2245" \
+    VERSION_X265="3.2.1" \
+    VERSION_HLS_JS="0.13.1"
+# end::dep_versions[]
 FROM alpine-base as gource-builder
 
 RUN apk add --update --no-cache --virtual .build-deps alpine-sdk git sdl2-dev sdl2_image-dev pcre-dev freetype-dev glew-dev glm-dev boost-dev libpng-dev tinyxml-dev autoconf automake \
@@ -24,14 +24,14 @@ RUN apk add --update --no-cache --virtual .build-deps alpine-sdk git sdl2-dev sd
     && git clone --branch master https://github.com/acaudwell/Gource.git \
     && cd Gource \
     && git archive -9 --format=tar.gz -o /sources/gource-nightly.tar.gz --prefix=gource-nightly/ master \
-    && git archive -9 --format=tar.gz -o /sources/gource-"${GOURCE_STABLE_VERSION}".tar.gz --prefix=gource-"${GOURCE_STABLE_VERSION}"/ gource-"${GOURCE_STABLE_VERSION}" \
+    && git archive -9 --format=tar.gz -o /sources/gource-"${VERSION_STABLE_GOURCE}".tar.gz --prefix=gource-"${VERSION_STABLE_GOURCE}"/ gource-"${VERSION_STABLE_GOURCE}" \
     && ./autogen.sh \
     && ./configure --prefix=/opt/gource_nightly \
     && make -j"$(nproc)" \
     && make install \
     && mv /opt/gource_nightly/bin/gource /opt/gource_nightly/bin/gource_nightly \
     && rm -rf * \
-    && git checkout gource-"${GOURCE_STABLE_VERSION}" \
+    && git checkout gource-"${VERSION_STABLE_GOURCE}" \
     && git checkout . \
     && ./autogen.sh \
     && ./configure -prefix=/opt/gource_stable \
@@ -54,7 +54,7 @@ RUN apk add --no-cache --virtual .mesa_build_deps  \
         gettext \
         glproto \
         libtool \
-        "${LLVM_VERSION}"-dev \
+        "${VERSION_LLVM}"-dev \
         py-mako \
         xorg-server-dev \
         python-dev \
@@ -63,11 +63,11 @@ RUN apk add --no-cache --virtual .mesa_build_deps  \
 
 RUN mkdir -p /var/tmp/build \
     && cd /var/tmp/build \
-    && wget -q "https://mesa.freedesktop.org/archive/mesa-${MESA_VERSION}.tar.xz" \
-    && tar xf mesa-"${MESA_VERSION}".tar.xz \
-    && rm mesa-"${MESA_VERSION}".tar.xz \
-    && cd mesa-"${MESA_VERSION}" \
-    && printf "[binaries]\nllvm-config = '/usr/lib/${LLVM_VERSION}/bin/llvm-config'" \
+    && wget -q "https://mesa.freedesktop.org/archive/mesa-${VERSION_MESA}.tar.xz" \
+    && tar xf mesa-"${VERSION_MESA}".tar.xz \
+    && rm mesa-"${VERSION_MESA}".tar.xz \
+    && cd mesa-"${VERSION_MESA}" \
+    && printf "[binaries]\nllvm-config = '/usr/lib/${VERSION_LLVM}/bin/llvm-config'" \
 		> "/var/tmp/build/llvm.ini" \
     && meson build/ \
         --native-file "/var/tmp/build/llvm.ini" \
@@ -110,9 +110,9 @@ WORKDIR /build_dir
 # Build nasm from source
 RUN mkdir -p nasm \
     && cd nasm \
-    && wget -q https://www.nasm.us/pub/nasm/releasebuilds/"${NASM_VERSION}"/nasm-"${NASM_VERSION}".tar.xz \
-    && tar --strip-components=1 -xf nasm-"${NASM_VERSION}".tar.xz \
-    && rm nasm-"${NASM_VERSION}".tar.xz \
+    && wget -q https://www.nasm.us/pub/nasm/releasebuilds/"${VERSION_NASM}"/nasm-"${VERSION_NASM}".tar.xz \
+    && tar --strip-components=1 -xf nasm-"${VERSION_NASM}".tar.xz \
+    && rm nasm-"${VERSION_NASM}".tar.xz \
     && ./autogen.sh \
     && ./configure \
     && make -j"$(nproc)" \
@@ -121,9 +121,9 @@ RUN mkdir -p nasm \
 # Build yasm from source
 RUN mkdir -p yasm \
     && cd yasm \
-    && wget -q http://www.tortall.net/projects/yasm/releases/yasm-"${YASM_VERSION}".tar.gz \
-    && tar --strip-components=1 -xf yasm-"${YASM_VERSION}".tar.gz \
-    && rm yasm-"${YASM_VERSION}".tar.gz \
+    && wget -q http://www.tortall.net/projects/yasm/releases/yasm-"${VERSION_YASM}".tar.gz \
+    && tar --strip-components=1 -xf yasm-"${VERSION_YASM}".tar.gz \
+    && rm yasm-"${VERSION_YASM}".tar.gz \
     && ./configure \
     && make -j"$(nproc)" \
     && make install
@@ -132,9 +132,9 @@ RUN mkdir -p yasm \
 # Build libx264 from source
 RUN mkdir -p x264 \
     && cd x264 \
-    && wget -q http://download.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-"${X264_VERSION}"-stable.tar.bz2  \
-    && tar --strip-components=1 -xf x264-snapshot-"${X264_VERSION}"-stable.tar.bz2 \
-    && mv x264-snapshot-"${X264_VERSION}"-stable.tar.bz2 /sources/ \
+    && wget -q http://download.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-"${VERSION_X264}"-stable.tar.bz2  \
+    && tar --strip-components=1 -xf x264-snapshot-"${VERSION_X264}"-stable.tar.bz2 \
+    && mv x264-snapshot-"${VERSION_X264}"-stable.tar.bz2 /sources/ \
     && ./configure \
         --disable-cli \
         --enable-shared \
@@ -149,9 +149,9 @@ RUN mkdir -p x264 \
 # Build libx265 from source
 RUN mkdir -p x265 \
     && cd x265 \
-    && wget -q http://download.videolan.org/pub/videolan/x265/x265_"${X265_VERSION}".tar.gz  \
-    && tar --strip-components=1 -xf x265_"${X265_VERSION}".tar.gz \
-    && mv x265_"${X265_VERSION}".tar.gz /sources/ \
+    && wget -q http://download.videolan.org/pub/videolan/x265/x265_"${VERSION_X265}".tar.gz  \
+    && tar --strip-components=1 -xf x265_"${VERSION_X265}".tar.gz \
+    && mv x265_"${VERSION_X265}".tar.gz /sources/ \
     && mkdir -p build_8 build_10 build_12 \
     && cd build_12 \
     && cmake ../source \
@@ -209,9 +209,9 @@ RUN mkdir -p x265 \
 RUN mkdir -p ffmpeg \
     && cd ffmpeg \
     && cp -r /opt/install/* /usr/local/ \
-    && wget -q https://www.ffmpeg.org/releases/ffmpeg-"${FFMPEG_VERSION}".tar.xz \
-    && tar --strip-components=1 -xf ffmpeg-"${FFMPEG_VERSION}".tar.xz \
-    && mv ffmpeg-"${FFMPEG_VERSION}".tar.xz /sources/ \
+    && wget -q https://www.ffmpeg.org/releases/ffmpeg-"${VERSION_FFMPEG}".tar.xz \
+    && tar --strip-components=1 -xf ffmpeg-"${VERSION_FFMPEG}".tar.xz \
+    && mv ffmpeg-"${VERSION_FFMPEG}".tar.xz /sources/ \
     && ./configure \
         --prefix=/opt/install \
         --pkg-config-flags="--static" \
@@ -246,7 +246,7 @@ RUN apk --update add --no-cache --virtual .runtime-deps \
         boost-filesystem freetype glew glu libgcc libpng libstdc++ mesa-gl musl pcre sdl2 sdl2_image \
         bash \
         expat \
-        "${LLVM_VERSION}"-libs \
+        "${VERSION_LLVM}"-libs \
         xdpyinfo \
         xvfb \
         git \
@@ -260,8 +260,8 @@ RUN apk --update add --no-cache --virtual .runtime-deps \
         wget \
     && mkdir -p /visualization/html \
     && cd /visualization/html \
-    && wget -q https://github.com/video-dev/hls.js/releases/download/v"${HLS_JS_VERSION}"/hls.light.min.js \
-    && wget -q https://github.com/video-dev/hls.js/releases/download/v"${HLS_JS_VERSION}"/hls.light.min.js.map
+    && wget -q https://github.com/video-dev/hls.js/releases/download/v"${VERSION_HLS_JS}"/hls.light.min.js \
+    && wget -q https://github.com/video-dev/hls.js/releases/download/v"${VERSION_HLS_JS}"/hls.light.min.js.map
 
 
 # Copy our assets

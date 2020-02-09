@@ -16,6 +16,10 @@ include::api_sections/runtime_mounts.adoc[]
 
 '''
 
+include::api_sections/live_preview.adoc[]
+
+'''
+
 include::api_sections/templates.adoc[]
 
 '''
@@ -24,7 +28,7 @@ include::api_sections/runtime.adoc[]
 
 '''
 
-include::api_sections/preview.adoc[]
+include::api_sections/preview_vars.adoc[]
 
 '''
 

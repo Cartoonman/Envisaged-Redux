@@ -10,9 +10,9 @@ load common/bats_common
 
 @test "Test Invert Colors" {
     ffmpeg_flags_test=("bash" "-c" "source "${ER_ROOT_DIRECTORY}"/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${invert_filter}\";")
-    output="$(export INVERT_COLORS=0; "${ffmpeg_flags_test[@]}")"
+    output="$(export RENDER_INVERT_COLORS=0; "${ffmpeg_flags_test[@]}")"
     assert_equal "$output" ""
-    output="$(export INVERT_COLORS=1; "${ffmpeg_flags_test[@]}")"
+    output="$(export RENDER_INVERT_COLORS=1; "${ffmpeg_flags_test[@]}")"
     assert_equal "$output" ",lutrgb=r=negval:g=negval:b=negval"
 }
 

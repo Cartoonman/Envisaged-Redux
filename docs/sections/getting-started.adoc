@@ -67,7 +67,7 @@ A great way to experiment is to leave the Live Preview window up while playing w
 The Live Preview window will automatically show the live preview when available without requiring browser refreshes.
 
 
-&#8224; For more details on interpreting the output of Live Preview with respect to the rendered output video, see link:#_live_preview_details[Live Preview Details].
+NOTE: &#8224; Under certain cases, the Live Preview output will not match the rendered output video. See link:#_live_preview[Live Preview] for more details.
 
 === All Examples
 
@@ -98,7 +98,7 @@ preview::
 +
 --
 
-If for any reason Live Preview does not work for you (e.g. browser not capable of https://en.wikipedia.org/wiki/HTTP_Live_Streaming[hls]), this is a useful script for running very short renders quickly.
+If for any reason Live Preview does not work for you (e.g. browser not capable of https://en.wikipedia.org/wiki/HTTP_Live_Streaming[HLS]), this is a useful script for running very short renders quickly.
 Users can use this to quickly view the effects of their custom runtime configurations on the rendered visualization.
 
 --
@@ -107,7 +107,7 @@ Users can use this to quickly view the effects of their custom runtime configura
 All of the included example scripts have a common API for interfacing with. 
 They are easily extendable, and can be used out of the box for general experimentation.
 
-CAUTION: All example scripts import functions from `examples/common.bash`. If you wish to move the scripts elsewhere, make sure you copy `common.bash` and place it in the same directory as the scripts.
+CAUTION: All example scripts source functions from `examples/common.bash`. If you wish to move the scripts elsewhere, make sure you copy `common.bash` and place it in the same directory as the scripts.
 
 
 .Avaliable Runtime Arguments for Example Scripts:

@@ -4,7 +4,15 @@ These variables give user access to Gource's runtime settings.
 
 The currently supported Gource build is **v0.49**.
 
-==== Variables: Gource General API
+
+These are the subgroups of Gource Variables:
+
+* <<_general_api,General API>>
+* <<_caption_api,Caption API>>
+* <<_nightly_api,Nightly API>>
+* <<_templated_api_border,Templated API: Border>>
+
+==== General API
 These are general variables that apply to all templates.
 There are certain templates however that will override some of these values.
 If applicable, a list of these templates will be noted in the <<OverriddenBy>> field.
@@ -526,7 +534,7 @@ a| * border
 
 '''
 
-==== Variables: Gource Caption API
+==== Caption API
 
 These are specific Gource Variables that will only be used if a caption file was provided to *Envisaged Redux* at runtime. These settings allow the user to configure the effects of the captions displayed.
 
@@ -583,28 +591,12 @@ a| `5.0`
 
 '''
 
-==== Variables: Gource Nightly API
+==== Nightly API
 
 These are features that have been added to the master branch of Gource, but has either not been made a new release, or is not yet supported by Envisaged as a stable version of Gource.
+These will only have an effect if <<_runtime_gource_nightly, RUNTIME_GOURCE_NIGHTLY>> is _true_.
 
-WARNING: These variables are highly subject to change, and variables may come and go. This particular API is considered *strictly* experimental and cannot ever be considered stable, the only exception being <<_use_gource_nightly, USE_GOURCE_NIGHTLY>>.
-
-
-[discrete]
-===== USE_GOURCE_NIGHTLY
-[cols="15h,~", stripes=even, width=100%, grid=rows]
-|===
-| **<<Type>>**
-| <<Boolean>>
-
-| **<<ExampleValue>>**
-a| `1`
-
-| **<<Description>>**
-| Flag to use nightly (master branch) {uri-gource}[gource]. Enables pre-release configs in this table. 
-It is required that this be set to 1 for all following settings to have any effect.
-Otherwise, all following settings for Gource Nightly will be ignored.
-|===
+WARNING: These variables are highly subject to change, and variables may come and go. This particular API is considered *strictly* experimental and cannot ever be considered stable.
 
 [discrete]
 ===== GOURCE_FILE_EXT_FALLBACK
@@ -626,7 +618,7 @@ a| `1`
 
 '''
 
-==== Gource Variables for Templates: Border
+==== Templated API: Border
 
 For the Border template, these are specialized Environment Variables for configuring Gource. These will only have an effect when used with the Border template, and will have no effect otherwise.
 

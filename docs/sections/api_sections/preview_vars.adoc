@@ -1,0 +1,21 @@
+=== Live Preview Environment Variables
+
+These are general settings that configure the <<_live_preview,Live Preview>> feature in *Envisaged Redux*.
+
+
+[discrete]
+===== PREVIEW_SLOWDOWN_FACTOR
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<Integer>>
+
+| **<<ExampleValue>>**
+a| `2`
+
+| **<<Description>>**
+| Slowdown Factor is used to slow the preview stream to reduce buffer hangs from slow renders. 1 means no slowdown. Supported values are integers >= 1.
+
+This setting will not affect the resultant `output.mp4`.
+|===
