@@ -3,7 +3,44 @@
 The rendering process can be configured using a number of Render Environment Variable. These primarily adjust and effect the FFmpeg backend.
 
 [discrete]
-===== H265_PRESET
+===== RENDER_VIDEO_RESOLUTION
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<String>>
+
+| **<<ExampleValue>>**
+a| `2160p`
+
+| **<<Default>>**
+a| `1080p`
+
+| **<<Description>>**
+| Output video resolution.
+Supported options are `480p`, `720p`, `1080p`, `1440p`, and `2160p`.
+|===
+
+[discrete]
+===== RENDER_FPS
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<String>>
+
+| **<<ExampleValue>>**
+a| `60`
+
+| **<<Default>>**
+a| `30`
+
+| **<<Description>>**
+| Output video Frames per Second. Supported framerates are `25`, `30`, or `60` only.
+|===
+
+[discrete]
+===== RENDER_H265_PRESET
 [cols="15h,~", stripes=odd, width=100%, grid=rows]
 |===
 
@@ -21,7 +58,7 @@ a| `medium`
 |===
 
 [discrete]
-===== H265_CRF
+===== RENDER_H265_CRF
 [cols="15h,~", stripes=odd, width=100%, grid=rows]
 |===
 
@@ -39,7 +76,7 @@ a| `21`
 |===
 
 [discrete]
-===== INVERT_COLORS
+===== RENDER_INVERT_COLORS
 [cols="15h,~", stripes=odd, width=100%, grid=rows]
 |===
 

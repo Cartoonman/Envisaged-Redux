@@ -137,9 +137,9 @@ Default::
 --
 If this is specified, the Environment Variable will use this assigned default value when not explicitly set at runtime.
 
-For example, <<_fps,FPS>> has a default value of `30`. This means that if *Envisaged Redux* is launched without the FPS variable set, it will automatically assign `30` as the value of FPS.
+For example, <<_render_fps,RENDER_FPS>> has a default value of `30`. This means that if *Envisaged Redux* is launched without the RENDER_FPS variable set, it will automatically assign `30` as the value of RENDER_FPS.
 
-If `FPS=60` is set at runtime, the FPS variable will be `60` instead of the default `30`.
+If `RENDER_FPS=60` is set at runtime, the RENDER_FPS variable will be `60` instead of the default `30`.
 
 Environment Variables which do not have a default remain as an unset variable when not declared at runtime.
 --

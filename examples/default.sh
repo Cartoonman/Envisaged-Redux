@@ -16,8 +16,8 @@ parse_args "$@"
 # env_vars_declare \
 #     GOURCE_TITLE                    "My Software Project" \
 #     GOURCE_CAMERA_MODE              "overview" \
-#     VIDEO_RESOLUTION                "1080p" \
-#     TEMPLATE                        "standard"
+#     RENDER_VIDEO_RESOLUTION         "1080p" \
+#     RUNTIME_TEMPLATE                "standard"
 
 docker run --rm -i -t \
     -p 8080:80 \

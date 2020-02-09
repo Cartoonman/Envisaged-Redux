@@ -3,59 +3,7 @@
 These are general settings that configure and enable certain features of *Envisaged Redux*.
 
 [discrete]
-===== RECURSE_SUBMODULES
-[cols="15h,~", stripes=odd, width=100%, grid=rows]
-|===
-
-| **<<Type>>**
-| <<Boolean>>
-
-| **<<ExampleValue>>**
-a| `1`
-
-| **<<Description>>**
-| Flag to enable recursing through the repo(s) submodules
-|===
-
-[discrete]
-===== VIDEO_RESOLUTION
-[cols="15h,~", stripes=odd, width=100%, grid=rows]
-|===
-
-| **<<Type>>**
-| <<String>>
-
-| **<<ExampleValue>>**
-a| `2160p`
-
-| **<<Default>>**
-a| `1080p`
-
-| **<<Description>>**
-| Output video resolution. 
-Supported options are `480p`, `720p`, `1080p`, `1440p`, and `2160p`.
-|===
-
-[discrete]
-===== FPS
-[cols="15h,~", stripes=odd, width=100%, grid=rows]
-|===
-
-| **<<Type>>**
-| <<String>>
-
-| **<<ExampleValue>>**
-a| `60`
-
-| **<<Default>>**
-a| `30`
-
-| **<<Description>>**
-| Output video Frames per Second. Supported framerates are `25`, `30`, or `60` only.
-|===
-
-[discrete]
-===== TEMPLATE
+===== RUNTIME_TEMPLATE
 [cols="15h,~", stripes=odd, width=100%, grid=rows]
 |===
 
@@ -73,4 +21,65 @@ a| Specify a template to use. The implemented templates are:
 
 * <<template_standard,standard>>
 * <<template_border,border>>
+|===
+
+[discrete]
+===== RUNTIME_RECURSE_SUBMODULES
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>**
+| Flag to enable recursing through the repo(s) submodules
+|===
+
+[discrete]
+===== RUNTIME_LIVE_PREVIEW
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>**
+| Flag to enable Live Gource preview through the web interface. See <<_live_preview,Live Preview>> for details.
+|===
+
+[discrete]
+===== RUNTIME_GOURCE_NIGHTLY
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>**
+| Flag to use nightly (master branch) {uri-gource}[gource]. Enables pre-release configs in this table.
+It is required that this be set to 1 for all following settings to have any effect.
+Otherwise, all following settings for Gource Nightly will be ignored.
+|===
+
+[discrete]
+===== RUNTIME_PRINT_VARS
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>**
+| Flag to have **Envisaged Redux** print the provided input Environment Variables.
+Useful for logging the runtime configuration on headless platforms.
 |===

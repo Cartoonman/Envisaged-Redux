@@ -19,4 +19,4 @@ Args:
         instead of avaliable for download through web server.
 
     Other args will be passed through to docker run command.
-        e.g. -e H265_CRF="0"
+        e.g. -e RENDER_H265_CRF="0"

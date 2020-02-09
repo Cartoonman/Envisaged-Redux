@@ -10,6 +10,7 @@ set -e
 CUR_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 readonly CUR_DIR_PATH
 source "${CUR_DIR_PATH}/common/common.bash"
+source "${CUR_DIR_PATH}/common/api_dict.bash"
 
 
 print_intro()
@@ -27,6 +28,27 @@ EOF
     printf "%b%s%b\n\n" "\033[1m\033[4m" "Version ${version}" "\033[0m"
 }
 readonly -f print_intro
+
+validate_env_vars()
+{
+    local env_vars
+    readarray -d $'\n' -t env_vars <<< "$( printenv | sed 's@=.*@@' | grep -e '^GOURCE*' -e '^RUNTIME*' -e '^RENDER*' -e '^PREVIEW*' | sort -d )"
+    for var in ${env_vars[@]}; do
+        if (( _api_dict[${var}] != 1 )); then
+            log_warn "${var} is not a valid or known variable."
+            unset "${var}"
+        fi
+    done
+   if (( RUNTIME_PRINT_VARS == 1 )); then
+        log_notice "Printing Configuration Variables:"
+        local print_vars
+        readarray -d $'\n' -t print_vars <<< "$( printenv | grep -e '^GOURCE*' -e '^RUNTIME*' -e '^RENDER*' -e '^PREVIEW*' | sort -d )"
+        for var in "${print_vars[@]}"; do
+            printf "        %s\n" "${var}"
+        done
+    fi
+}
+readonly -f validate_env_vars
 
 parse_args()
 {
@@ -62,7 +84,7 @@ parse_configs()
 {
     # Check runtime mode.
     echo 0 > "${ER_ROOT_DIRECTORY}"/html/live_preview
-    if [[ "${ENABLE_LIVE_PREVIEW}" == "1" ]]; then
+    if [[ "${RUNTIME_LIVE_PREVIEW}" == "1" ]]; then
         declare -grix RT_LIVE_PREVIEW=1
         echo 1 > "${ER_ROOT_DIRECTORY}"/html/live_preview
     fi
@@ -75,7 +97,7 @@ parse_configs()
     fi
 
     # Check which gource release is chosen
-    if [[ "${USE_GOURCE_NIGHTLY}" == "1" ]]; then
+    if [[ "${RUNTIME_GOURCE_NIGHTLY}" == "1" ]]; then
         declare -grx RT_GOURCE_EXEC='gource_nightly'
         log_notice "Using $("${RT_GOURCE_EXEC}" -h | head -n 1) Nightly Release"
         declare -grix RT_NIGHTLY=1
@@ -124,7 +146,7 @@ readonly -f parse_configs
 process_single_repo()
 {
     declare -i submod_count=0
-    if [[ "${RECURSE_SUBMODULES}" == "1" ]]; then
+    if [[ "${RUNTIME_RECURSE_SUBMODULES}" == "1" ]]; then
         log_info "Recursing through submodules."
         declare -a submod_paths=()
         cd "${ER_ROOT_DIRECTORY}"/git_repo && git submodule foreach --recursive '( echo "submod_paths+=($displaypath)" >> '"${ER_ROOT_DIRECTORY}"'/submods.bash )'
@@ -168,7 +190,7 @@ process_multi_repo()
             log_warn "${ER_ROOT_DIRECTORY}/git_repo/${dir} is not a git repo, skipping..."
             continue
         fi
-        if [[ "${RECURSE_SUBMODULES}" == "1" ]]; then
+        if [[ "${RUNTIME_RECURSE_SUBMODULES}" == "1" ]]; then
             log_info "Recursing through submodules in ${dir}"
             declare -a submod_paths=()
             cd "${ER_ROOT_DIRECTORY}"/git_repo/"${dir}" && git submodule foreach --recursive '( echo "submod_paths+=($displaypath)" >> '"${ER_ROOT_DIRECTORY}"'/submods.bash )'
@@ -293,20 +315,20 @@ start_render()
     # Disable strict error handling during this method.
     set +e
     # Start the visualization render based on template chosen
-    if [ -n "${TEMPLATE}" ]; then
-        case ${TEMPLATE} in
+    if [ -n "${RUNTIME_TEMPLATE}" ]; then
+        case ${RUNTIME_TEMPLATE} in
             border)
-                log_info "Using ${TEMPLATE} template..."
+                log_info "Using ${RUNTIME_TEMPLATE} template..."
                 "${ER_ROOT_DIRECTORY}"/runtime/templates/border.sh
                 EXIT_CODE=$?
                 ;;
             standard)
-                log_info "Using ${TEMPLATE} template..."
+                log_info "Using ${RUNTIME_TEMPLATE} template..."
                 "${ER_ROOT_DIRECTORY}"/runtime/templates/standard.sh
                 EXIT_CODE=$?
                 ;;
             *)
-                log_error "Unknown template option ${TEMPLATE}"
+                log_error "Unknown template option ${RUNTIME_TEMPLATE}"
                 EXIT_CODE=1
                 kill -TERM $$
                 ;;
@@ -359,6 +381,9 @@ main()
 
     # Set exit code
     declare -gix EXIT_CODE=0
+
+    # Validate env vars
+    validate_env_vars
 
     # Parse input args if any
     parse_args "$@"

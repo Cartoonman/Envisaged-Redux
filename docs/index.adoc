@@ -15,9 +15,9 @@ include::../VERSION[]
 
 == About
 
-*Envisaged Redux* is a Docker container application that combines the power of Gource and FFmpeg to generate visualizations of Git commit history. 
+*Envisaged Redux* is a Docker container application to generate visualizations of Git commit history. It does so using the power of Gource and FFmpeg.
 
-What makes this stand apart from other similar containerized applications is its portable-focused approach. *Envisaged Redux* can and will run on any platform that supports Docker, and it requires no extra hardware support to run (e.g. GPU's). This enables *Envisaged Redux* to be used in CI/CD chains and basic cloud VPS services without issue. This is achieved by leveraging the Gallium LLVMPipe Driver and Xvfb to render in software.
+What makes **Envisaged Redux** stand out from other similar containerized applications is its portable-focused approach. *Envisaged Redux* can and will run on any platform that supports Docker, and it requires no extra hardware support to run (e.g. GPU's). This enables *Envisaged Redux* to be used in CI/CD chains and basic cloud VPS services without issue. This is achieved by leveraging the Gallium LLVMPipe Driver and Xvfb to render in software.
 
 Head over to link:#_getting_started[Getting Started] for a fast track tutorial.
 
@@ -27,9 +27,9 @@ Official source repository for this project is on https://gitlab.com/Cartoonman/
 .Key features include: 
 * Web-based Live Preview
 * Gource API (via Environment Variables)
-* Templating Support
-* Multi-repository support
-* Recursive submodule support.
+* Render Templates
+* Multi-repository Support
+* Recursive Submodule Support
 
 *Envisaged Redux* is a fork of the https://github.com/utensils/Envisaged[Envisaged] project.
 
@@ -45,6 +45,7 @@ A number of core dependencies used by *Envisaged Redux* are:
 * Xvfb
 * Mesa (Gallium LLVMPipe)
 * ImageMagick
+* HLS.js
 
 &#8224; These projects are GPL Licensed to their respective copyright owners.
 They are compiled from source during the `docker build` process and the source code is bundled with each image under `/gpl_sources`.
@@ -52,6 +53,18 @@ Compile-time configurations are derivable from the `Dockerfile` at the root of t
 
 If there is any issue regarding GPL compliance, please reach out to the maintainer of this project.
 
+=== Versioned Dependencies
+
+For stability purposes, some dependencies (including some build-time dependencies) are version controlled for stability purposes.
+
+The current list of versioned dependencies for **Envisaged Redux** 
+include::../VERSION[]
+are:
+
+[source,docker]
+----
+include::../Dockerfile[tags=dep_versions]
+----
 
 include::sections/building.adoc[]
 

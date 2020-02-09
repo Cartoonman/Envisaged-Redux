@@ -4,7 +4,7 @@ Templates are predefined structural configurations within *Envisaged Redux* that
 
 By selecting a template, *Envisaged Redux* will use it to render the output video. Certain templates may restrict, add, or modify the behavior of other configs.
 
-Templates are configured through the <<_template,TEMPLATE>> Environment Variable.
+Templates are configured through the <<_runtime_template,RUNTIME_TEMPLATE>> Environment Variable.
 
 [#template_standard]
 [discrete]
