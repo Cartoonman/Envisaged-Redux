@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - API change: Standardizing namespaces of input variables.
 - Documentation.
 
+### Fixed
+- Regression bug where image2pipe doesn't run in sync with frame rate, causing duplicate frames.
+- Regression bug where Env Vars with spaces in values were not handled properly.
+
 ## [0.12.1] - 2020-02-07
 
 ### Added

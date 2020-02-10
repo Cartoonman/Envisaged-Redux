@@ -17,6 +17,7 @@ ENV VERSION_STABLE_GOURCE="0.49" \
     VERSION_X265="3.2.1" \
     VERSION_HLS_JS="0.13.1"
 # end::dep_versions[]
+
 FROM alpine-base as gource-builder
 
 RUN apk add --update --no-cache --virtual .build-deps alpine-sdk git sdl2-dev sdl2_image-dev pcre-dev freetype-dev glew-dev glm-dev boost-dev libpng-dev tinyxml-dev autoconf automake \

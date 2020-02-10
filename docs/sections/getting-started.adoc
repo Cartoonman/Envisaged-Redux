@@ -57,7 +57,8 @@ examples/quick_start.batch
 
 . At this point the container should be spawned. Open your browser and navigate to [http://localhost:8080]
 
-. Click on `Click here for Live Preview` (or navigate to http://localhost:8080/preview.html) to view the Live Preview feature of *Envisaged Redux*. The Live Preview shows in pseudo-realtime (with a slowdown factor applied to avoid jitter) what the visualization being rendered looks like &#8224;.
+. Click on `Click here for Live Preview` (or navigate to http://localhost:8080/preview.html) to view the Live Preview feature of *Envisaged Redux*. 
+The Live Preview shows in pseudo-realtime (with a slowdown factor applied to avoid jitter) what the visualization being rendered looks like &#8224;.
 
 . When the video is finished rendering, the main page will display the link to download the video from.
 When you are done, simply press Ctrl + C in the terminal running *Envisaged Redux* and this will close the application.
@@ -67,7 +68,8 @@ A great way to experiment is to leave the Live Preview window up while playing w
 The Live Preview window will automatically show the live preview when available without requiring browser refreshes.
 
 
-NOTE: &#8224; Under certain cases, the Live Preview output will not match the rendered output video. See link:#_live_preview[Live Preview] for more details.
+NOTE: &#8224; Certain visual compression artifacts present/absent in output file will not be present/absent in the Live Preview display. 
+See link:#_live_preview[Live Preview] for more details regarding these caveats.
 
 === All Examples
 

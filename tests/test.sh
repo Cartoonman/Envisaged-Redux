@@ -35,7 +35,9 @@ echo "---Done---"
 
 # Unit tests
 echo "---Starting Unit Tests---"
+echo "--Gource Unit Tests--"
 bats "${CUR_DIR_PATH}"/bats_tests/gource_unit_test.bats
+echo "--FFmpeg Unit Tests--"
 bats "${CUR_DIR_PATH}"/bats_tests/ffmpeg_unit_test.bats
 
 # Integration tests
@@ -44,12 +46,13 @@ echo "---Starting Integration Tests---"
 # Set up environment
 mkdir -p "${ER_ROOT_DIRECTORY}"/video
 ln -sf "${ER_ROOT_DIRECTORY}"/git_sandbox/repo1 "${ER_ROOT_DIRECTORY}"/git_repo
-
+echo "--Entrypoint Tests--"
 bats "${CUR_DIR_PATH}"/bats_tests/entrypoint_test.bats
+echo "--Integration Args Tests--"
 bats "${CUR_DIR_PATH}"/bats_tests/integration_args.bats
 
 (( SAVE == 1 )) && mv "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt /hostdir/cmd_test_data.txt
-
+echo "--Integration Args Tests--"
 bats "${CUR_DIR_PATH}"/bats_tests/repo_parse.bats
 
 

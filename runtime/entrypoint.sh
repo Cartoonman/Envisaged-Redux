@@ -33,8 +33,8 @@ validate_env_vars()
 {
     local env_vars
     readarray -d $'\n' -t env_vars <<< "$( printenv | sed 's@=.*@@' | grep -e '^GOURCE*' -e '^RUNTIME*' -e '^RENDER*' -e '^PREVIEW*' | sort -d )"
-    for var in ${env_vars[@]}; do
-        if (( _api_dict[${var}] != 1 )); then
+    for var in "${env_vars[@]}"; do
+        if [ -n "${var}" ] && (( _api_dict[${var}] != 1 )); then
             log_warn "${var} is not a valid or known variable."
             unset "${var}"
         fi
