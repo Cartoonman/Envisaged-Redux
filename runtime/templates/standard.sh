@@ -89,7 +89,7 @@ g_cmd_tmp=( \
     )
 # Sanitize array
 declare -a g_cmd=()
-for var in ${g_cmd_tmp[@]}; do
+for var in "${g_cmd_tmp[@]}"; do
     [ -n "${var}" ] && g_cmd+=("${var}")
 done
 unset g_cmd_tmp
@@ -112,15 +112,15 @@ log_notice "Rendering video pipe.."
 mkdir -p "${ER_ROOT_DIRECTORY}"/video
 # [0:v]: gource, [1:v]: logo
 f_cmd_tmp=( \
-        ffmpeg -y -f image2pipe -probesize 100M -thread_queue_size 512 -i ./tmp/gource.pipe \
+        ffmpeg -y -f image2pipe -probesize 100M -thread_queue_size 512 -framerate "${RENDER_FPS}" -i ./tmp/gource.pipe \
         "${RT_LOGO}" \
         -filter_complex "[0:v]select${invert_filter}[default]${logo_filter_graph}${live_preview_splitter}" \
-        -map "${primary_map_label}" -vcodec libx265 -r "${RENDER_FPS}" -pix_fmt yuv420p -crf "${RENDER_H265_CRF}" -preset "${RENDER_H265_PRESET}" \
-        "${ER_ROOT_DIRECTORY}"/video/output.mp4 "${live_preview_args}" \
+        -map "${primary_map_label}" -vcodec libx265 -pix_fmt yuv420p -crf "${RENDER_H265_CRF}" -preset "${RENDER_H265_PRESET}" \
+        "${ER_ROOT_DIRECTORY}"/video/output.mp4 "${live_preview_args[@]}" \
     )
 # Sanitize array
 declare -a f_cmd=()
-for var in ${f_cmd_tmp[@]}; do
+for var in "${f_cmd_tmp[@]}"; do
     [ -n "${var}" ] && f_cmd+=("${var}")
 done
 unset f_cmd_tmp

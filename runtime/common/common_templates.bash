@@ -130,14 +130,13 @@ gen_ffmpeg_flags()
                 "[time_scaler]setpts=${PREVIEW_SLOWDOWN_FACTOR}*PTS[live_preview]" \
         )"
         primary_map_label="[original_feed]"
-        declare -gr live_preview_args="$( \
-            printf " %s" \
-                "-map [live_preview] -c:v libx264 -pix_fmt yuv420p -maxrate 40M -bufsize 5M" \
-                "-profile:v high -level:v 5.2 -y -r ${lp_fps} -preset ultrafast -crf 1" \
-                "-tune zerolatency -x264-params keyint=$((lp_fps * 3)):min-keyint=${lp_fps}" \
-                "-vsync vfr -hls_flags independent_segments+delete_segments -hls_allow_cache 1" \
-                "-hls_time 1 -hls_list_size 10 -start_number 0 ./html/preview.m3u8" \
-        )"
+        declare -gar live_preview_args=( \
+            -map [live_preview] -c:v libx264 -pix_fmt yuv420p -maxrate 40M -bufsize 5M \
+            -profile:v high -level:v 5.2 -y -r "${lp_fps}" -preset ultrafast -crf 1 \
+                -tune zerolatency -x264-params keyint=$((lp_fps * 3)):min-keyint="${lp_fps}" \
+                -vsync vfr -hls_flags independent_segments+delete_segments -hls_allow_cache 1 \
+                -hls_time 1 -hls_list_size 10 -start_number 0 ./html/preview.m3u8 \
+        )
     fi
 
     readonly primary_map_label

@@ -1,4 +1,4 @@
-# Envisaged-Redux
+# Envisaged Redux
 **Powered by Gource, FFmpeg, and the Gallium LLVMPipe Driver**
 
 ## About
@@ -7,6 +7,7 @@
 
 What makes this stand apart from other similar containerized applications is its portable-focused approach. **Envisaged Redux** can and will run on any platform that supports Docker, and it requires no extra hardware support to run (e.g. GPU's). This enables **Envisaged Redux** to be used in CI/CD chains and basic cloud VPS services without issue. This is achieved by leveraging the Gallium LLVMPipe Driver and Xvfb to render in software.
 
-## Documentation
+**Envisaged Redux** is a fork of the original [Envisaged Project](https://github.com/utensils/Envisaged).
 
-The latest official documentation is hosted on Zeit at https://envisaged-redux.now.sh/.
+The latest official documentation is hosted at **https://envisaged-redux.now.sh/**.
+------

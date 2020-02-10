@@ -7,7 +7,7 @@ For safety reasons, all mounts that provide data to *Envisaged Redux* should be 
 This will be reflected in the examples.
 
 [discrete]
-===== Repo(s)
+===== Single/Multi Repos
 [cols="15h,~", stripes=even, width=100%, grid=rows]
 |===
 
@@ -21,7 +21,7 @@ This will be reflected in the examples.
 a| `--mount type=bind,src=#/path/to/git_repo(s)_dir#,dst=/visualization/git_repo,readonly`
 
 | **<<Description>>**
-a| Mounts the path to a single git repo, or a directory of multiple git repos for multi-repo visualizations. 
+a| Mounts the path to a single git repo, or a directory of multiple git repos in subdirectories for multi-repo visualizations. 
 
 TIP: When running a multi-repo scenario, add `root` to <<_gource_hide_items,GOURCE_HIDE_ITEMS>> to visually separate multiple repos.
 |===

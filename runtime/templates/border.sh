@@ -162,7 +162,7 @@ g1_cmd_tmp=( \
     )
 # Sanitize array
 declare -a g1_cmd=()
-for var in ${g1_cmd_tmp[@]}; do
+for var in "${g1_cmd_tmp[@]}"; do
     [ -n "${var}" ] && g1_cmd+=("${var}")
 done
 unset g1_cmd_tmp
@@ -195,7 +195,7 @@ g2_cmd_tmp=( \
     )
 # Sanitize array
 declare -a g2_cmd=()
-for var in ${g2_cmd_tmp[@]}; do
+for var in "${g2_cmd_tmp[@]}"; do
     [ -n "${var}" ] && g2_cmd+=("${var}")
 done
 unset g2_cmd_tmp
@@ -228,19 +228,20 @@ f_filter_complex="$( \
         "[date][with_key]vstack[default]${logo_filter_graph}${live_preview_splitter}" \
 )"
 f_cmd_tmp=( \
-        ffmpeg -y -f image2pipe -probesize 100M -thread_queue_size 512 -i "${ER_ROOT_DIRECTORY}"/tmp/gource.pipe \
-        -f image2pipe -probesize 100M -thread_queue_size 512 -i "${ER_ROOT_DIRECTORY}"/tmp/overlay.pipe \
+        ffmpeg -y -f image2pipe -probesize 100M -thread_queue_size 512 -framerate "${RENDER_FPS}" -i "${ER_ROOT_DIRECTORY}"/tmp/gource.pipe \
+        -f image2pipe -probesize 100M -thread_queue_size 512 -framerate "${RENDER_FPS}" -i "${ER_ROOT_DIRECTORY}"/tmp/overlay.pipe \
         "${RT_LOGO}" \
         -filter_complex "${f_filter_complex}" -map "${primary_map_label}" \
-        -vcodec libx265 -r "${RENDER_FPS}" -pix_fmt yuv420p -crf "${RENDER_H265_CRF}" -preset "${RENDER_H265_PRESET}" "${ER_ROOT_DIRECTORY}"/video/output.mp4 \
-        "${live_preview_args}" \
+        -vcodec libx265 -pix_fmt yuv420p -crf "${RENDER_H265_CRF}" -preset "${RENDER_H265_PRESET}" "${ER_ROOT_DIRECTORY}"/video/output.mp4 \
+        "${live_preview_args[@]}" \
     )
 # Sanitize array
 declare -a f_cmd=()
-for var in ${f_cmd_tmp[@]}; do
+for var in "${f_cmd_tmp[@]}"; do
     [ -n "${var}" ] && f_cmd+=("${var}")
 done
 unset f_cmd_tmp
+echo "${f_cmd[@]}"
 
 if (( RT_TEST == 1 )); then
     tmp_output="$(printf "%s " "${f_cmd[@]}")"
