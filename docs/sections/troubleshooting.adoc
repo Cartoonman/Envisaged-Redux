@@ -6,7 +6,7 @@ If you receive this error:
 
 ----
   convert: no decode delegate for this image format `IMAGE' @ error/constitute.c/ReadImage/556.
-  convert: no images defined `/visualization/logo_txfrmed.image' @ error/convert.c/ConvertImageCommand/3273.
+  convert: no images defined `/visualization/resources/logo_txfrmed.image' @ error/convert.c/ConvertImageCommand/3273.
 ----
 
 This means the image file passed into *Envisaged Redux* is not readable by the image converter onboard (ImageMagick). Try using another format or image.

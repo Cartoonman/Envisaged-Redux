@@ -7,17 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.0] - 2020-02-12
+
 ### Added
 - RUNTIME_PRINT_VARS added to print variables.
 - Validation of Environment Variables.
+- Avatars and Logo added to quick-start example.
 
 ### Updated
-- API change: Standardizing namespaces of input variables.
+- **API Change:** Standardizing namespaces of input variables.
+- **API Change:** Migrating user-defined mount files into `/resources` subdirectory.
 - Documentation.
 
 ### Fixed
 - Regression bug where image2pipe doesn't run in sync with frame rate, causing duplicate frames.
 - Regression bug where Env Vars with spaces in values were not handled properly.
+- Hanging if provided vcs directory contained no valid repos.
+- Missing PNG decoding support in FFmpeg.
+- Fixed broken Logo handling.
 
 ## [0.12.1] - 2020-02-07
 
@@ -282,7 +289,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial fork from [Envisaged].
 
-[unreleased]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.12.1...master
+[unreleased]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.13.0...master
+[0.13.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.12.1...v0.13.0
 [0.12.1]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.12.0...v0.12.1
 [0.12.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.11.0...v0.12.0
 [0.11.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.10.0...v0.11.0

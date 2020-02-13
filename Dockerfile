@@ -103,6 +103,7 @@ RUN apk add --update --no-cache \
         bash \
         cmake \
         git \
+        zlib-dev \
         pkgconfig \
     && mkdir -p /opt/install /build_dir /sources/
 
@@ -228,6 +229,7 @@ RUN mkdir -p ffmpeg \
         --enable-libx265 \
         --enable-libx264 \
         --enable-demuxer=image2pipe \
+        --enable-decoder=png \
     && make -j"$(nproc)" \
     && make install
 
@@ -262,7 +264,8 @@ RUN apk --update add --no-cache --virtual .runtime-deps \
     && mkdir -p /visualization/html \
     && cd /visualization/html \
     && wget -q https://github.com/video-dev/hls.js/releases/download/v"${VERSION_HLS_JS}"/hls.light.min.js \
-    && wget -q https://github.com/video-dev/hls.js/releases/download/v"${VERSION_HLS_JS}"/hls.light.min.js.map
+    && wget -q https://github.com/video-dev/hls.js/releases/download/v"${VERSION_HLS_JS}"/hls.light.min.js.map \
+    && mkdir -p /visualization/resources
 
 
 # Copy our assets

@@ -12,14 +12,12 @@ source "${CUR_DIR_PATH}/../common/common_templates.bash"
 
 exit_handler()
 {
-    # Remove our temporary files.
-    log_notice "Removing temporary files."
-    rm -rf "${ER_ROOT_DIRECTORY}"/tmp
-    # Exit Gource(s) if still alive.
-    stop_process ${G1_PID}
-    stop_process ${G2_PID}
+    # Exit Processes if still alive.
+    stop_process "${_G1_PID}"
+    stop_process "${_G2_PID}"
+    stop_process "${_F_PID}"
     log_debug "Render process returning with code ${EXIT_CODE}"
-    exit ${EXIT_CODE}
+    exit "${EXIT_CODE}"
 }
 readonly -f exit_handler
 
@@ -92,9 +90,6 @@ esac
 logo_ffmpeg_label="[2:v]" && gen_ffmpeg_flags
 (( $? != 0 )) && EXIT_CODE=1 && exit_handler
 
-# Create our temp directory
-mkdir -p "${ER_ROOT_DIRECTORY}"/tmp
-
 # Create our named pipes.
 mkfifo "${ER_ROOT_DIRECTORY}"/tmp/gource.pipe
 mkfifo "${ER_ROOT_DIRECTORY}"/tmp/overlay.pipe
@@ -137,17 +132,17 @@ GOURCE_BACKGROUND_COLOR="${gource_background_color_backup}"
 
 declare -ig _G1_PID _G2_PID _F_PID
 
-trap 'stop_process ${_G1_PID};\
-    stop_process ${_G2_PID};\
-    stop_process ${_F_PID};\
-    log_error "Error occured during render stage.";\
-    exit 1;' SIGTRAP
+trap 'stop_process "${_G1_PID}";\
+      stop_process "${_G2_PID}";\
+      stop_process "${_F_PID}";\
+      log_error "Error occured during render stage.";\
+      exit 1;' SIGTRAP
 
-trap 'stop_process ${_G1_PID};\
-    stop_process ${_G2_PID};\
-    stop_process ${_F_PID};\
-    log_notice "Received SIGINT";\
-    exit 1;' SIGINT
+trap 'stop_process "${_G1_PID}";\
+      stop_process "${_G2_PID}";\
+      stop_process "${_F_PID}";\
+      log_notice "Received SIGINT";\
+      exit 1;' SIGINT
 
 # Start Gource for visualization.
 log_notice "Starting Gource primary with title [${GOURCE_TITLE}]"
@@ -156,7 +151,7 @@ g1_cmd_tmp=( \
         --"${gource_res}" \
         "${gource_primary_args[@]}" \
         --stop-at-end \
-        "${ER_ROOT_DIRECTORY}"/development.log \
+        "${ER_ROOT_DIRECTORY}"/tmp/gource.log \
         -r "${RENDER_FPS}" \
         -o \
     )
@@ -167,7 +162,7 @@ for var in "${g1_cmd_tmp[@]}"; do
 done
 unset g1_cmd_tmp
 
-(( RT_TEST == 1 )) && printf "%s " "${g1_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
+(( RT_TEST == 1 )) && printf "%s " "${g1_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/save/cmd_test_data.txt
 if (( RT_NO_RUN != 1 )); then
     (
         "${g1_cmd[@]}" - >"${ER_ROOT_DIRECTORY}"/tmp/gource.pipe
@@ -189,7 +184,7 @@ g2_cmd_tmp=( \
         --transparent \
         --background-colour 202021 \
         --stop-at-end \
-        "${ER_ROOT_DIRECTORY}"/development.log \
+        "${ER_ROOT_DIRECTORY}"/tmp/gource.log \
         -r "${RENDER_FPS}" \
         -o \
     )
@@ -200,7 +195,7 @@ for var in "${g2_cmd_tmp[@]}"; do
 done
 unset g2_cmd_tmp
 
-(( RT_TEST == 1 )) && printf "%s " "${g2_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
+(( RT_TEST == 1 )) && printf "%s " "${g2_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/save/cmd_test_data.txt
 if (( RT_NO_RUN != 1 )); then
     (
         "${g2_cmd[@]}" - >"${ER_ROOT_DIRECTORY}"/tmp/overlay.pipe
@@ -230,7 +225,7 @@ f_filter_complex="$( \
 f_cmd_tmp=( \
         ffmpeg -y -f image2pipe -probesize 100M -thread_queue_size 512 -framerate "${RENDER_FPS}" -i "${ER_ROOT_DIRECTORY}"/tmp/gource.pipe \
         -f image2pipe -probesize 100M -thread_queue_size 512 -framerate "${RENDER_FPS}" -i "${ER_ROOT_DIRECTORY}"/tmp/overlay.pipe \
-        "${RT_LOGO}" \
+        "${logo_input[@]}" \
         -filter_complex "${f_filter_complex}" -map "${primary_map_label}" \
         -vcodec libx265 -pix_fmt yuv420p -crf "${RENDER_H265_CRF}" -preset "${RENDER_H265_PRESET}" "${ER_ROOT_DIRECTORY}"/video/output.mp4 \
         "${live_preview_args[@]}" \
@@ -241,11 +236,10 @@ for var in "${f_cmd_tmp[@]}"; do
     [ -n "${var}" ] && f_cmd+=("${var}")
 done
 unset f_cmd_tmp
-echo "${f_cmd[@]}"
 
 if (( RT_TEST == 1 )); then
     tmp_output="$(printf "%s " "${f_cmd[@]}")"
-    printf "%s" "${tmp_output%?}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
+    printf "%s" "${tmp_output%?}" >> "${ER_ROOT_DIRECTORY}"/save/cmd_test_data.txt
 fi
 if (( RT_NO_RUN != 1 )); then
     (
@@ -257,7 +251,7 @@ if (( RT_NO_RUN != 1 )); then
         fi
     ) &
     _F_PID=$!
-    wait ${_F_PID} ${_G1_PID} ${_G2_PID}
+    wait "${_F_PID}" "${_G1_PID}" "${_G2_PID}"
 fi
 
 if (( EXIT_CODE != 0 )); then
@@ -266,7 +260,7 @@ else
     log_success "FFmpeg video render completed!"
 
     # Update html and link new video.
-    if (( RT_TEST != 1 )); then
+    if (( RT_TEST != 1 )) && (( RT_LOCAL_OUTPUT != 1 )); then
         filesize="$(du -sh "${ER_ROOT_DIRECTORY}"/video/output.mp4 | cut -f 1)"
         printf "$(cat "${ER_ROOT_DIRECTORY}"/html/completed.html)" $filesize >"${ER_ROOT_DIRECTORY}"/html/index.html
         ln -sf "${ER_ROOT_DIRECTORY}"/video/output.mp4 "${ER_ROOT_DIRECTORY}"/html/output.mp4

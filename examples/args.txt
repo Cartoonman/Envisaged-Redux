@@ -1,8 +1,8 @@
 Args:
-    --git-repo-dir [absolute/path/to/repo(s)_dir]       Required
-        The git repo (or directory of git repos) you want
-        Gource to render.
-
+    --vcs-source-dir [absolute/path/to/repo(s)_dir]       Required
+        The VCS repo (or directory of repos) you want Gource to 
+        render. Currently supports Git repositories only.
+        
     --caption-file [absolute/path/to/caption_file]      Optional
         The path to a caption file for Gource to display
         captions during the video at predefined timestamps.
