@@ -25,26 +25,34 @@ load common/bats_common
 @test "Test Error Handling - Bad Logo" {
     export COUNT=1
 
-    head -c 10000 /dev/null > "${ER_ROOT_DIRECTORY}"/logo.image
+    head -c 10000 /dev/null > "${ER_ROOT_DIRECTORY}"/resources/logo.image
     entrypoint_failure_run
     entrypoint_failure_run TEST
     entrypoint_failure_run NO_RUN
     entrypoint_failure_run TEST NO_RUN
     entrypoint_failure_run template="border"
     entrypoint_failure_run RENDER_FPS=100
-    rm "${ER_ROOT_DIRECTORY}"/logo.image
+    rm "${ER_ROOT_DIRECTORY}"/resources/logo.image
 }
 
 @test "Test Error Handling - No Repo" {
     export COUNT=1
 
-    mv "${ER_ROOT_DIRECTORY}"/git_repo "${ER_ROOT_DIRECTORY}"/old_git_repo
+    mv "${ER_ROOT_DIRECTORY}"/resources/vcs_source "${ER_ROOT_DIRECTORY}"/resources/old_vcs_source
     entrypoint_failure_run
     entrypoint_failure_run TEST
     entrypoint_failure_run NO_RUN
     entrypoint_failure_run TEST NO_RUN
     entrypoint_failure_run template="border"
     entrypoint_failure_run RENDER_FPS=100
-    mv "${ER_ROOT_DIRECTORY}"/old_git_repo "${ER_ROOT_DIRECTORY}"/git_repo
+
+    # Test directory existing, but empty.
+    mkdir "${ER_ROOT_DIRECTORY}"/resources/vcs_source
+    entrypoint_failure_run
+    entrypoint_failure_run RUNTIME_RECURSE_SUBMODULES=1
+
+    # Revert
+    rm -r "${ER_ROOT_DIRECTORY}"/resources/vcs_source
+    mv "${ER_ROOT_DIRECTORY}"/resources/old_vcs_source "${ER_ROOT_DIRECTORY}"/resources/vcs_source
 }
 

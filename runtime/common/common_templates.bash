@@ -61,7 +61,7 @@ gen_gource_args()
     [ "${GOURCE_SHOW_KEY}" = "1" ]              && gource_arg_array+=("--key")
 
     # Captions
-    (( RT_CAPTIONS == 1 ))                      && gource_arg_array+=("--caption-file" ""${ER_ROOT_DIRECTORY}"/captions.txt")
+    (( RT_CAPTIONS == 1 ))                      && gource_arg_array+=("--caption-file" ""${ER_ROOT_DIRECTORY}"/resources/captions.txt")
     if (( RT_CAPTIONS == 1 )); then
         [ -n "${GOURCE_CAPTION_SIZE}" ]         && gource_arg_array+=("--caption-size" "${GOURCE_CAPTION_SIZE}")
         [ -n "${GOURCE_CAPTION_COLOR}" ]        && gource_arg_array+=("--caption-colour" "${GOURCE_CAPTION_COLOR}")
@@ -69,7 +69,7 @@ gen_gource_args()
     fi
 
     # Avatars
-    (( RT_AVATARS == 1 ))                       && gource_arg_array+=("--user-image-dir" ""${ER_ROOT_DIRECTORY}"/avatars")
+    (( RT_AVATARS == 1 ))                       && gource_arg_array+=("--user-image-dir" ""${ER_ROOT_DIRECTORY}"/resources/avatars")
 
     # Nightly
     if (( RT_NIGHTLY == 1 )); then
@@ -107,13 +107,14 @@ gen_ffmpeg_flags()
 
     # Default map
     declare -g primary_map_label="[default]"
-    if [ -n "${RT_LOGO}" ]; then
+    if (( RT_LOGO == 1 )); then
         if [ ! -n "${logo_ffmpeg_label}" ]; then
             log_error "Error: logo_ffmpeg_label variable must be set when using logo for ffmpeg (internal error)."
             return 1
         fi
         declare -gr logo_filter_graph=";${primary_map_label}${logo_ffmpeg_label}overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
         primary_map_label="[with_logo]"
+        declare -gr logo_input=("-i" "${ER_ROOT_DIRECTORY}/resources/logo_txfrmed.image")
     fi
 
     if (( RT_LIVE_PREVIEW == 1 )); then

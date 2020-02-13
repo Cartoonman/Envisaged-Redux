@@ -18,20 +18,20 @@ parse_args()
         key="$1"
 
         case ${key} in
-            --git-repo-dir)
-                git_repo_uri=("--mount" "type=bind,src=$2,dst=/visualization/git_repo,readonly")
+            --vcs-source-dir)
+                vcs_source_uri=("--mount" "type=bind,src=$2,dst=/visualization/resources/vcs_source,readonly")
                 shift
                 ;;
             --caption-file)
-                caption_uri=("--mount" "type=bind,src=$2,dst=/visualization/captions.txt,readonly")
+                caption_uri=("--mount" "type=bind,src=$2,dst=/visualization/resources/captions.txt,readonly")
                 shift
                 ;;
             --avatars-dir)
-                avatars_uri=("--mount" "type=bind,src=$2,dst=/visualization/avatars,readonly")
+                avatars_uri=("--mount" "type=bind,src=$2,dst=/visualization/resources/avatars,readonly")
                 shift
                 ;;
             --logo-file)
-                logo_uri=("--mount" "type=bind,src=$2,dst=/visualization/logo.image,readonly")
+                logo_uri=("--mount" "type=bind,src=$2,dst=/visualization/resources/logo.image,readonly")
                 shift
                 ;;
             --output-dir)

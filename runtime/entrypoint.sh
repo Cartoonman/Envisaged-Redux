@@ -69,6 +69,7 @@ parse_args()
             TEST)
                 declare -grix RT_TEST=1
                 log_warn "TEST Flag Invoked"
+                mkdir -p "${ER_ROOT_DIRECTORY}"/save \
                 ;;
             NO_RUN)
                 declare -grix RT_NO_RUN=1
@@ -96,7 +97,7 @@ parse_configs()
         mkdir -p "${ER_ROOT_DIRECTORY}"/video
     fi
 
-    # Check which gource release is chosen
+    # Check which Gource release was chosed
     if [[ "${RUNTIME_GOURCE_NIGHTLY}" == "1" ]]; then
         declare -grx RT_GOURCE_EXEC='gource_nightly'
         log_notice "Using $("${RT_GOURCE_EXEC}" -h | head -n 1) Nightly Release"
@@ -107,36 +108,36 @@ parse_configs()
     fi
 
     # Check for avatar directory mount.
-    if [ -d "${ER_ROOT_DIRECTORY}"/avatars ]; then
+    if [ -d "${ER_ROOT_DIRECTORY}"/resources/avatars ]; then
         log_info "Using avatars directory"
         declare -grix RT_AVATARS=1
     fi
 
     # Check for captions
-    if [ -f "${ER_ROOT_DIRECTORY}"/captions.txt ]; then
+    if [ -f "${ER_ROOT_DIRECTORY}"/resources/captions.txt ]; then
         log_info "Using captions file"
         declare -grix RT_CAPTIONS=1
     fi
 
     # Check for logo
-    if [ -f "${ER_ROOT_DIRECTORY}"/logo.image ]; then
+    if [ -f "${ER_ROOT_DIRECTORY}"/resources/logo.image ]; then
         log_notice "Possible logo file detected. Attempting to transform..."
         set +e
-        convert -geometry x160 "${ER_ROOT_DIRECTORY}"/logo.image "${ER_ROOT_DIRECTORY}"/logo_txfrmed.image
+        convert -geometry x160 "${ER_ROOT_DIRECTORY}"/resources/logo.image "${ER_ROOT_DIRECTORY}"/resources/logo_txfrmed.image
         if (( $? != 0 )); then
             log_error "Error: ImageMagick failed to convert the supplied logo file. Please check image file passed or convert to another format."
             exit 1
         else
             log_success "Success. Using logo file"
-            declare -grx RT_LOGO=" -i "${ER_ROOT_DIRECTORY}"/logo_txfrmed.image "
+            declare -grix RT_LOGO=1
         fi
     fi
 
 
     # Check if repo exists
-    if [ ! -d "${ER_ROOT_DIRECTORY}"/git_repo ]
+    if [ ! -d "${ER_ROOT_DIRECTORY}"/resources/vcs_source ]
     then
-        log_error "Error: git repo not found: "${ER_ROOT_DIRECTORY}"/git_repo does not exist."
+        log_error "Error: No VCS source found: ${ER_ROOT_DIRECTORY}/resources/vcs_source does not exist."
         exit 1
     fi
     return 0
@@ -149,8 +150,7 @@ process_single_repo()
     if [[ "${RUNTIME_RECURSE_SUBMODULES}" == "1" ]]; then
         log_info "Recursing through submodules."
         declare -a submod_paths=()
-        cd "${ER_ROOT_DIRECTORY}"/git_repo && git submodule foreach --recursive '( echo "submod_paths+=($displaypath)" >> '"${ER_ROOT_DIRECTORY}"'/submods.bash )'
-        cd "${ER_ROOT_DIRECTORY}"
+        git -C "${ER_ROOT_DIRECTORY}"/resources/vcs_source submodule foreach --recursive '( echo "submod_paths+=($displaypath)" >> '"${ER_ROOT_DIRECTORY}"'/submods.bash )'
         if [ ! -f "${ER_ROOT_DIRECTORY}"/submods.bash ]; then
             log_warn "No submodules found. Continuing..."
         else
@@ -161,18 +161,18 @@ process_single_repo()
         submod_paths+=('') # include parent of course
         for submod_path in "${submod_paths[@]}"; do
             ((++submod_count))
-            "${RT_GOURCE_EXEC}" --output-custom-log development"${submod_count}".log "${ER_ROOT_DIRECTORY}"/git_repo/"${submod_path}"
+            "${RT_GOURCE_EXEC}" --output-custom-log "${ER_ROOT_DIRECTORY}"/tmp/gource"${submod_count}".log "${ER_ROOT_DIRECTORY}"/resources/vcs_source/"${submod_path}"
             if [ -n "${submod_path}" ]; then
-                sed -i -r "s#(.+)\|#\1|/${submod_path}#" development"${submod_count}".log
+                sed -i -r "s#(.+)\|#\1|/${submod_path}#" "${ER_ROOT_DIRECTORY}"/tmp/gource"${submod_count}".log
             fi
-            logs+=("development${submod_count}.log")
+            logs+=("${ER_ROOT_DIRECTORY}/tmp/gource${submod_count}.log")
         done
         ((submod_count--)) # Account for repo itself
-        sort -n "${logs[@]}" > development.log
+        sort -n "${logs[@]}" > "${ER_ROOT_DIRECTORY}"/tmp/gource.log
         rm "${logs[@]}"
     else
         # Single repo no submods - simple case.
-        "${RT_GOURCE_EXEC}" --output-custom-log development.log "${ER_ROOT_DIRECTORY}"/git_repo
+        "${RT_GOURCE_EXEC}" --output-custom-log "${ER_ROOT_DIRECTORY}"/tmp/gource.log "${ER_ROOT_DIRECTORY}"/resources/vcs_source
     fi
     log_success "Processed 1 repo and ${submod_count} submodules."
     return 0
@@ -186,15 +186,14 @@ process_multi_repo()
     declare -a logs=()
     while read -r dir; do
         log_notice "Checking ${dir}... "
-        if [ ! -d "${ER_ROOT_DIRECTORY}"/git_repo/"${dir}"/.git ]; then
-            log_warn "${ER_ROOT_DIRECTORY}/git_repo/${dir} is not a git repo, skipping..."
+        if [ ! -d "${ER_ROOT_DIRECTORY}"/resources/vcs_source/"${dir}"/.git ]; then
+            log_warn "${ER_ROOT_DIRECTORY}/vcs_source/${dir} is not a git repo, Skipping..."
             continue
         fi
         if [[ "${RUNTIME_RECURSE_SUBMODULES}" == "1" ]]; then
             log_info "Recursing through submodules in ${dir}"
             declare -a submod_paths=()
-            cd "${ER_ROOT_DIRECTORY}"/git_repo/"${dir}" && git submodule foreach --recursive '( echo "submod_paths+=($displaypath)" >> '"${ER_ROOT_DIRECTORY}"'/submods.bash )'
-            cd "${ER_ROOT_DIRECTORY}"
+            git -C "${ER_ROOT_DIRECTORY}"/resources/vcs_source/"${dir}" submodule foreach --recursive '( echo "submod_paths+=($displaypath)" >> '"${ER_ROOT_DIRECTORY}"'/submods.bash )'
             if [ ! -f "${ER_ROOT_DIRECTORY}"/submods.bash ]; then
                 log_warn "No submodules found in ${dir}. Continuing..."
             else
@@ -204,24 +203,25 @@ process_multi_repo()
             submod_paths+=('') # include parent of course
             for submod_path in "${submod_paths[@]}"; do
                 ((++total_count))
-                "${RT_GOURCE_EXEC}" --output-custom-log development"${total_count}".log "${ER_ROOT_DIRECTORY}"/git_repo/"${dir}"/"${submod_path}"
+                "${RT_GOURCE_EXEC}" --output-custom-log "${ER_ROOT_DIRECTORY}"/tmp/gource"${total_count}".log "${ER_ROOT_DIRECTORY}"/resources/vcs_source/"${dir}"/"${submod_path}"
                 if [ -n "${submod_path}" ]; then
-                    sed -i -r "s#(.+)\|#\1|/${dir}/${submod_path}#" development${total_count}.log
+                    sed -i -r "s#(.+)\|#\1|/${dir}/${submod_path}#" "${ER_ROOT_DIRECTORY}"/tmp/gource${total_count}.log
                     ((++submod_count))
                 else
-                    sed -i -r "s#(.+)\|#\1|/${dir}#" development${total_count}.log
+                    sed -i -r "s#(.+)\|#\1|/${dir}#" "${ER_ROOT_DIRECTORY}"/tmp/gource${total_count}.log
                 fi
-                logs+=("development${total_count}.log")
+                logs+=("${ER_ROOT_DIRECTORY}/tmp/gource${total_count}.log")
             done
         else
             ((++total_count))
-            "${RT_GOURCE_EXEC}" --output-custom-log development"${total_count}".log "${ER_ROOT_DIRECTORY}"/git_repo/"${dir}"
-            sed -i -r "s#(.+)\|#\1|/${dir}#" development${total_count}.log
-            logs+=("development${total_count}.log")
+            "${RT_GOURCE_EXEC}" --output-custom-log "${ER_ROOT_DIRECTORY}"/tmp/gource"${total_count}".log "${ER_ROOT_DIRECTORY}"/resources/vcs_source/"${dir}"
+            sed -i -r "s#(.+)\|#\1|/${dir}#" "${ER_ROOT_DIRECTORY}"/tmp/gource${total_count}.log
+            logs+=("${ER_ROOT_DIRECTORY}/tmp/gource${total_count}.log")
         fi
-    done <<< "$(find "${ER_ROOT_DIRECTORY}"/git_repo/ -maxdepth 1 -mindepth 1 -type d -printf '%f\n')"
+    done <<< "$(find "${ER_ROOT_DIRECTORY}"/resources/vcs_source/ -maxdepth 1 -mindepth 1 -type d -printf '%f\n')"
+    (( ${#logs[@]} == 0 )) && log_error "Error: No suitable repos found in "${ER_ROOT_DIRECTORY}"/resources/vcs_source." && exit 1
+    sort -n "${logs[@]}" > "${ER_ROOT_DIRECTORY}"/tmp/gource.log
     log_success "Processed $((total_count-submod_count)) repos and ${submod_count} submodules."
-    sort -n "${logs[@]}" > development.log
     rm "${logs[@]}"
     return 0
 }
@@ -230,14 +230,15 @@ readonly -f process_multi_repo
 process_repos()
 {
     # Check if this is a single or multi repo
-    if [ ! -d "${ER_ROOT_DIRECTORY}"/git_repo/.git ]; then
-        log_info "Detected potential multi-repo input. Assuming this is a multi-repo directory."
+    if [ ! -d "${ER_ROOT_DIRECTORY}"/resources/vcs_source/.git ]; then
+        log_info "Detected potential multi-repo git input. Assuming this is a multi-repo directory."
         process_multi_repo
     else
-        log_info "Detected single-repo input."
+        log_info "Detected single-repo git repository input."
         process_single_repo
     fi
-    log_info "Git logs Parsed."
+    (( RT_TEST == 1 )) && cp "${ER_ROOT_DIRECTORY}"/tmp/gource.log "${ER_ROOT_DIRECTORY}"/save/gource.log
+    log_info "Git logs parsed."
     return 0
 }
 readonly -f process_repos
@@ -257,7 +258,7 @@ start_httpd()
     done
     if (( SECONDS - watch_start > _HTTPD_TIMEOUT )); then
         log_error "Timeout: httpd failed to start after ${_HTTPD_TIMEOUT} seconds. Observed error code ${curl_exit_code}."
-        stop_process ${_HTTPD_PID}
+        stop_process "${_HTTPD_PID}"
         exit 1
     fi
     log_success "httpd started successfully."
@@ -279,8 +280,8 @@ start_xvfb()
     done
     if (( SECONDS - watch_start > _XVFB_TIMEOUT )); then
         log_error "Timeout: Xvfb failed to start after ${_XVFB_TIMEOUT} seconds. Observed error code ${xdpy_exit_code}."
-        stop_process ${_HTTPD_PID}
-        stop_process ${_XVFB_PID}
+        stop_process "${_HTTPD_PID}"
+        stop_process "${_XVFB_PID}"
         exit 1
     fi
     log_success "Xvfb started successfully."
@@ -301,10 +302,10 @@ start_services()
     set -e
 
     # Trap the services so we can shut them down properly later.
-    trap 'stop_process ${_XVFB_PID};\
-        stop_process ${_HTTPD_PID};\
-        log_debug "Exiting with code ${EXIT_CODE} ";\
-        exit ${EXIT_CODE};' SIGINT SIGTERM
+    trap 'stop_process "${_XVFB_PID}";\
+          stop_process "${_HTTPD_PID}";\
+          log_debug "Exiting with code ${EXIT_CODE} ";\
+          exit ${EXIT_CODE};' SIGINT SIGTERM
     return 0
 }
 readonly -f start_services
@@ -339,6 +340,10 @@ start_render()
         EXIT_CODE=$?
     fi
 
+    # Clean temporary files
+    log_notice "Cleaning temporary files"
+    rm -rf "${ER_ROOT_DIRECTORY}"/tmp
+
     (( EXIT_CODE != 0 )) && kill -TERM $$
 
     # Re-enable strict error handling
@@ -362,7 +367,7 @@ handle_output()
 
     if (( RT_LOCAL_OUTPUT != 1 )); then
         # Wait for httpd process to end.
-        while kill -0 ${_HTTPD_PID} >/dev/null 2>&1; do
+        while kill -0 "${_HTTPD_PID}" >/dev/null 2>&1; do
             wait
         done
     fi
@@ -381,6 +386,9 @@ main()
 
     # Set exit code
     declare -gix EXIT_CODE=0
+
+    # Create our temp directory
+    mkdir -p "${ER_ROOT_DIRECTORY}"/tmp
 
     # Validate env vars
     validate_env_vars
@@ -406,8 +414,8 @@ main()
 
 
     # Exit
-    stop_process ${_XVFB_PID}
-    stop_process ${_HTTPD_PID}
+    stop_process "${_XVFB_PID}"
+    stop_process "${_HTTPD_PID}"
     log_debug "Exiting at end with code ${EXIT_CODE}"
     exit "${EXIT_CODE}"
 }
