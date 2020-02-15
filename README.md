@@ -2,7 +2,7 @@
 
 ## About
 
-<img style="float: right;" align="right" src="docs/resources/envisaged_redux_logo.png" alt="Envisaged Redux Logo">
+<img style="float: right;" align="right" src="https://envisaged-redux.now.sh/resources/envisaged_redux_logo.png" alt="Envisaged Redux Logo">
 
 **Envisaged Redux** is a Docker container application that combines the power of Gource and FFmpeg to generate visualizations. Currently the focus and capability of **Envisaged Redux** is on Git commit history visualizations. However it can easily be extended to visualize anything using Gource's custom log format.
 
