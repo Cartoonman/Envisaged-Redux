@@ -15,7 +15,9 @@ include::../VERSION[]
 
 == About
 
-*Envisaged Redux* is a Docker container application to generate visualizations of Git commit history. It does so using the power of Gource and FFmpeg.
+image::envisaged_redux_logo.png[Standard Template Example,float="right",align="center"]
+
+*Envisaged Redux* is a Docker container application to generate Gource visualizations and saving them as videos using FFmpeg. Currently *Envisaged Redux* only supports Git commit visualizations. More inputs may be supported in the future.
 
 What makes **Envisaged Redux** stand out from other similar containerized applications is its portable-focused approach. *Envisaged Redux* can and will run on any platform that supports Docker, and it requires no extra hardware support to run (e.g. GPU's). This enables *Envisaged Redux* to be used in CI/CD chains and basic cloud VPS services without issue. This is achieved by leveraging the Gallium LLVMPipe Driver and Xvfb to render in software.
 
@@ -25,6 +27,7 @@ Official source repository for this project is on https://gitlab.com/Cartoonman/
 
 
 .Key features include: 
+* Git Support
 * Web-based Live Preview
 * Gource API (via Environment Variables)
 * Render Templates
@@ -37,6 +40,7 @@ Official source repository for this project is on https://gitlab.com/Cartoonman/
 
 A number of core dependencies used by *Envisaged Redux* are:
 
+* Git
 * FFmpeg &#8224;
 * Gource &#8224;
 * libx264 &#8224;

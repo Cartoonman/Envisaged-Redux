@@ -25,12 +25,12 @@ load common/bats_common
     output="$("${ffmpeg_flags_logo_filter_graph[@]}")"
     assert_equal "$output" ""
 
-    refute [ "$(declare -grx RT_LOGO=/path/to/logo.image; "${ffmpeg_flags_status[@]}")" = "0" ]
-    assert [ "$(declare -grx RT_LOGO=/path/to/logo.image; export logo_ffmpeg_label=[1:v]; "${ffmpeg_flags_status[@]}")" = "0" ]
+    refute [ "$(declare -grix RT_LOGO=1; "${ffmpeg_flags_status[@]}")" = "0" ]
+    assert [ "$(declare -grix RT_LOGO=1; export logo_ffmpeg_label=[1:v]; "${ffmpeg_flags_status[@]}")" = "0" ]
 
-    output="$(declare -grx RT_LOGO=/path/to/logo.image; export logo_ffmpeg_label=[1:v]; "${ffmpeg_flags_prim_map_label[@]}")"
+    output="$(declare -grix RT_LOGO=1; export logo_ffmpeg_label=[1:v]; "${ffmpeg_flags_prim_map_label[@]}")"
     assert_equal "$output" "[with_logo]"
-    output="$(declare -grx RT_LOGO=/path/to/logo.image; export logo_ffmpeg_label=[1:v]; "${ffmpeg_flags_logo_filter_graph[@]}")"
+    output="$(declare -grix RT_LOGO=1; export logo_ffmpeg_label=[1:v]; "${ffmpeg_flags_logo_filter_graph[@]}")"
     assert_equal "$output" ";[default][1:v]overlay=main_w-overlay_w-40:main_h-overlay_h-40[with_logo]"
 }
 

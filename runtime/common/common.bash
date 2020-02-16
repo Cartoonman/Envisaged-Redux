@@ -58,7 +58,7 @@ readonly -f log_debug
 
 stop_process()
 {
-    [ -n "$1" ] && [ -e /proc/"$1" ] && kill $1
+    [ -n "$1" ] && [ -e /proc/"$1" ] && kill "$1"
     return 0
 }
 readonly -f stop_process

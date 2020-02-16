@@ -12,13 +12,11 @@ source "${CUR_DIR_PATH}/../common/common_templates.bash"
 
 exit_handler()
 {
-    # Remove our temporary files.
-    log_notice "Removing temporary files."
-    rm -rf "${ER_ROOT_DIRECTORY}"/tmp
     # Exit Gource if still alive.
-    stop_process ${G_PID}
+    stop_process "${_G_PID}"
+    stop_process "${_F_PID}"
     log_debug "Render process returning with code ${EXIT_CODE}"
-    exit ${EXIT_CODE}
+    exit "${EXIT_CODE}"
 }
 readonly -f exit_handler
 
@@ -55,9 +53,6 @@ esac
 logo_ffmpeg_label="[1:v]" && gen_ffmpeg_flags
 (( $? != 0 )) && EXIT_CODE=1 && exit_handler
 
-# Create our temp directory
-mkdir -p "${ER_ROOT_DIRECTORY}"/tmp
-
 # Create our named pipes.
 mkfifo "${ER_ROOT_DIRECTORY}"/tmp/gource.pipe
 
@@ -66,15 +61,15 @@ gen_gource_args
 
 declare -ig _G_PID _F_PID
 
-trap 'stop_process ${_G_PID};\
-    stop_process ${_F_PID};\
-    log_error "Error occured during render stage.";\
-    exit 1;' SIGTRAP
+trap 'stop_process "${_G_PID}";\
+      stop_process "${_F_PID}";\
+      log_error "Error occured during render stage.";\
+      exit 1;' SIGTRAP
 
-trap 'stop_process ${_G_PID};\
-    stop_process ${_F_PID};\
-    log_notice "Received SIGINT";\
-    exit 1;' SIGINT
+trap 'stop_process "${_G_PID}";\
+      stop_process "${_F_PID}";\
+      log_notice "Received SIGINT";\
+      exit 1;' SIGINT
 
 
 log_notice "Starting Gource primary with title [${GOURCE_TITLE}]"
@@ -83,7 +78,7 @@ g_cmd_tmp=( \
         --"${gource_res}" \
         "${gource_arg_array[@]}" \
         --stop-at-end \
-        "${ER_ROOT_DIRECTORY}"/development.log \
+        "${ER_ROOT_DIRECTORY}"/tmp/gource.log \
         -r "${RENDER_FPS}" \
         -o \
     )
@@ -94,7 +89,7 @@ for var in "${g_cmd_tmp[@]}"; do
 done
 unset g_cmd_tmp
 
-(( RT_TEST == 1 )) && printf "%s " "${g_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
+(( RT_TEST == 1 )) && printf "%s " "${g_cmd[@]}" >> "${ER_ROOT_DIRECTORY}"/save/cmd_test_data.txt
 if (( RT_NO_RUN != 1 )); then
     (
         "${g_cmd[@]}" - >"${ER_ROOT_DIRECTORY}"/tmp/gource.pipe
@@ -113,7 +108,7 @@ mkdir -p "${ER_ROOT_DIRECTORY}"/video
 # [0:v]: gource, [1:v]: logo
 f_cmd_tmp=( \
         ffmpeg -y -f image2pipe -probesize 100M -thread_queue_size 512 -framerate "${RENDER_FPS}" -i ./tmp/gource.pipe \
-        "${RT_LOGO}" \
+        "${logo_input[@]}" \
         -filter_complex "[0:v]select${invert_filter}[default]${logo_filter_graph}${live_preview_splitter}" \
         -map "${primary_map_label}" -vcodec libx265 -pix_fmt yuv420p -crf "${RENDER_H265_CRF}" -preset "${RENDER_H265_PRESET}" \
         "${ER_ROOT_DIRECTORY}"/video/output.mp4 "${live_preview_args[@]}" \
@@ -127,7 +122,7 @@ unset f_cmd_tmp
 
 if (( RT_TEST == 1 )); then
     tmp_output="$(printf "%s " "${f_cmd[@]}")"
-    printf "%s" "${tmp_output%?}" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
+    printf "%s" "${tmp_output%?}" >> "${ER_ROOT_DIRECTORY}"/save/cmd_test_data.txt
 fi
 if (( RT_NO_RUN != 1 )); then
     (
@@ -139,7 +134,7 @@ if (( RT_NO_RUN != 1 )); then
         fi
     ) &
     _F_PID=$!
-    wait ${_F_PID} ${_G_PID}
+    wait "${_F_PID}" "${_G_PID}"
 fi
 
 if (( EXIT_CODE != 0 )); then
@@ -148,7 +143,7 @@ else
     log_success "FFmpeg video render completed!"
 
     # Update html and link new video.
-    if (( RT_TEST != 1 )); then
+    if (( RT_TEST != 1 )) && (( RT_LOCAL_OUTPUT != 1 )); then
         filesize="$(du -sh "${ER_ROOT_DIRECTORY}"/video/output.mp4 | cut -f 1)"
         printf "$(cat "${ER_ROOT_DIRECTORY}"/html/completed.html)" $filesize >"${ER_ROOT_DIRECTORY}"/html/index.html
         ln -sf "${ER_ROOT_DIRECTORY}"/video/output.mp4 "${ER_ROOT_DIRECTORY}"/html/output.mp4

@@ -18,10 +18,11 @@ This will be reflected in the examples.
 | Yes
 
 | **<<MountExample>>**
-a| `--mount type=bind,src=#/path/to/git_repo(s)_dir#,dst=/visualization/git_repo,readonly`
+a| `--mount type=bind,src=#/path/to/vcs_source(s)_dir#,dst=/visualization/resources/vcs_source,readonly`
 
 | **<<Description>>**
-a| Mounts the path to a single git repo, or a directory of multiple git repos in subdirectories for multi-repo visualizations. 
+a| Mounts the path to a single VCS repo, or a directory of multiple VCS repos in subdirectories for multi-repo visualizations.
+Currently **Envisaged Redux** only supports Git repositories.
 
 TIP: When running a multi-repo scenario, add `root` to <<_gource_hide_items,GOURCE_HIDE_ITEMS>> to visually separate multiple repos.
 |===
@@ -38,7 +39,7 @@ TIP: When running a multi-repo scenario, add `root` to <<_gource_hide_items,GOUR
 | No
 
 | **<<MountExample>>**
-a| `--mount type=bind,src=#/path/to/captions.txt#,dst=/visualization/captions.txt,readonly`
+a| `--mount type=bind,src=#/path/to/captions.txt#,dst=/visualization/resources/captions.txt,readonly`
 
 | **<<Description>>**
 | Gource will try given captions.txt file to render captions on video. See {uri-gource-docs}[gource docs] for supported caption format.
@@ -56,7 +57,7 @@ a| `--mount type=bind,src=#/path/to/captions.txt#,dst=/visualization/captions.tx
 | No
 
 | **<<MountExample>>**
-a| `--mount type=bind,src=#/path/to/avatars_dir#,dst=/visualization/avatars,readonly`
+a| `--mount type=bind,src=#/path/to/avatars_dir#,dst=/visualization/resources/avatars,readonly`
 
 | **<<Description>>**
 | Gource will try given avatars directory to render user avatars on video. See {uri-gource-docs}[gource docs] for naming rules and supported image types.
@@ -74,7 +75,7 @@ a| `--mount type=bind,src=#/path/to/avatars_dir#,dst=/visualization/avatars,read
 | No
 
 | **<<MountExample>>**
-a| `--mount type=bind,src=#/path/to/image.png#,dst=/visualization/logo.image,readonly`
+a| `--mount type=bind,src=#/path/to/image.png#,dst=/visualization/resources/logo.image,readonly`
 
 | **<<Description>>**
 | Gource will try given logo image file to render the logo in the lower right hand corner of the video.

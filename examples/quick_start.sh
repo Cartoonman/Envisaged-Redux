@@ -12,10 +12,12 @@ source "${CUR_DIR_PATH}/common.bash"
 parse_args "$@"
 
 # Training Wheels. Remove or modify this section if using this script in your own setups.
-if [[ "${git_repo_uri}" == "" ]]; then
+if [[ "${vcs_source_uri}" == "" ]]; then
     echo "No git repo directory specified, using Envisaged-Redux repo..."
-    git_repo_uri=("--mount" "type=bind,src=${CUR_DIR_PATH}/../,dst=/visualization/git_repo,readonly")
-    caption_uri=("--mount" "type=bind,src=${CUR_DIR_PATH}/data/quick_start_captions.txt,dst=/visualization/captions.txt,readonly")
+    vcs_source_uri=("--mount" "type=bind,src=${CUR_DIR_PATH}/../,dst=/visualization/resources/vcs_source,readonly")
+    caption_uri=("--mount" "type=bind,src=${CUR_DIR_PATH}/data/quick_start_captions.txt,dst=/visualization/resources/captions.txt,readonly")
+    avatars_uri=("--mount" "type=bind,src=${CUR_DIR_PATH}/data/quick_start_avatars,dst=/visualization/resources/avatars,readonly")
+    logo_uri=("--mount" "type=bind,src=${CUR_DIR_PATH}/../docs/resources/envisaged_redux_logo.png,dst=/visualization/resources/logo.image,readonly")
 fi
 
 # Declare Environment Variables to configure Envisaged Redux
@@ -51,7 +53,7 @@ env_vars_declare \
 docker run --rm -it \
     -p 8080:80 \
     --name envisaged-redux \
-    "${git_repo_uri[@]}" \
+    "${vcs_source_uri[@]}" \
     "${local_output_uri[@]}" \
     "${caption_uri[@]}" \
     "${avatars_uri[@]}" \

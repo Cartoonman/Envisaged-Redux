@@ -151,12 +151,12 @@ integration_run()
     local log_output="$( eval "${env_args[@]}" "${ER_ROOT_DIRECTORY}"/runtime/entrypoint.sh TEST NO_RUN 2>&1 )" runtime_exit_code=$?
     (( runtime_exit_code != 0 )) && echo -e "${log_output}" && fail "Failure detected on test #${COUNT}"
     if (( SAVE == 1 )); then
-        printf "\n" >> "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
+        printf "\n" >> "${ER_ROOT_DIRECTORY}"/save/cmd_test_data.txt
     else
-        local actual_result="$(cat "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt)"
+        local actual_result="$(cat "${ER_ROOT_DIRECTORY}"/save/cmd_test_data.txt)"
         local expected_result="$(awk "NR==${COUNT}" "${ER_ROOT_DIRECTORY}"/tests/test_data/cmd_test_data.txt)"
         assert_equal "${actual_result}" "${expected_result}" || wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m' <(echo "${expected_result}") <(echo "${actual_result}") || fail "Failure detected on test #${COUNT}"
-        rm "${ER_ROOT_DIRECTORY}"/cmd_test_data.txt
+        rm -f "${ER_ROOT_DIRECTORY}"/save/cmd_test_data.txt
     fi
     (( ++COUNT ))
 }
@@ -174,12 +174,12 @@ repo_run()
     (( runtime_exit_code != 0 )) && echo -e "${log_output}" && fail "Failure detected on test #${COUNT}"
     if (( SAVE == 1 )); then
         mkdir -p /hostdir/repo
-        cp "${ER_ROOT_DIRECTORY}"/development.log /hostdir/repo/r_"${COUNT}".log
+        cp "${ER_ROOT_DIRECTORY}"/save/gource.log /hostdir/repo/r_"${COUNT}".log
     else
-        local actual_result="$(cat "${ER_ROOT_DIRECTORY}"/development.log)"
+        local actual_result="$(cat "${ER_ROOT_DIRECTORY}"/save/gource.log)"
         local expected_result="$(cat "${ER_ROOT_DIRECTORY}"/tests/test_data/repo/r_${COUNT}.log)"
         assert_equal "${actual_result}" "${expected_result}" || wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m' <(echo "${expected_result}") <(echo "${actual_result}") || fail "Failure detected on test #${COUNT}"
-        rm "${ER_ROOT_DIRECTORY}"/development.log
+        rm -f "${ER_ROOT_DIRECTORY}"/save/gource.log
     fi
     (( ++COUNT ))
 }
@@ -219,7 +219,6 @@ system_run()
         assert_equal "${actual_result}" "${expected_result}" || fail "Failure detected on test #${COUNT}"
     fi
     rm -f "${ER_ROOT_DIRECTORY}"/video/output.mp4
-    rm -f "${ER_ROOT_DIRECTORY}"/development.log
     (( ++COUNT ))
 }
 readonly -f system_run

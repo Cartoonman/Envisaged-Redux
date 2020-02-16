@@ -28,7 +28,7 @@ env_vars_declare \
 docker run --rm -i -t \
     -p 8080:80 \
     --name envisaged-redux \
-    "${git_repo_uri[@]}" \
+    "${vcs_source_uri[@]}" \
     "${local_output_uri[@]}" \
     "${caption_uri[@]}" \
     "${avatars_uri[@]}" \
