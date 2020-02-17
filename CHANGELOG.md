@@ -7,7 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+[Documentation](https://envisaged-redux.now.sh/)
+
+### Added
+- PDF Documentation build on Zeit upstream.
+- Versioned docs accessible in Changelog.
+
+### Updated
+- External links in documentation now opens new tab in browsers.
+
 ## [0.13.0] - 2020-02-12
+
+[Documentation](https://envisaged-redux-v0-13-0.now.sh/)
 
 ### Added
 - RUNTIME_PRINT_VARS added to print variables.
@@ -28,6 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.12.1] - 2020-02-07
 
+[Documentation](https://envisaged-redux-v0-12-1.now.sh/)
+
 ### Added
 - Adding tests for Border Template variable handling.
 - Documentation on building Envisaged Redux.
@@ -42,6 +55,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed FFmpeg thread queue blocking.
 
 ## [0.12.0] - 2020-02-01
+
+[Documentation](https://envisaged-redux-v0-12-0.now.sh/)
 
 ### Added
 

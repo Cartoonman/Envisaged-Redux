@@ -10,8 +10,11 @@ Users are encouraged to use these scripts to build off of and experiment with th
 
 ==== Dependancies
 [horizontal]
-Docker:: link:https://docs.docker.com/install/#supported-platforms[Installation Instructions]
-Git:: link:https://git-scm.com/book/en/v2/Getting-Started-Installing-Git[Installation Instructions]
+Docker:: link:https://docs.docker.com/install/#supported-platforms[Installation Instructions,window=_blank]
+Git:: link:https://git-scm.com/book/en/v2/Getting-Started-Installing-Git[Installation Instructions,window=_blank]
+
+
+=== Quick Start Example
 
 ==== Fetching the Image
 
@@ -37,27 +40,21 @@ git clone https://gitlab.com/Cartoonman/Envisaged-Redux.git
 
 --  
     
-
-=== Quick Start Example
+==== Starting the Example
 
 . Navigate to the cloned repo directory and run the following command:
 +
 --
 
-.For Linux/Mac:
 ----
 examples/quick_start.sh
-----
-.For Windows:
-----
-examples/quick_start.batch
 ----
 
 --  
 
-. At this point the container should be spawned. Open your browser and navigate to [http://localhost:8080]
+. At this point the container should be spawned. Open your browser and navigate to http://localhost:8080[window=_blank]
 
-. Click on `Click here for Live Preview` (or navigate to http://localhost:8080/preview.html) to view the Live Preview feature of *Envisaged Redux*. 
+. Click on `Click here for Live Preview` (or navigate to http://localhost:8080/preview.html[window=_blank]) to view the Live Preview feature of *Envisaged Redux*.
 The Live Preview shows in pseudo-realtime (with a slowdown factor applied to avoid jitter) what the visualization being rendered looks like &#8224;.
 
 . When the video is finished rendering, the main page will display the link to download the video from.
@@ -100,7 +97,7 @@ preview::
 +
 --
 
-If for any reason Live Preview does not work for you (e.g. browser not capable of https://en.wikipedia.org/wiki/HTTP_Live_Streaming[HLS]), this is a useful script for running very short renders quickly.
+If for any reason Live Preview does not work for you (e.g. browser not capable of https://en.wikipedia.org/wiki/HTTP_Live_Streaming[HLS,window=_blank]), this is a useful script for running very short renders quickly.
 Users can use this to quickly view the effects of their custom runtime configurations on the rendered visualization.
 
 --

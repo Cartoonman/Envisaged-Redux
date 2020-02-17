@@ -1,9 +1,5 @@
 {
   "scripts": {
-    "build": "asciidoctor docs/index.adoc --destination-dir public && cp -r docs/resources public/resources"
-  },
-  "dependencies": {
-    "@asciidoctor/core": "latest",
-    "@asciidoctor/cli": "latest"
+    "build": "gem install asciidoctor asciidoctor-pdf --pre && asciidoctor docs/index.adoc -a htmldoc --destination-dir public && asciidoctor --backend pdf -r asciidoctor-pdf --destination-dir public -a toc=macro -o envisaged-redux.pdf docs/index.adoc && cp -r docs/resources public/resources"
   }
 }

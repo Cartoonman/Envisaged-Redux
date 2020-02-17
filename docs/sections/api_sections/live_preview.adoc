@@ -3,7 +3,7 @@
 ==== Requirements
 In order to use Live Preview, you must run the *Envisaged Redux* docker container with port 80 accessible or mapped to the host.
 
-Live preview requires H.264 codec support and JavaScript enabled in your browser. A rough check can be done by visiting https://html5test.com/[html5test.com] to see if your browser supports H.264.
+Live preview requires H.264 codec support and JavaScript enabled in your browser. A rough check can be done by visiting https://html5test.com/[html5test.com,window=_blank] to see if your browser supports H.264.
 
 It is confirmed to work on the latest versions of Firefox, Chromium, and Edge, with likely support on Chrome, Safari and Opera.
 Since this works through the browser, it is inherently platform agnostic, and will work on any host operating system.

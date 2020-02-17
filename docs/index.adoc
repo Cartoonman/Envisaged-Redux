@@ -13,9 +13,17 @@
 Version 
 include::../VERSION[]
 
+toc::[]
+
+ifdef::htmldoc[]
+NOTE: The PDF version of this documentation can be obtained link:envisaged-redux.pdf[here,window=_blank].
+endif::[]
+
 == About
 
 image::envisaged_redux_logo.png[Standard Template Example,float="right",align="center"]
+
+This is the official documentation for the *Envisaged Redux* project.
 
 *Envisaged Redux* is a Docker container application to generate Gource visualizations and saving them as videos using FFmpeg. Currently *Envisaged Redux* only supports Git commit visualizations. More inputs may be supported in the future.
 
@@ -23,7 +31,7 @@ What makes **Envisaged Redux** stand out from other similar containerized applic
 
 Head over to link:#_getting_started[Getting Started] for a fast track tutorial.
 
-Official source repository for this project is on https://gitlab.com/Cartoonman/Envisaged-Redux[Gitlab] with a mirror on https://github.com/Cartoonman/Envisaged-Redux[Github].
+Official source repository for this project is on https://gitlab.com/Cartoonman/Envisaged-Redux[Gitlab,window=_blank] with a mirror on https://github.com/Cartoonman/Envisaged-Redux[Github,window=_blank].
 
 
 .Key features include: 
@@ -34,7 +42,7 @@ Official source repository for this project is on https://gitlab.com/Cartoonman/
 * Multi-repository Support
 * Recursive Submodule Support
 
-*Envisaged Redux* is a fork of the https://github.com/utensils/Envisaged[Envisaged] project.
+*Envisaged Redux* is a fork of the https://github.com/utensils/Envisaged[Envisaged,window=_blank] project.
 
 == Dependencies
 

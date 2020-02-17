@@ -12,7 +12,7 @@ This denotes the equivalent or assigned Gource runtime argument for the given En
 For example, the Environment Variable GOURCE_TITLE has the assignment of `--title`.
 This means that when the user provides the input of `GOURCE_TITLE="My Project"`, then the argument that is forwarded to Gource is `--title "My Project"`. 
 
-This serves as a easy reference for further exploration if a user is curious what the details of a given configuration are. All Gource assignments can be looked up on the official {uri-gource-docs}[Gource docs]
+This serves as a easy reference for further exploration if a user is curious what the details of a given configuration are. All Gource assignments can be looked up on the official {uri-gource-docs}[Gource docs,window=_blank]
 --
 
 [#Type]
@@ -22,7 +22,7 @@ Type::
 --
 This denotes the expected datatype of the variable. 
 By default all Environment Variables exist in an unset state save a few exceptions.
-If a Gource variable is unset, the Gource executable will use its own internal default handler. See {uri-gource}[Gource's source code] for more details on the default assignments and handling of configuration variables. 
+If a Gource variable is unset, the Gource executable will use its own internal default handler. See {uri-gource}[Gource's source code,window=_blank] for more details on the default assignments and handling of configuration variables. 
 
 In general, configuration variables will either be set to a default value, or remain unset in Gource.
 

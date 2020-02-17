@@ -1,6 +1,6 @@
 == Building Envisaged Redux
 
-Prebuilt images of **Envisaged Redux** are available at https://hub.docker.com/r/cartoonman/envisaged-redux[Docker Hub].
+Prebuilt images of **Envisaged Redux** are available at https://hub.docker.com/r/cartoonman/envisaged-redux[Docker Hub,window=_blank].
 If you wish to build and test Envisaged Redux locally (for example, to develop on), read on.
 
 === Auto Script
