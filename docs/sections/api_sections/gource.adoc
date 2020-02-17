@@ -68,7 +68,7 @@ a|
 * `"2012-11-15 13:00:00 +8"`
 
 | **<<Description>>** 
-| Start after given date (and optional time) (see {uri-gource-docs}[gource docs] for formats)
+| Start after given date (and optional time) (see {uri-gource-docs}[gource docs,window=_blank] for formats)
 |===
 
 [discrete]
@@ -88,7 +88,7 @@ a|
 * `"2012-11-15 13:00:00 +8"`
 
 | **<<Description>>** 
-| Stop after given date (and optional time) (see {uri-gource-docs}[gource docs] for formats)
+| Stop after given date (and optional time) (see {uri-gource-docs}[gource docs,window=_blank] for formats)
 |===
 
 [discrete]

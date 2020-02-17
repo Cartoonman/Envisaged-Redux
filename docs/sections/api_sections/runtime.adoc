@@ -64,7 +64,7 @@ a| `1`
 a| `1`
 
 | **<<Description>>**
-| Flag to use nightly (master branch) {uri-gource}[gource]. Enables pre-release configs in this table.
+| Flag to use nightly (master branch) {uri-gource}[gource,window=_blank]. Enables pre-release configs in this table.
 It is required that this be set to 1 for all following settings to have any effect.
 Otherwise, all following settings for Gource Nightly will be ignored.
 |===

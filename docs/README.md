@@ -20,7 +20,7 @@ If you wish to generate the documentation as a PDF, you will also need to instal
 To generate the documentation in HTML5, run the following command in the `/docs` directory:
 
 ```bash
-asciidoctor index.adoc
+asciidoctor -a htmldoc index.adoc
 ```
 
 The output should be an `index.html` in the `/docs` directory.
@@ -31,7 +31,7 @@ To generate the documentation in PDF, run the following command in the `/docs` d
 Make sure that you have already installed the `asciidoctor-pdf` extension described above.
 
 ```bash
-asciidoctor --backend pdf -r asciidoctor-pdf index.adoc
+asciidoctor --backend pdf -r asciidoctor-pdf -a toc=macro index.adoc
 ```
 
 The output should be an `index.pdf` in the `/docs` directory.

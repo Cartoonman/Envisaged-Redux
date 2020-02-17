@@ -42,7 +42,7 @@ TIP: When running a multi-repo scenario, add `root` to <<_gource_hide_items,GOUR
 a| `--mount type=bind,src=#/path/to/captions.txt#,dst=/visualization/resources/captions.txt,readonly`
 
 | **<<Description>>**
-| Gource will try given captions.txt file to render captions on video. See {uri-gource-docs}[gource docs] for supported caption format.
+| Gource will try given captions.txt file to render captions on video. See {uri-gource-docs}[gource docs,window=_blank] for supported caption format.
 |===
 
 [discrete]
@@ -60,7 +60,7 @@ a| `--mount type=bind,src=#/path/to/captions.txt#,dst=/visualization/resources/c
 a| `--mount type=bind,src=#/path/to/avatars_dir#,dst=/visualization/resources/avatars,readonly`
 
 | **<<Description>>**
-| Gource will try given avatars directory to render user avatars on video. See {uri-gource-docs}[gource docs] for naming rules and supported image types.
+| Gource will try given avatars directory to render user avatars on video. See {uri-gource-docs}[gource docs,window=_blank] for naming rules and supported image types.
 |===
 
 [discrete]
