@@ -101,6 +101,7 @@ gource_font_color_backup="${GOURCE_FONT_COLOR}"
 gource_hide_items_backup="${GOURCE_HIDE_ITEMS}"
 gource_show_key_backup="${GOURCE_SHOW_KEY}"
 gource_background_color_backup="${GOURCE_BACKGROUND_COLOR}"
+gource_follow_user_backup="${GOURCE_FOLLOW_USER}" # Patch because Gource does not obey --hide for selected users. 
 
 # Generate args for Primary Gource
 GOURCE_FONT_SIZE="${GOURCE_BORDER_TITLE_SIZE}"
@@ -117,6 +118,8 @@ GOURCE_FONT_COLOR="${GOURCE_BORDER_DATE_COLOR}"
 GOURCE_HIDE_ITEMS="bloom,dirnames,files,filenames,mouse,root,tree,users,usernames"
 GOURCE_SHOW_KEY=1
 GOURCE_BACKGROUND_COLOR=""
+GOURCE_FOLLOW_USER=""
+(( RT_BACKGROUND_IMAGE == 1 )) && RT_BACKGROUND_IMAGE=0
 
 gen_gource_args
 gource_secondary_args=("${gource_arg_array[@]}")
@@ -128,6 +131,7 @@ GOURCE_FONT_COLOR="${gource_font_color_backup}"
 GOURCE_HIDE_ITEMS="${gource_hide_items_backup}"
 GOURCE_SHOW_KEY="${gource_show_key_backup}"
 GOURCE_BACKGROUND_COLOR="${gource_background_color_backup}"
+GOURCE_FOLLOW_USER="${gource_follow_user_backup}"
 
 
 declare -ig _G1_PID _G2_PID _F_PID

@@ -127,7 +127,7 @@ gource_test_cond_bools() {
     assert_equal "${output}" "$(echo ${test3[@]})"
 }
 
-gource_test_avatars() {
+gource_test_mount_args() {
     local -r ctrl_var="$1"
     local -r ctrl_var_key="$2"
     local -r ctrl_var_val="$3"

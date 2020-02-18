@@ -34,9 +34,12 @@ load common/bats_common
     gource_test_entrypoint_1 "var" "GOURCE_BLOOM_MULTIPLIER" "--bloom-multiplier"
     gource_test_entrypoint_1 "var" "GOURCE_BLOOM_INTENSITY" "--bloom-intensity"
     gource_test_entrypoint_1 "var" "GOURCE_PADDING" "--padding"
+    gource_test_entrypoint_1 "var" "GOURCE_ELASTICITY" "--elasticity"
+    gource_test_entrypoint_1 "var" "GOURCE_FOLLOW_USER" "--follow-user"
     gource_test_entrypoint_1 "bool" "GOURCE_HIGHLIGHT_ALL_USERS" "--highlight-users"
     gource_test_entrypoint_1 "bool" "GOURCE_MULTI_SAMPLING" "--multi-sampling"
     gource_test_entrypoint_1 "bool" "GOURCE_SHOW_KEY" "--key"
+    gource_test_entrypoint_1 "bool" "GOURCE_REALTIME" "--realtime"
 }
 
 
@@ -55,5 +58,10 @@ load common/bats_common
 
 @test "Test Gource Args Avatars" {
     local -r CTRL_ARGS_STD=("RT_AVATARS" "--user-image-dir" ""${ER_ROOT_DIRECTORY}"/resources/avatars")
-    gource_test_avatars "${CTRL_ARGS_STD[@]}"
+    gource_test_mount_args "${CTRL_ARGS_STD[@]}"
+}
+
+@test "Test Gource Args Background Image" {
+    local -r CTRL_ARGS_STD=("RT_BACKGROUND_IMAGE" "--background-image" ""${ER_ROOT_DIRECTORY}"/resources/background.image")
+    gource_test_mount_args "${CTRL_ARGS_STD[@]}"
 }

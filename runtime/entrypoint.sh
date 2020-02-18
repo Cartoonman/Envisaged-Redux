@@ -119,6 +119,12 @@ parse_configs()
         declare -grix RT_CAPTIONS=1
     fi
 
+    # Check for background image
+    if [ -f "${ER_ROOT_DIRECTORY}"/resources/background.image ]; then
+        log_info "Using background image file"
+        declare -grix RT_BACKGROUND_IMAGE=1
+    fi
+
     # Check for logo
     if [ -f "${ER_ROOT_DIRECTORY}"/resources/logo.image ]; then
         log_notice "Possible logo file detected. Attempting to transform..."

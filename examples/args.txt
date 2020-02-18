@@ -1,5 +1,5 @@
 Args:
-    --vcs-source-dir [absolute/path/to/repo(s)_dir]       Required
+    --vcs-source-dir [absolute/path/to/repo(s)_dir]     Required
         The VCS repo (or directory of repos) you want Gource to 
         render. Currently supports Git repositories only.
         
@@ -13,6 +13,10 @@ Args:
 
     --logo-file    [absolute/path/to/logo_image]        Optional
         A logo image file to be rendered in the video.
+
+    --background-image-file  [absolute/path/to/image]   Optional
+        An image file to be used as the background image of
+        the Gource visualization
 
     --output-dir   [path/to/dir]                        Optional
         If given, the video will be saved into this directory

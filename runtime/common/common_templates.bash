@@ -55,13 +55,16 @@ gen_gource_args()
     [ -n "${GOURCE_BLOOM_MULTIPLIER}" ]         && gource_arg_array+=("--bloom-multiplier" "${GOURCE_BLOOM_MULTIPLIER}")
     [ -n "${GOURCE_BLOOM_INTENSITY}" ]          && gource_arg_array+=("--bloom-intensity" "${GOURCE_BLOOM_INTENSITY}")
     [ -n "${GOURCE_PADDING}" ]                  && gource_arg_array+=("--padding" "${GOURCE_PADDING}")
+    [ -n "${GOURCE_ELASTICITY}" ]               && gource_arg_array+=("--elasticity" "${GOURCE_ELASTICITY}")
+    [ -n "${GOURCE_FOLLOW_USER}" ]              && gource_arg_array+=("--follow-user" "${GOURCE_FOLLOW_USER}")
 
     [ "${GOURCE_HIGHLIGHT_ALL_USERS}" = "1" ]   && gource_arg_array+=("--highlight-users")
     [ "${GOURCE_MULTI_SAMPLING}" = "1" ]        && gource_arg_array+=("--multi-sampling")
     [ "${GOURCE_SHOW_KEY}" = "1" ]              && gource_arg_array+=("--key")
+    [ "${GOURCE_REALTIME}" = "1" ]              && gource_arg_array+=("--realtime")
 
     # Captions
-    (( RT_CAPTIONS == 1 ))                      && gource_arg_array+=("--caption-file" ""${ER_ROOT_DIRECTORY}"/resources/captions.txt")
+    (( RT_CAPTIONS == 1 ))                      && gource_arg_array+=("--caption-file" "${ER_ROOT_DIRECTORY}/resources/captions.txt")
     if (( RT_CAPTIONS == 1 )); then
         [ -n "${GOURCE_CAPTION_SIZE}" ]         && gource_arg_array+=("--caption-size" "${GOURCE_CAPTION_SIZE}")
         [ -n "${GOURCE_CAPTION_COLOR}" ]        && gource_arg_array+=("--caption-colour" "${GOURCE_CAPTION_COLOR}")
@@ -69,7 +72,10 @@ gen_gource_args()
     fi
 
     # Avatars
-    (( RT_AVATARS == 1 ))                       && gource_arg_array+=("--user-image-dir" ""${ER_ROOT_DIRECTORY}"/resources/avatars")
+    (( RT_AVATARS == 1 ))                       && gource_arg_array+=("--user-image-dir" "${ER_ROOT_DIRECTORY}/resources/avatars")
+
+    # Background Image
+    (( RT_BACKGROUND_IMAGE == 1 ))              && gource_arg_array+=("--background-image" "${ER_ROOT_DIRECTORY}/resources/background.image")
 
     # Nightly
     if (( RT_NIGHTLY == 1 )); then
