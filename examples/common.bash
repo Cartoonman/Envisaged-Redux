@@ -34,6 +34,10 @@ parse_args()
                 logo_uri=("--mount" "type=bind,src=$2,dst=/visualization/resources/logo.image,readonly")
                 shift
                 ;;
+            --background-image-file)
+                background_image_uri=("--mount" "type=bind,src=$2,dst=/visualization/resources/background.image,readonly")
+                shift
+                ;;
             --output-dir)
                 local_output_uri=("--mount" "type=bind,src=$2,dst=/visualization/video")
                 shift

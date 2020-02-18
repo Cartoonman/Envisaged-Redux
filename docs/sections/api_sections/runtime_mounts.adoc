@@ -82,6 +82,24 @@ a| `--mount type=bind,src=#/path/to/image.png#,dst=/visualization/resources/logo
 |===
 
 [discrete]
+===== Background Image
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+
+| **<<MountType>>**
+| <<Read>>
+
+| **<<Required>>**
+| No
+
+| **<<MountExample>>**
+a| `--mount type=bind,src=#/path/to/image.png#,dst=/visualization/resources/background.image,readonly`
+
+| **<<Description>>**
+| Gource will try given background image file to use as the background of the visualization scene.
+|===
+
+[discrete]
 ===== Output
 [cols="15h,~", stripes=even, width=100%, grid=rows]
 |===
