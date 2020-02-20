@@ -14,11 +14,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GOURCE_ELASTICITY added.
 - Background Image functionality added.
 - GOURCE_FOLLOW_USER added.
+- GOURCE_HIGHLIGHT_DIRS added.
+- GOURCE_HIGHLIGHT_COLOR added.
+- GOURCE_SELECTION_COLOR added.
+- GOURCE_FILENAME_COLOR added.
+- GOURCE_DIR_COLOR added.
+- GOURCE_FILE_EXTENSIONS added.
+- GOURCE_USER_FRICTION added.
+- GOURCE_DISABLE_AUTO_ROTATE added.
 - PDF Documentation build on Zeit upstream.
 - Versioned docs accessible in Changelog.
 
 ### Updated
 - External links in documentation now opens new tab in browsers.
+- **API Change:** GOURCE_HIGHLIGHT_ALL_DIRS changed to GOURCE_HIGHLIGHT_DIRS for consistency.
+- **API Change:** GOURCE_DIR_DEPTH changed to GOURCE_DIR_NAME_DEPTH for consistency.
+
 
 ## [0.13.0] - 2020-02-12
 

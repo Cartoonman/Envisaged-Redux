@@ -44,7 +44,7 @@ env_vars_declare \
     GOURCE_BLOOM_MULTIPLIER         "1.5" \
     GOURCE_BLOOM_INTENSITY          "0.75" \
     GOURCE_PADDING                  "1.2" \
-    GOURCE_HIGHLIGHT_ALL_USERS      "1" \
+    GOURCE_HIGHLIGHT_USERS          "1" \
     GOURCE_MULTI_SAMPLING           "1" \
     RUNTIME_LIVE_PREVIEW            "1" \
     PREVIEW_SLOWDOWN_FACTOR         "2"
