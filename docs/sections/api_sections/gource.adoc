@@ -410,7 +410,7 @@ a| `"%m/%d/%Y %H:%M:%S"`
 |===
 
 [discrete]
-===== GOURCE_DIR_DEPTH
+===== GOURCE_DIR_NAME_DEPTH
 [cols="15h,~", stripes=even, width=100%, grid=rows]
 |===
 | **<<Assignment>>**
@@ -478,7 +478,7 @@ a| `1.1`
 |===
 
 [discrete]
-===== GOURCE_HIGHLIGHT_ALL_USERS
+===== GOURCE_HIGHLIGHT_USERS
 [cols="15h,~", stripes=even, width=100%, grid=rows]
 |===
 | **<<Assignment>>**
@@ -579,10 +579,147 @@ a| `--follow-user`
 | **<<ExampleValue>>**
 a| * `John Doe`
 * `user45623`
+
 | **<<Description>>** 
 | Set the camera such that it follows the given user.
 |===
 
+[discrete]
+===== GOURCE_HIGHLIGHT_DIRS
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--highlight-dirs`
+
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>** 
+| Keeps the names of all directories visible for the duration of the visualization.
+|===
+
+[discrete]
+===== GOURCE_HIGHLIGHT_COLOR
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--highlight-colour`
+
+| **<<Type>>**
+| <<Hexadecimal>>
+
+| **<<ExampleValue>>**
+a| `FFFFFF`
+
+| **<<Description>>** 
+| Sets the color of user names in hex.
+|===
+
+[discrete]
+===== GOURCE_SELECTION_COLOR
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--selection-colour`
+
+| **<<Type>>**
+| <<Hexadecimal>>
+
+| **<<ExampleValue>>**
+a| `FFFFFF`
+
+| **<<Description>>** 
+| Sets the color of selected user names (names selected by <<_gource_follow_user,GOURCE_FOLLOW_USER>> for example).
+|===
+
+[discrete]
+===== GOURCE_FILENAME_COLOR
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--filename-colour`
+
+| **<<Type>>**
+| <<Hexadecimal>>
+
+| **<<ExampleValue>>**
+a| `FFFFFF`
+
+| **<<Description>>** 
+| Sets the color of filenames.
+|===
+
+[discrete]
+===== GOURCE_DIR_COLOR
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--dir-colour`
+
+| **<<Type>>**
+| <<Hexadecimal>>
+
+| **<<ExampleValue>>**
+a| `FFFFFF`
+
+| **<<Description>>** 
+| Sets the color of directory names.
+|===
+
+[discrete]
+===== GOURCE_FILE_EXTENSIONS
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--file-extensions`
+
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>** 
+| Show filename extensions only.
+|===
+
+[discrete]
+===== GOURCE_USER_FRICTION
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--user-friction`
+
+| **<<Type>>**
+| <<Float>>
+
+| **<<ExampleValue>>**
+a| `1.0`
+
+| **<<Description>>** 
+| Sets the time (in seconds) it takes for users to come to a stop.
+|===
+
+[discrete]
+===== GOURCE_DISABLE_AUTO_ROTATE
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--disable-auto-rotate`
+
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>** 
+| Disables automatic camera rotation. Camera will not rotate.
+
+|===
 '''
 
 ==== Caption API

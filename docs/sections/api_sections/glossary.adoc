@@ -63,7 +63,7 @@ Integer:::
 +
 Integer number. The range bounds if known will be described. 
 +
-Example integer input: `GOURCE_DIR_DEPTH="3"`
+Example integer input: `GOURCE_DIR_NAME_DEPTH="3"`
 
 [#Float]
 [reftext="Float"]
