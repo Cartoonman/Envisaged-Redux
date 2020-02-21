@@ -2,7 +2,7 @@
 
 These variables give user access to Gource's runtime settings.
 
-The currently supported Gource build is **v0.49**.
+The currently supported Gource build is **v0.51**.
 
 
 These are the subgroups of Gource Variables:

@@ -155,6 +155,7 @@ g1_cmd_tmp=( \
         --"${gource_res}" \
         "${gource_primary_args[@]}" \
         --stop-at-end \
+        --disable-input \
         "${ER_ROOT_DIRECTORY}"/tmp/gource.log \
         -r "${RENDER_FPS}" \
         -o \
