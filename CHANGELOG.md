@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### [Documentation](https://envisaged-redux.now.sh/)
 
+### Updated
+- Gource updated from v0.49 to v0.51
+- LLVM updated from 5 to 9.
+
 ## [0.14.0] - 2020-02-20
 
 ### [Documentation](https://envisaged-redux-v0-14-0.now.sh/)
