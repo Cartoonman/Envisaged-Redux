@@ -48,11 +48,12 @@ load common/bats_common
     gource_test_entrypoint_1 "bool" "GOURCE_HIGHLIGHT_DIRS" "--highlight-dirs"
     gource_test_entrypoint_1 "bool" "GOURCE_FILE_EXTENSIONS" "--file-extensions"
     gource_test_entrypoint_1 "bool" "GOURCE_DISABLE_AUTO_ROTATE" "--disable-auto-rotate"
+    gource_test_entrypoint_1 "bool" "GOURCE_COLOR_IMAGES" "--colour-images"
 }
 
 
 @test "Test Gource Args Caption" {
-    local -r CTRL_ARGS_STD=("RT_CAPTIONS" "--caption-file" ""${ER_ROOT_DIRECTORY}"/resources/captions.txt")
+    local -r CTRL_ARGS_STD=("RT_CAPTIONS" "--caption-file" "${ER_ROOT_DIRECTORY}/resources/captions.txt")
     gource_test_entrypoint_2 "var" "GOURCE_CAPTION_SIZE" "--caption-size" "${CTRL_ARGS_STD[@]}"
     gource_test_entrypoint_2 "var" "GOURCE_CAPTION_COLOR" "--caption-colour" "${CTRL_ARGS_STD[@]}"
     gource_test_entrypoint_2 "var" "GOURCE_CAPTION_DURATION" "--caption-duration" "${CTRL_ARGS_STD[@]}"
@@ -65,11 +66,16 @@ load common/bats_common
 
 
 @test "Test Gource Args Avatars" {
-    local -r CTRL_ARGS_STD=("RT_AVATARS" "--user-image-dir" ""${ER_ROOT_DIRECTORY}"/resources/avatars")
+    local -r CTRL_ARGS_STD=("RT_AVATARS" "--user-image-dir" "${ER_ROOT_DIRECTORY}/resources/avatars")
     gource_test_mount_args "${CTRL_ARGS_STD[@]}"
 }
 
 @test "Test Gource Args Background Image" {
-    local -r CTRL_ARGS_STD=("RT_BACKGROUND_IMAGE" "--background-image" ""${ER_ROOT_DIRECTORY}"/resources/background.image")
+    local -r CTRL_ARGS_STD=("RT_BACKGROUND_IMAGE" "--background-image" "${ER_ROOT_DIRECTORY}/resources/background.image")
+    gource_test_mount_args "${CTRL_ARGS_STD[@]}"
+}
+
+@test "Test Gource Args Default User Image" {
+    local -r CTRL_ARGS_STD=("RT_DEFAULT_USER_IMAGE" "--default-user-image" "${ER_ROOT_DIRECTORY}/resources/default_user.image")
     gource_test_mount_args "${CTRL_ARGS_STD[@]}"
 }

@@ -720,6 +720,24 @@ a| `1`
 | Disables automatic camera rotation. Camera will not rotate.
 
 |===
+
+[discrete]
+===== GOURCE_COLOR_IMAGES
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--colour-images`
+
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>**
+| Colorizes the provided user images used in the <<_default_user_image,Default User Image Mount>>.
+
+|===
 '''
 
 ==== Caption API

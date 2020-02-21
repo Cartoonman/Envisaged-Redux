@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GOURCE_FILE_EXTENSIONS added.
 - GOURCE_USER_FRICTION added.
 - GOURCE_DISABLE_AUTO_ROTATE added.
+- Default User Image functionality added.
+- GOURCE_COLOR_IMAGES added.
 - PDF Documentation build on Zeit upstream.
 - Versioned docs accessible in Changelog.
 

@@ -64,6 +64,7 @@ _tmp_api_dict+=( \
     GOURCE_TIME_SCALE \
     GOURCE_TITLE \
     GOURCE_USER_FRICTION \
+    GOURCE_COLOR_IMAGES \
     GOURCE_USER_SCALE \
 )
 

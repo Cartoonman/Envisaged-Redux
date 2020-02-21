@@ -69,6 +69,7 @@ gen_gource_args()
     [ "${GOURCE_HIGHLIGHT_DIRS}" = "1" ]        && gource_arg_array+=("--highlight-dirs")
     [ "${GOURCE_FILE_EXTENSIONS}" = "1" ]       && gource_arg_array+=("--file-extensions")
     [ "${GOURCE_DISABLE_AUTO_ROTATE}" = "1" ]   && gource_arg_array+=("--disable-auto-rotate")
+    [ "${GOURCE_COLOR_IMAGES}" = "1" ]          && gource_arg_array+=("--colour-images")
     
 
     # Captions
@@ -84,6 +85,9 @@ gen_gource_args()
 
     # Background Image
     (( RT_BACKGROUND_IMAGE == 1 ))              && gource_arg_array+=("--background-image" "${ER_ROOT_DIRECTORY}/resources/background.image")
+
+    # Default User Image
+    (( RT_DEFAULT_USER_IMAGE == 1 ))            && gource_arg_array+=("--default-user-image" "${ER_ROOT_DIRECTORY}/resources/default_user.image")
 
     # Nightly
     if (( RT_NIGHTLY == 1 )); then

@@ -38,6 +38,10 @@ parse_args()
                 background_image_uri=("--mount" "type=bind,src=$2,dst=/visualization/resources/background.image,readonly")
                 shift
                 ;;
+            --default-user-image-file)
+                default_user_image_uri=("--mount" "type=bind,src=$2,dst=/visualization/resources/default_user.image,readonly")
+                shift
+                ;;
             --output-dir)
                 local_output_uri=("--mount" "type=bind,src=$2,dst=/visualization/video")
                 shift

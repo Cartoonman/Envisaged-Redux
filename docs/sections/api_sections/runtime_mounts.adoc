@@ -100,6 +100,26 @@ a| `--mount type=bind,src=#/path/to/image.png#,dst=/visualization/resources/back
 |===
 
 [discrete]
+===== Default User Image
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+
+| **<<MountType>>**
+| <<Read>>
+
+| **<<Required>>**
+| No
+
+| **<<MountExample>>**
+a| `--mount type=bind,src=#/path/to/image.png#,dst=/visualization/resources/default_user.image,readonly`
+
+| **<<Description>>**
+a| Gource will try given image file to use as the default user image for all users in the visualization scene.
+
+TIP: Add <<_gource_color_images,GOURCE_COLOR_IMAGES>> to have Gource apply a random color fill to each user with the given default image.
+|===
+
+[discrete]
 ===== Output
 [cols="15h,~", stripes=even, width=100%, grid=rows]
 |===

@@ -34,6 +34,7 @@ docker run --rm -i -t \
     "${avatars_uri[@]}" \
     "${logo_uri[@]}" \
     "${background_image_uri[@]}" \
+    "${default_user_image_uri[@]}" \
     "${env_vars[@]}" \
     "${args[@]}" \
     cartoonman/envisaged-redux:latest

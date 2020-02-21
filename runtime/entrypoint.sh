@@ -119,6 +119,12 @@ parse_configs()
         declare -grix RT_CAPTIONS=1
     fi
 
+    # Check for default user image
+    if [ -f "${ER_ROOT_DIRECTORY}"/resources/default_user.image ]; then
+        log_info "Using default user image ifle"
+        declare -grix RT_DEFAULT_USER_IMAGE=1
+    fi
+
     # Check for background image
     if [ -f "${ER_ROOT_DIRECTORY}"/resources/background.image ]; then
         log_info "Using background image file"
