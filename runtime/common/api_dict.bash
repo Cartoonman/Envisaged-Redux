@@ -72,6 +72,7 @@ _tmp_api_dict+=( \
 _tmp_api_dict+=( \
     GOURCE_CAPTION_COLOR \
     GOURCE_CAPTION_DURATION \
+    GOURCE_CAPTION_OFFSET \
     GOURCE_CAPTION_SIZE \
 )
 

@@ -67,7 +67,7 @@ a|
 * `"2004-09-22 04:15:00"`
 * `"2012-11-15 13:00:00 +8"`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Start after given date (and optional time) (see {uri-gource-docs}[gource docs,window=_blank] for formats)
 |===
 
@@ -87,7 +87,7 @@ a|
 * `"2004-09-22 04:15:00"`
 * `"2012-11-15 13:00:00 +8"`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Stop after given date (and optional time) (see {uri-gource-docs}[gource docs,window=_blank] for formats)
 |===
 
@@ -105,7 +105,7 @@ a| `--start-position`
 a| * `0.25`
    * `random`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Begin at some position in the log (between 0.0 and 1.0 or 'random').
 |===
 
@@ -122,7 +122,7 @@ a| `--stop-position`
 | **<<ExampleValue>>**
 a| `0.75`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Stop at some position in the log (between 0.0 and 1.0) 
 |===
 
@@ -139,7 +139,7 @@ a| `--stop-at-time`
 | **<<ExampleValue>>**
 a| `20`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Stop after a specified number of seconds.
 |===
 
@@ -156,7 +156,7 @@ a| `--seconds-per-day`
 | **<<ExampleValue>>**
 a| `0.1`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Speed of simulation in seconds per day.
 |===
 
@@ -173,7 +173,7 @@ a| `--auto-skip-seconds`
 | **<<ExampleValue>>**
 a| `3.0`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Skip to next entry if nothing happens for a number of seconds.
 |===
 
@@ -190,7 +190,7 @@ a| `--time-scale`
 | **<<ExampleValue>>**
 a| `1.0`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Change simulation time scale. 
 |===
 
@@ -207,7 +207,7 @@ a| `--user-scale`
 | **<<ExampleValue>>**
 a| `1.0`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Change scale of user avatars.
 |===
 
@@ -224,7 +224,7 @@ a| `--max-user-speed`
 | **<<ExampleValue>>**
 a| `500`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Max speed users can travel per second.   
 |===
 
@@ -247,7 +247,7 @@ a| * border
 ** Only overrides `date` (Forces `date` to be set).
 User can set all other options.
 
-| **<<Description>>** 
+| **<<Description>>**
 a| Hide one or more display elements from the list below:
 
     bloom     - bloom effect
@@ -278,7 +278,7 @@ a| `--file-idle-time`
 | **<<ExampleValue>>**
 a| `0.0`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Time in seconds files remain idle before they are removed or 0 for no limit.
 |===
 
@@ -295,7 +295,7 @@ a| `--max-files`
 | **<<ExampleValue>>**
 a| `0`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Set the maximum number of files or 0 for no limit. Excess files will be discarded.
 |===
 
@@ -312,7 +312,7 @@ a| `--max-file-lag`
 | **<<ExampleValue>>**
 a| `5.0`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Max time files of a commit can take to appear. Use -1 for no limit.
 |===
 
@@ -329,7 +329,7 @@ a| `--filename-time`
 | **<<ExampleValue>>**
 a| `2`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Duration to keep filenames on screen (>= 2.0). 
 |===
 
@@ -350,7 +350,7 @@ a| `48`
 a| * border
 ** Superseded by <<_gource_border_title_size,GOURCE_BORDER_TITLE_SIZE>> and <<_gource_border_date_size,GOURCE_BORDER_DATE_SIZE>>.
 
-| **<<Description>>** 
+| **<<Description>>**
 | Font size for title and date. 
 |===
 
@@ -371,7 +371,7 @@ a| `FFFFFF`
 a| * border
 ** Superseded by <<_gource_border_title_color,GOURCE_BORDER_TITLE_COLOR>> and <<_gource_border_date_color,GOURCE_BORDER_DATE_COLOR>>.
 
-| **<<Description>>** 
+| **<<Description>>**
 | Font color for title and date in hex.
 |===
 
@@ -388,7 +388,7 @@ a| `--background-colour`
 | **<<ExampleValue>>**
 a| `000000`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Background color in hex.
 |===
 
@@ -405,7 +405,7 @@ a| `--date-format`
 | **<<ExampleValue>>**
 a| `"%m/%d/%Y %H:%M:%S"`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Date Format (based on strftime format)
 |===
 
@@ -422,7 +422,7 @@ a| `--dir-name-depth`
 | **<<ExampleValue>>**
 a| `3`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Draw names of directories down to a specific depth in the tree.
 |===
 
@@ -439,7 +439,7 @@ a| `--bloom-multiplier`
 | **<<ExampleValue>>**
 a| `1.2`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Adjust the amount of bloom. (>= 0.0)
 |===
 
@@ -456,7 +456,7 @@ a| `--bloom-intensity`
 | **<<ExampleValue>>**
 a| `0.75`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Adjust the intensity of the bloom. (>= 0.0)
 |===
 
@@ -473,7 +473,7 @@ a| `--padding`
 | **<<ExampleValue>>**
 a| `1.1`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Camera view padding (between 0.0-2.0 exclusive)
 |===
 
@@ -490,7 +490,7 @@ a| `--highlight-users`
 | **<<ExampleValue>>**
 a| `1`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Keeps all user's names visible.
 |===
 
@@ -507,7 +507,7 @@ a| `--multi-sampling`
 | **<<ExampleValue>>**
 a| `1`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Enables anti-aliasing multi-sampling for smoother edges
 |===
 
@@ -528,7 +528,7 @@ a| `1`
 a| * border
 ** Always enabled.
 
-| **<<Description>>** 
+| **<<Description>>**
 | Enables the file extension key legend
 |===
 
@@ -545,7 +545,7 @@ a| `--realtime`
 | **<<ExampleValue>>**
 a| `1`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Runs the visualization at realtime playback speed.
 |===
 
@@ -562,7 +562,7 @@ a| `--elasticity`
 | **<<ExampleValue>>**
 a| `1.4`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Sets the elasticity of nodes.
 |===
 
@@ -580,7 +580,7 @@ a| `--follow-user`
 a| * `John Doe`
 * `user45623`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Set the camera such that it follows the given user.
 |===
 
@@ -597,7 +597,7 @@ a| `--highlight-dirs`
 | **<<ExampleValue>>**
 a| `1`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Keeps the names of all directories visible for the duration of the visualization.
 |===
 
@@ -614,7 +614,7 @@ a| `--highlight-colour`
 | **<<ExampleValue>>**
 a| `FFFFFF`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Sets the color of user names in hex.
 |===
 
@@ -631,7 +631,7 @@ a| `--selection-colour`
 | **<<ExampleValue>>**
 a| `FFFFFF`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Sets the color of selected user names (names selected by <<_gource_follow_user,GOURCE_FOLLOW_USER>> for example).
 |===
 
@@ -648,7 +648,7 @@ a| `--filename-colour`
 | **<<ExampleValue>>**
 a| `FFFFFF`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Sets the color of filenames.
 |===
 
@@ -665,7 +665,7 @@ a| `--dir-colour`
 | **<<ExampleValue>>**
 a| `FFFFFF`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Sets the color of directory names.
 |===
 
@@ -682,7 +682,7 @@ a| `--file-extensions`
 | **<<ExampleValue>>**
 a| `1`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Show filename extensions only.
 |===
 
@@ -699,7 +699,7 @@ a| `--user-friction`
 | **<<ExampleValue>>**
 a| `1.0`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Sets the time (in seconds) it takes for users to come to a stop.
 |===
 
@@ -716,7 +716,7 @@ a| `--disable-auto-rotate`
 | **<<ExampleValue>>**
 a| `1`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Disables automatic camera rotation. Camera will not rotate.
 
 |===
@@ -757,7 +757,7 @@ a| `--caption-size`
 | **<<ExampleValue>>**
 a| `48`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Caption font size.
 |===
 
@@ -774,7 +774,7 @@ a| `--caption-colour`
 | **<<ExampleValue>>**
 a| `FFFFFF`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Caption color in hex.
 |===
 
@@ -791,10 +791,27 @@ a| `--caption-duration`
 | **<<ExampleValue>>**
 a| `5.0`
 
-| **<<Description>>** 
+| **<<Description>>**
 | The duration in seconds each caption will appear for.
 |===
 
+
+[discrete]
+===== GOURCE_CAPTION_OFFSET
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--caption-offset`
+
+| **<<Type>>**
+| <<Integer>>
+
+| **<<ExampleValue>>**
+a| `3`
+
+| **<<Description>>**
+| Caption horizontal offset. 0 centers the captions.
+|===
 '''
 
 ==== Nightly API
@@ -817,7 +834,7 @@ a| `--file-extension-fallback`
 | **<<ExampleValue>>**
 a| `1`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Use filename as extension if the extension is missing or empty.
     This applies for the file extension key legend.
 |===
@@ -841,7 +858,7 @@ a| `--font-size`
 | **<<ExampleValue>>**
 a| `48`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Font size for title.
 |===
 
@@ -858,7 +875,7 @@ a| `--font-size` __(overlay)__
 | **<<ExampleValue>>**
 a| `60`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Font size for date.
 |===
 
@@ -875,7 +892,7 @@ a| `--font-colour`
 | **<<ExampleValue>>**
 a| `FFFFFF`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Font color for title.
 |===
 
@@ -892,6 +909,6 @@ a| `--font-colour` __(overlay)__
 | **<<ExampleValue>>**
 a| `FFFFFF`
 
-| **<<Description>>** 
+| **<<Description>>**
 | Font color for date.
 |===

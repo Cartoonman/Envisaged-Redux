@@ -78,6 +78,7 @@ gen_gource_args()
         [ -n "${GOURCE_CAPTION_SIZE}" ]         && gource_arg_array+=("--caption-size" "${GOURCE_CAPTION_SIZE}")
         [ -n "${GOURCE_CAPTION_COLOR}" ]        && gource_arg_array+=("--caption-colour" "${GOURCE_CAPTION_COLOR}")
         [ -n "${GOURCE_CAPTION_DURATION}" ]     && gource_arg_array+=("--caption-duration" "${GOURCE_CAPTION_DURATION}")
+        [ -n "${GOURCE_CAPTION_OFFSET}" ]       && gource_arg_array+=("--caption-offset" "${GOURCE_CAPTION_OFFSET}")
     fi
 
     # Avatars
