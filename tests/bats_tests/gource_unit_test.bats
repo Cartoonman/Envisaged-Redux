@@ -57,6 +57,7 @@ load common/bats_common
     gource_test_entrypoint_2 "var" "GOURCE_CAPTION_SIZE" "--caption-size" "${CTRL_ARGS_STD[@]}"
     gource_test_entrypoint_2 "var" "GOURCE_CAPTION_COLOR" "--caption-colour" "${CTRL_ARGS_STD[@]}"
     gource_test_entrypoint_2 "var" "GOURCE_CAPTION_DURATION" "--caption-duration" "${CTRL_ARGS_STD[@]}"
+    gource_test_entrypoint_2 "var" "GOURCE_CAPTION_OFFSET" "--caption-offset" "${CTRL_ARGS_STD[@]}"
 }
 
 @test "Test Gource Args Nightly" {

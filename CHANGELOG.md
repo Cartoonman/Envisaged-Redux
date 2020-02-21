@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### [Documentation](https://envisaged-redux.now.sh/)
 
+## [0.14.0] - 2020-02-20
+
+### [Documentation](https://envisaged-redux-v0-14-0.now.sh/)
+
 ### Added
 - GOURCE_REALTIME added.
 - GOURCE_ELASTICITY added.
@@ -24,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GOURCE_DISABLE_AUTO_ROTATE added.
 - Default User Image functionality added.
 - GOURCE_COLOR_IMAGES added.
+- GOURCE_CAPTION_OFFSET added.
 - PDF Documentation build on Zeit upstream.
 - Versioned docs accessible in Changelog.
 
@@ -321,7 +326,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial fork from [Envisaged].
 
-[unreleased]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.13.0...master
+[unreleased]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.14.0...master
+[0.14.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.13.0...v0.14.0
 [0.13.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.12.1...v0.13.0
 [0.12.1]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.12.0...v0.12.1
 [0.12.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.11.0...v0.12.0
