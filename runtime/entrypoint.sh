@@ -15,7 +15,7 @@ source "${CUR_DIR_PATH}/common/api_dict.bash"
 
 print_intro()
 {
-    cat << "EOF"
+    cat <<-'EOF'
  _____            _                          _    ____          _
 | ____|_ ____   _(_)___  __ _  __ _  ___  __| |  |  _ \ ___  __| |_   ___  __
 |  _| | '_ \ \ / / / __|/ _` |/ _` |/ _ \/ _` |  | |_) / _ \/ _` | | | \ \/ /
@@ -107,6 +107,13 @@ parse_configs()
         log_info "Using $("${RT_GOURCE_EXEC}" -h | head -n 1) Stable Release "
     fi
 
+    # Check for custom Gource log input
+    if [ -f "${ER_ROOT_DIRECTORY}"/resources/gource.log ]; then
+        log_info "Using provided Gource log file"
+        cp "${ER_ROOT_DIRECTORY}"/resources/gource.log "${ER_ROOT_DIRECTORY}"/tmp/gource.log
+        declare -grix RT_CUSTOM_LOG=1
+    fi
+
     # Check for avatar directory mount.
     if [ -d "${ER_ROOT_DIRECTORY}"/resources/avatars ]; then
         log_info "Using avatars directory"
@@ -121,8 +128,14 @@ parse_configs()
 
     # Check for default user image
     if [ -f "${ER_ROOT_DIRECTORY}"/resources/default_user.image ]; then
-        log_info "Using default user image ifle"
+        log_info "Using default user image file"
         declare -grix RT_DEFAULT_USER_IMAGE=1
+    fi
+
+    # Check for font file
+    if [ -f "${ER_ROOT_DIRECTORY}"/resources/font ]; then
+        log_info "Using provided font file"
+        declare -grix RT_FONT_FILE=1
     fi
 
     # Check for background image
@@ -147,7 +160,7 @@ parse_configs()
 
 
     # Check if repo exists
-    if [ ! -d "${ER_ROOT_DIRECTORY}"/resources/vcs_source ]
+    if (( RT_CUSTOM_LOG != 1 )) && [ ! -d "${ER_ROOT_DIRECTORY}"/resources/vcs_source ]
     then
         log_error "Error: No VCS source found: ${ER_ROOT_DIRECTORY}/resources/vcs_source does not exist."
         exit 1
@@ -250,7 +263,7 @@ process_repos()
         process_single_repo
     fi
     (( RT_TEST == 1 )) && cp "${ER_ROOT_DIRECTORY}"/tmp/gource.log "${ER_ROOT_DIRECTORY}"/save/gource.log
-    log_info "Git logs parsed."
+    log_info "Gource logs parsed."
     return 0
 }
 readonly -f process_repos
@@ -412,7 +425,7 @@ main()
     parse_configs
 
     # Traverse repos and generate git logs to process
-    process_repos
+    (( RT_CUSTOM_LOG != 1 )) && process_repos
 
     # Activate services
     (( RT_NO_RUN != 1 )) && start_services

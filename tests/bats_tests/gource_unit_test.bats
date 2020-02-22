@@ -41,6 +41,11 @@ load common/bats_common
     gource_test_entrypoint_1 "var" "GOURCE_FILENAME_COLOR" "--filename-colour"
     gource_test_entrypoint_1 "var" "GOURCE_DIR_COLOR" "--dir-colour"
     gource_test_entrypoint_1 "var" "GOURCE_USER_FRICTION" "--user-friction"
+    gource_test_entrypoint_1 "var" "GOURCE_DIR_NAME_POSITION" "--dir-name-position"
+    gource_test_entrypoint_1 "var" "GOURCE_FONT_SCALE" "--font-scale"
+    gource_test_entrypoint_1 "var" "GOURCE_FILE_FONT_SIZE" "--file-font-size"
+    gource_test_entrypoint_1 "var" "GOURCE_DIR_FONT_SIZE" "--dir-font-size"
+    gource_test_entrypoint_1 "var" "GOURCE_USER_FONT_SIZE" "--user-font-size"
     gource_test_entrypoint_1 "bool" "GOURCE_HIGHLIGHT_USERS" "--highlight-users"
     gource_test_entrypoint_1 "bool" "GOURCE_MULTI_SAMPLING" "--multi-sampling"
     gource_test_entrypoint_1 "bool" "GOURCE_SHOW_KEY" "--key"
@@ -49,6 +54,8 @@ load common/bats_common
     gource_test_entrypoint_1 "bool" "GOURCE_FILE_EXTENSIONS" "--file-extensions"
     gource_test_entrypoint_1 "bool" "GOURCE_DISABLE_AUTO_ROTATE" "--disable-auto-rotate"
     gource_test_entrypoint_1 "bool" "GOURCE_COLOR_IMAGES" "--colour-images"
+    gource_test_entrypoint_1 "bool" "GOURCE_NO_TIME_TRAVEL" "--no-time-travel"
+    gource_test_entrypoint_1 "bool" "GOURCE_FILE_EXTENSION_FALLBACK" "--file-extension-fallback"
 }
 
 
@@ -62,9 +69,8 @@ load common/bats_common
 
 @test "Test Gource Args Nightly" {
     local -r CTRL_ARGS_STD=("RT_NIGHTLY")
-    gource_test_entrypoint_2 "bool" "GOURCE_FILE_EXT_FALLBACK" "--file-extension-fallback" "${CTRL_ARGS_STD[@]}"
+    # gource_test_entrypoint_2 
 }
-
 
 @test "Test Gource Args Avatars" {
     local -r CTRL_ARGS_STD=("RT_AVATARS" "--user-image-dir" "${ER_ROOT_DIRECTORY}/resources/avatars")
@@ -78,5 +84,10 @@ load common/bats_common
 
 @test "Test Gource Args Default User Image" {
     local -r CTRL_ARGS_STD=("RT_DEFAULT_USER_IMAGE" "--default-user-image" "${ER_ROOT_DIRECTORY}/resources/default_user.image")
+    gource_test_mount_args "${CTRL_ARGS_STD[@]}"
+}
+
+@test "Test Gource Args Font File" {
+    local -r CTRL_ARGS_STD=("RT_FONT_FILE" "--font-file" "${ER_ROOT_DIRECTORY}/resources/font")
     gource_test_mount_args "${CTRL_ARGS_STD[@]}"
 }

@@ -22,6 +22,10 @@ parse_args()
                 vcs_source_uri=("--mount" "type=bind,src=$2,dst=/visualization/resources/vcs_source,readonly")
                 shift
                 ;;
+            --custom-log)
+                custom_log_uri=("--mount" "type=bind,src=$2,dst=/visualization/resources/gource.log,readonly")
+                shift
+                ;;
             --caption-file)
                 caption_uri=("--mount" "type=bind,src=$2,dst=/visualization/resources/captions.txt,readonly")
                 shift
@@ -40,6 +44,10 @@ parse_args()
                 ;;
             --default-user-image-file)
                 default_user_image_uri=("--mount" "type=bind,src=$2,dst=/visualization/resources/default_user.image,readonly")
+                shift
+                ;;
+            --font-file)
+                font_file_uri=("--mount" "type=bind,src=$2,dst=/visualization/resources/font,readonly")
                 shift
                 ;;
             --output-dir)

@@ -23,12 +23,14 @@ docker run --rm -i -t \
     -p 8080:80 \
     --name envisaged-redux \
     "${vcs_source_uri[@]}" \
+    "${custom_log_uri[@]}" \
     "${local_output_uri[@]}" \
     "${caption_uri[@]}" \
     "${avatars_uri[@]}" \
     "${logo_uri[@]}" \
     "${background_image_uri[@]}" \
     "${default_user_image_uri[@]}" \
+    "${font_file_uri[@]}" \
     "${env_vars[@]}" \
     "${args[@]}" \
     cartoonman/envisaged-redux:latest

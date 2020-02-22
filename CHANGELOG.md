@@ -9,9 +9,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### [Documentation](https://envisaged-redux.now.sh/)
 
+## [0.15.0] - 2020-02-22
+
+### [Documentation](https://envisaged-redux-v0-15-0.now.sh/)
+
+### Added
+- Added Font File Functionality.
+- Added custom Gource log functionality.
+- Added GOURCE_NO_TIME_TRAVEL.
+- Added GOURCE_DIR_NAME_POSITION.
+- Added GOURCE_FONT_SCALE.
+- Added GOURCE_FILE_FONT_SIZE.
+- Added GOURCE_DIR_FONT_SIZE.
+- Added GOURCE_USER_FONT_SIZE.
+
 ### Updated
-- Gource updated from v0.49 to v0.51
+- Stable Gource updated from v0.49 to v0.51
 - LLVM updated from 5 to 9.
+- Upgraded GOURCE_FILE_EXTENSION_FALLBACK into stable Gource API.
+
+### Removed
+- Python and Subversion packages, since they weren't being used. 
 
 ## [0.14.0] - 2020-02-20
 
@@ -330,7 +348,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial fork from [Envisaged].
 
-[unreleased]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.14.0...master
+[unreleased]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.15.0...master
+[0.15.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.14.0...v0.15.0
 [0.14.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.13.0...v0.14.0
 [0.13.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.12.1...v0.13.0
 [0.12.1]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.12.0...v0.12.1
