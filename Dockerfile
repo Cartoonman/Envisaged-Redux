@@ -248,16 +248,12 @@ ENV PATH="/opt/gource_stable/bin:/opt/gource_nightly/bin:${PATH}"
 RUN apk --update add --no-cache --virtual .runtime-deps \
         boost-filesystem freetype glew glu libgcc libpng libstdc++ mesa-gl musl pcre sdl2 sdl2_image \
         bash \
-        expat \
         "${VERSION_LLVM}"-libs \
         xdpyinfo \
         xvfb \
         git \
-        gource \
         imagemagick \
         lighttpd \
-        python \
-        subversion \
         findutils \
         curl \
         wget \

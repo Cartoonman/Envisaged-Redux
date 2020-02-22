@@ -80,7 +80,7 @@ If you followed the section link:#_Getting_Started[Getting Started], this is the
 This showcases a general example of configurations tailored for visualizing *Envisaged Redux*'s development history.
 This enables the Live Preview functionality, as well as provides an example of using the Captions feature.
 
-By default if the `--git-repo-dir` argument is not provided, it will use the *Envisaged Redux* repository, as well as add in the provided captions file to the render process. Adding a `--git-repo-dir` argument overrides this.
+By default if the `--vcs-source-dir` argument is not provided, it will use the *Envisaged Redux* repository, as well as add in the provided captions file to the render process. Adding a `--vcs-source-dir` argument overrides this.
 
 --
 

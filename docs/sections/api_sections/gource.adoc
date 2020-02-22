@@ -738,6 +738,131 @@ a| `1`
 | Colorizes the provided user images used in the <<_default_user_image,Default User Image Mount>>.
 
 |===
+
+[discrete]
+===== GOURCE_NO_TIME_TRAVEL
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--no-time-travel`
+
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>**
+| Use the time of the last commit if the time of a commit is in the past.
+
+|===
+
+[discrete]
+===== GOURCE_DIR_NAME_POSITION
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--dir-name-position`
+
+| **<<Type>>**
+| <<Float>>
+
+| **<<ExampleValue>>**
+a| `0.5`
+
+| **<<Description>>**
+| Position along edge of the directory name (between 0.1 and 1.0, default is 0.5).
+
+|===
+
+[discrete]
+===== GOURCE_FILE_EXTENSION_FALLBACK
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--file-extension-fallback`
+
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>**
+| Use filename as extension if the extension is missing or empty.
+    This applies for the file extension key legend, enabled by <<_gource_show_key,GOURCE_SHOW_KEY>>.
+|===
+
+[discrete]
+===== GOURCE_FONT_SCALE
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--font-scale`
+
+| **<<Type>>**
+| <<Float>>
+
+| **<<ExampleValue>>**
+a| `1.0`
+
+| **<<Description>>**
+| Scales the sizes of all fonts. 1.0 is default, < 1.0 is smaller, and > 1.0 is larger.
+|===
+
+[discrete]
+===== GOURCE_FILE_FONT_SIZE
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--file-font-size`
+
+| **<<Type>>**
+| <<Integer>>
+
+| **<<ExampleValue>>**
+a| `14`
+
+| **<<Description>>**
+| Font size of filenames.
+
+|===
+
+[discrete]
+===== GOURCE_DIR_FONT_SIZE
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--dir-font-size`
+
+| **<<Type>>**
+| <<Integer>>
+
+| **<<ExampleValue>>**
+a| `14`
+
+| **<<Description>>**
+| Font size of directory names.
+
+|===
+
+[discrete]
+===== GOURCE_USER_FONT_SIZE
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+| **<<Assignment>>**
+a| `--user-font-size`
+
+| **<<Type>>**
+| <<Integer>>
+
+| **<<ExampleValue>>**
+a| `14`
+
+| **<<Description>>**
+| Font size of user names.
+
+|===
 '''
 
 ==== Caption API
@@ -821,23 +946,7 @@ These will only have an effect if <<_runtime_gource_nightly, RUNTIME_GOURCE_NIGH
 
 WARNING: These variables are highly subject to change, and variables may come and go. This particular API is considered *strictly* experimental and cannot ever be considered stable.
 
-[discrete]
-===== GOURCE_FILE_EXT_FALLBACK
-[cols="15h,~", stripes=even, width=100%, grid=rows]
-|===
-| **<<Assignment>>**
-a| `--file-extension-fallback`
-
-| **<<Type>>**
-| <<Boolean>>
-
-| **<<ExampleValue>>**
-a| `1`
-
-| **<<Description>>**
-| Use filename as extension if the extension is missing or empty.
-    This applies for the file extension key legend.
-|===
+**There are no Nightly Gource functionalities at this time.**
 
 '''
 

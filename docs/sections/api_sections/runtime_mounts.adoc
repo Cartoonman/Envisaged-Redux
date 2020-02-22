@@ -27,6 +27,23 @@ Currently **Envisaged Redux** only supports Git repositories.
 TIP: When running a multi-repo scenario, add `root` to <<_gource_hide_items,GOURCE_HIDE_ITEMS>> to visually separate multiple repos.
 |===
 
+===== Custom Log
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+
+| **<<MountType>>**
+| <<Read>>
+
+| **<<Required>>**
+| Yes
+
+| **<<MountExample>>**
+a| `--mount type=bind,src=#/path/to/custom.log#,dst=/visualization/resources/gource.log,readonly`
+
+| **<<Description>>**
+a| **Envisaged Redux** will skip checks for a source repo and use the provided log file as the input to Gource.
+|===
+
 [discrete]
 ===== Captions
 [cols="15h,~", stripes=even, width=100%, grid=rows]
@@ -117,6 +134,26 @@ a| `--mount type=bind,src=#/path/to/image.png#,dst=/visualization/resources/defa
 a| Gource will try given image file to use as the default user image for all users in the visualization scene.
 
 TIP: Add <<_gource_color_images,GOURCE_COLOR_IMAGES>> to have Gource apply a random color fill to each user with the given default image.
+|===
+
+[discrete]
+===== Font File
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+
+| **<<MountType>>**
+| <<Read>>
+
+| **<<Required>>**
+| No
+
+| **<<MountExample>>**
+a| `--mount type=bind,src=#/path/to/font.ttf#,dst=/visualization/resources/font,readonly`
+
+| **<<Description>>**
+| Gource will use the provided font file as the text font used in the visualization.
+Compatible with most font types supported by FreeType, including `.ttf` and `.odf` formats.
+
 |===
 
 [discrete]

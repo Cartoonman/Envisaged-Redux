@@ -25,7 +25,7 @@ image::envisaged_redux_logo.png[Standard Template Example,float="right",align="c
 
 This is the official documentation for the *Envisaged Redux* project.
 
-*Envisaged Redux* is a Docker container application to generate Gource visualizations and saving them as videos using FFmpeg. Currently *Envisaged Redux* only supports Git commit visualizations. More inputs may be supported in the future.
+*Envisaged Redux* is a Docker container application to generate Gource visualizations and saving them as videos using FFmpeg. Currently *Envisaged Redux* supports generating Gourve visualizations from Git repos, as well as an option to provide your own Gource custom log to render. More inputs may be supported in the future.
 
 What makes **Envisaged Redux** stand out from other similar containerized applications is its portable-focused approach. *Envisaged Redux* can and will run on any platform that supports Docker, and it requires no extra hardware support to run (e.g. GPU's). This enables *Envisaged Redux* to be used in CI/CD chains and basic cloud VPS services without issue. This is achieved by leveraging the Gallium LLVMPipe Driver and Xvfb to render in software.
 
