@@ -147,6 +147,9 @@ gen_ffmpeg_flags()
         declare -gr logo_input=("-i" "${ER_ROOT_DIRECTORY}/resources/logo_txfrmed.image")
     fi
 
+    [ -n "${RENDER_PROFILE}" ]    && declare -gr ffmpeg_profile=("-profile:v" "${RENDER_PROFILE}")
+    [ -n "${RENDER_LEVEL}" ]      && declare -gr ffmpeg_level=("-level" "${RENDER_LEVEL}")
+
     if (( RT_LIVE_PREVIEW == 1 )); then
         declare -g live_preview_splitter live_preview_args
         : "${PREVIEW_SLOWDOWN_FACTOR:=1}"

@@ -111,8 +111,8 @@ f_cmd_tmp=( \
         ffmpeg -y -f image2pipe -probesize 100M -thread_queue_size 512 -framerate "${RENDER_FPS}" -i ./tmp/gource.pipe \
         "${logo_input[@]}" \
         -filter_complex "[0:v]select${invert_filter}[default]${logo_filter_graph}${live_preview_splitter}" \
-        -map "${primary_map_label}" -vcodec libx265 -pix_fmt yuv420p -crf "${RENDER_H265_CRF}" -preset "${RENDER_H265_PRESET}" \
-        "${ER_ROOT_DIRECTORY}"/video/output.mp4 "${live_preview_args[@]}" \
+        -map "${primary_map_label}" -vcodec libx265 -pix_fmt yuv420p -crf "${RENDER_H265_CRF}" "${ffmpeg_profile[@]}" \
+        "${ffmpeg_level[@]}" -preset "${RENDER_H265_PRESET}" "${ER_ROOT_DIRECTORY}"/video/output.mp4 "${live_preview_args[@]}" \
     )
 # Sanitize array
 declare -a f_cmd=()

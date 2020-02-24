@@ -17,6 +17,8 @@ _tmp_api_dict+=( \
     RENDER_H265_PRESET \
     RENDER_INVERT_COLORS \
     RENDER_VIDEO_RESOLUTION \
+    RENDER_PROFILE \
+    RENDER_LEVEL \
 )
 # Preview Args
 _tmp_api_dict+=( \

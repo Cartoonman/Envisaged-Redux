@@ -42,6 +42,8 @@ a| `--mount type=bind,src=#/path/to/custom.log#,dst=/visualization/resources/gou
 
 | **<<Description>>**
 a| **Envisaged Redux** will skip checks for a source repo and use the provided log file as the input to Gource.
+See https://github.com/acaudwell/Gource/wiki/Custom-Log-Format[Gource's Custom Log Format Page] for more details on the file format, as well as examples.
+
 |===
 
 [discrete]
