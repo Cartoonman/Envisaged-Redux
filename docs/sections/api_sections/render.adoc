@@ -76,6 +76,39 @@ a| `21`
 |===
 
 [discrete]
+===== RENDER_PROFILE
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<String>>
+
+| **<<ExampleValue>>**
+a| `baseline`
+
+| **<<Description>>**
+| The maximum compatibility profile to set for the chosen codec.
+See https://trac.ffmpeg.org/wiki/Encode/H.264#Profile[ffmpeg docs,window=_blank] for details.
+|===
+
+[discrete]
+===== RENDER_LEVEL
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<Float>>
+
+| **<<ExampleValue>>**
+a| `3.0`
+
+| **<<Description>>**
+| The target level for the chosen codec.
+Note that there are fixed, specific supported levels, and you must specify a supported level.
+See https://trac.ffmpeg.org/wiki/Encode/H.264#Compatibility[ffmpeg docs,window=_blank] for details.
+|===
+
+[discrete]
 ===== RENDER_INVERT_COLORS
 [cols="15h,~", stripes=odd, width=100%, grid=rows]
 |===

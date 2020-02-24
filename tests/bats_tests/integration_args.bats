@@ -48,6 +48,14 @@ load common/bats_common
     integration_run RUNTIME_TEMPLATE="border" RENDER_INVERT_COLORS=0
     integration_run RUNTIME_TEMPLATE="border" RENDER_INVERT_COLORS=1
 
+    # Profile & Level
+    integration_run RENDER_LEVEL="4.0"
+    integration_run RENDER_PROFILE="main"
+    integration_run RENDER_PROFILE="baseline" RENDER_LEVEL="3.0"
+    integration_run RUNTIME_TEMPLATE="border" RENDER_LEVEL="4.0"
+    integration_run RUNTIME_TEMPLATE="border" RENDER_PROFILE="main"
+    integration_run RUNTIME_TEMPLATE="border" RENDER_PROFILE="baseline" RENDER_LEVEL="3.0"
+
     # Gource Nightly
     integration_run RUNTIME_GOURCE_NIGHTLY=0
     integration_run RUNTIME_GOURCE_NIGHTLY=1

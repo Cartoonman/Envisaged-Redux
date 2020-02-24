@@ -232,7 +232,8 @@ f_cmd_tmp=( \
         -f image2pipe -probesize 100M -thread_queue_size 512 -framerate "${RENDER_FPS}" -i "${ER_ROOT_DIRECTORY}"/tmp/overlay.pipe \
         "${logo_input[@]}" \
         -filter_complex "${f_filter_complex}" -map "${primary_map_label}" \
-        -vcodec libx265 -pix_fmt yuv420p -crf "${RENDER_H265_CRF}" -preset "${RENDER_H265_PRESET}" "${ER_ROOT_DIRECTORY}"/video/output.mp4 \
+        -vcodec libx265 -pix_fmt yuv420p -crf "${RENDER_H265_CRF}" "${ffmpeg_profile[@]}" "${ffmpeg_level[@]}" \
+        -preset "${RENDER_H265_PRESET}" "${ER_ROOT_DIRECTORY}"/video/output.mp4 \
         "${live_preview_args[@]}" \
     )
 # Sanitize array

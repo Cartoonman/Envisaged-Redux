@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### [Documentation](https://envisaged-redux.now.sh/)
 
+### Added
+- Added RENDER_PROFILE and RENDER_LEVEL
+
 ## [0.15.0] - 2020-02-22
 
 ### [Documentation](https://envisaged-redux-v0-15-0.now.sh/)
