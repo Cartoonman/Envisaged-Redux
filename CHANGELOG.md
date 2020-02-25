@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Added RENDER_PROFILE and RENDER_LEVEL
+- Added RENDER_CODEC and set default CODEC to h264, with option for h265.
 
 ## [0.15.0] - 2020-02-22
 

@@ -12,6 +12,7 @@ _tmp_api_dict+=( \
 
 # Render Args
 _tmp_api_dict+=( \
+    RENDER_CODEC \
     RENDER_FPS \
     RENDER_H265_CRF \
     RENDER_H265_PRESET \

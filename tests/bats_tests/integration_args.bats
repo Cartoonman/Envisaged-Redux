@@ -56,6 +56,12 @@ load common/bats_common
     integration_run RUNTIME_TEMPLATE="border" RENDER_PROFILE="main"
     integration_run RUNTIME_TEMPLATE="border" RENDER_PROFILE="baseline" RENDER_LEVEL="3.0"
 
+    # Codec
+    integration_run RENDER_CODEC="h264"
+    integration_run RENDER_CODEC="h265"
+    integration_run RUNTIME_TEMPLATE="border" RENDER_CODEC="h264"
+    integration_run RUNTIME_TEMPLATE="border" RENDER_CODEC="h265"
+
     # Gource Nightly
     integration_run RUNTIME_GOURCE_NIGHTLY=0
     integration_run RUNTIME_GOURCE_NIGHTLY=1

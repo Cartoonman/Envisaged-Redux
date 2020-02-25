@@ -14,6 +14,7 @@ unset inc_dir_path
 : "${RENDER_H265_CRF:=21}"
 : "${RENDER_VIDEO_RESOLUTION:=1080p}"
 : "${RENDER_FPS:=30}"
+: "${RENDER_CODEC:=h264}"
 
 # gen_gource_args
 # Generates an indexed array of gource args to pass to gource.
@@ -149,6 +150,15 @@ gen_ffmpeg_flags()
 
     [ -n "${RENDER_PROFILE}" ]    && declare -gr ffmpeg_profile=("-profile:v" "${RENDER_PROFILE}")
     [ -n "${RENDER_LEVEL}" ]      && declare -gr ffmpeg_level=("-level" "${RENDER_LEVEL}")
+
+    case ${RENDER_CODEC} in
+        h264)
+            declare -gr ffmpeg_codec="libx264"
+            ;;
+        h265)
+            declare -gr ffmpeg_codec="libx265"
+            ;;
+    esac
 
     if (( RT_LIVE_PREVIEW == 1 )); then
         declare -g live_preview_splitter live_preview_args

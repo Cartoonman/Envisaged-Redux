@@ -83,3 +83,16 @@ load common/bats_common
     assert_equal "$output" "-level 4.0"
 
 }
+
+@test "Test Codec" {
+    ffmpeg_codec=("bash" "-c" "source "${ER_ROOT_DIRECTORY}"/runtime/common/common_templates.bash; gen_ffmpeg_flags > /dev/null 2>&1; echo \"\${ffmpeg_codec[@]}\";")
+
+    output="$("${ffmpeg_codec[@]}")"
+    assert_equal "$output" "libx264"
+
+    output="$(declare -grx RENDER_CODEC="h265"; "${ffmpeg_codec[@]}")"
+    assert_equal "$output" "libx265"
+    output="$(declare -grx RENDER_CODEC="h264"; "${ffmpeg_codec[@]}")"
+    assert_equal "$output" "libx264"
+
+}
