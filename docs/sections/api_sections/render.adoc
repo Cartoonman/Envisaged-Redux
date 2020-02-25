@@ -3,6 +3,25 @@
 The rendering process can be configured using a number of Render Environment Variable. These primarily adjust and effect the FFmpeg backend.
 
 [discrete]
+===== RENDER_CODEC
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<String>>
+
+| **<<ExampleValue>>**
+a| `h265`
+
+| **<<Default>>**
+a| `h264`
+
+| **<<Description>>**
+| Output video codec.
+Supported options are `h264` and `h265`.
+|===
+
+[discrete]
 ===== RENDER_VIDEO_RESOLUTION
 [cols="15h,~", stripes=odd, width=100%, grid=rows]
 |===
