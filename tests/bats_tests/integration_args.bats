@@ -62,6 +62,10 @@ load common/bats_common
     integration_run RUNTIME_TEMPLATE="border" RENDER_CODEC="h264"
     integration_run RUNTIME_TEMPLATE="border" RENDER_CODEC="h265"
 
+    # Codec Options
+    integration_run RENDER_CODEC="h264" RENDER_H264_PRESET="veryfast" RENDER_H264_CRF="51"
+    integration_run RUNTIME_TEMPLATE="border" RENDER_CODEC="h265" RENDER_H265_CRF="1" RENDER_H265_PRESET="veryslow"
+
     # Verbosity
     integration_run RENDER_VERBOSE="1"
     integration_run RUNTIME_TEMPLATE="border" RENDER_VERBOSE="1"

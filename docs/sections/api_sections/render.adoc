@@ -2,6 +2,11 @@
 
 The rendering process can be configured using a number of Render Environment Variable. These primarily adjust and effect the FFmpeg backend.
 
+In addition to general Render settings, there are Codec-specific options available to configure:
+
+* <<_h_264_options,H.264 Options>>
+* <<_h_265_options,H.265 Options>>
+
 [discrete]
 ===== RENDER_CODEC
 [cols="15h,~", stripes=odd, width=100%, grid=rows]
@@ -56,42 +61,6 @@ a| `30`
 
 | **<<Description>>**
 | Output video Frames per Second. Supported framerates are `25`, `30`, or `60` only.
-|===
-
-[discrete]
-===== RENDER_H265_PRESET
-[cols="15h,~", stripes=odd, width=100%, grid=rows]
-|===
-
-| **<<Type>>**
-| <<String>>
-
-| **<<ExampleValue>>**
-a| `veryfast`
-
-| **<<Default>>**
-a| `medium`
-
-| **<<Description>>**
-| H.265 encoding preset. Refer to the {uri-ffmpeg-h265}[FFmpeg H265 Docs] for supported options.
-|===
-
-[discrete]
-===== RENDER_H265_CRF
-[cols="15h,~", stripes=odd, width=100%, grid=rows]
-|===
-
-| **<<Type>>**
-| <<Integer>>
-
-| **<<ExampleValue>>**
-a| `35`
-
-| **<<Default>>**
-a| `21`
-
-| **<<Description>>**
-| The Constant Rate Factor (CRF). Refer to {uri-ffmpeg-h265}[FFmpeg H265 Docs] for supported values.
 |===
 
 [discrete]
@@ -171,4 +140,70 @@ a| `1`
 | **<<Description>>**
 | When set to true, this disables the live progress bar during FFmpeg render step. 
 Should be used on headless (non-interactive) renders to avoid output log spam.
+|===
+
+==== H.264 Options
+These are environment variables to configure the H.264 (x264) codec renderer.
+
+[discrete]
+===== RENDER_H264_PRESET
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<String>>
+
+| **<<ExampleValue>>**
+a| `medium`
+
+| **<<Description>>**
+| H.264 encoding preset. Refer to the {uri-ffmpeg-h264}[FFmpeg H264 Docs,window=_blank] for supported options.
+|===
+
+[discrete]
+===== RENDER_H264_CRF
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<Integer>>
+
+| **<<ExampleValue>>**
+a| `21`
+
+| **<<Description>>**
+| The Constant Rate Factor (CRF). Refer to {uri-ffmpeg-h264}[FFmpeg H264 Docs,window=_blank] for supported values.
+|===
+
+==== H.265 Options
+These are environment variables to configure the H.265 (x265) codec renderer.
+
+[discrete]
+===== RENDER_H265_PRESET
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<String>>
+
+| **<<ExampleValue>>**
+a| `medium`
+
+| **<<Description>>**
+| H.265 encoding preset. Refer to the {uri-ffmpeg-h265}[FFmpeg H265 Docs,window=_blank] for supported options.
+|===
+
+[discrete]
+===== RENDER_H265_CRF
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<Integer>>
+
+| **<<ExampleValue>>**
+a| `21`
+
+| **<<Description>>**
+| The Constant Rate Factor (CRF). Refer to {uri-ffmpeg-h265}[FFmpeg H265 Docs,window=_blank] for supported values.
 |===
