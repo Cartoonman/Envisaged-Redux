@@ -62,6 +62,10 @@ load common/bats_common
     integration_run RUNTIME_TEMPLATE="border" RENDER_CODEC="h264"
     integration_run RUNTIME_TEMPLATE="border" RENDER_CODEC="h265"
 
+    # Verbosity
+    integration_run RENDER_VERBOSE="1"
+    integration_run RUNTIME_TEMPLATE="border" RENDER_VERBOSE="1"
+
     # Gource Nightly
     integration_run RUNTIME_GOURCE_NIGHTLY=0
     integration_run RUNTIME_GOURCE_NIGHTLY=1

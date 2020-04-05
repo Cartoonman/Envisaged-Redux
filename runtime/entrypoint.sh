@@ -12,7 +12,6 @@ readonly CUR_DIR_PATH
 source "${CUR_DIR_PATH}/common/common.bash"
 source "${CUR_DIR_PATH}/common/api_dict.bash"
 
-
 print_intro()
 {
     cat <<-'EOF'
@@ -58,7 +57,7 @@ parse_args()
         case $k in
             DEBUG)
                 declare -grix RT_DEBUG=1
-                log_warn "DEBUG Flag Invoked"
+                log_warn "DEBUG Flag Invoked."
                 ;;
             HOLD)
                 log_info "Test mode enabled. Spinning main thread. Run docker stop on container when complete."
@@ -68,12 +67,12 @@ parse_args()
                 ;;
             TEST)
                 declare -grix RT_TEST=1
-                log_warn "TEST Flag Invoked"
+                log_warn "TEST Flag Invoked."
                 mkdir -p "${ER_ROOT_DIRECTORY}"/save \
                 ;;
             NO_RUN)
                 declare -grix RT_NO_RUN=1
-                log_warn "NO_RUN Flag Invoked"
+                log_warn "NO_RUN Flag Invoked."
                 ;;
         esac
         shift
@@ -86,12 +85,15 @@ parse_configs()
     # Check runtime mode.
     echo 0 > "${ER_ROOT_DIRECTORY}"/html/live_preview
     if [[ "${RUNTIME_LIVE_PREVIEW}" == "1" ]]; then
+        log_info "Live Preview is enabled."
         declare -grix RT_LIVE_PREVIEW=1
         echo 1 > "${ER_ROOT_DIRECTORY}"/html/live_preview
     fi
 
     # Check for video saving mode
     if [ -d "${ER_ROOT_DIRECTORY}"/video ]; then
+        log_info "Video export directory is set."
+        log_warn "Will save video file into assigned export directory, then quit upon completion."
         declare -grix RT_LOCAL_OUTPUT=1
     else
         mkdir -p "${ER_ROOT_DIRECTORY}"/video
@@ -100,47 +102,47 @@ parse_configs()
     # Check which Gource release was chosed
     if [[ "${RUNTIME_GOURCE_NIGHTLY}" == "1" ]]; then
         declare -grx RT_GOURCE_EXEC='gource_nightly'
-        log_notice "Using $("${RT_GOURCE_EXEC}" -h | head -n 1) Nightly Release"
+        log_notice "Using $("${RT_GOURCE_EXEC}" -h | head -n 1) Nightly Release."
         declare -grix RT_NIGHTLY=1
     else
         declare -grx RT_GOURCE_EXEC='gource'
-        log_info "Using $("${RT_GOURCE_EXEC}" -h | head -n 1) Stable Release "
+        log_info "Using $("${RT_GOURCE_EXEC}" -h | head -n 1) Stable Release."
     fi
 
     # Check for custom Gource log input
     if [ -f "${ER_ROOT_DIRECTORY}"/resources/gource.log ]; then
-        log_info "Using provided Gource log file"
+        log_info "Using provided Gource log file."
         cp "${ER_ROOT_DIRECTORY}"/resources/gource.log "${ER_ROOT_DIRECTORY}"/tmp/gource.log
         declare -grix RT_CUSTOM_LOG=1
     fi
 
     # Check for avatar directory mount.
     if [ -d "${ER_ROOT_DIRECTORY}"/resources/avatars ]; then
-        log_info "Using avatars directory"
+        log_info "Using avatars directory."
         declare -grix RT_AVATARS=1
     fi
 
     # Check for captions
     if [ -f "${ER_ROOT_DIRECTORY}"/resources/captions.txt ]; then
-        log_info "Using captions file"
+        log_info "Using captions file."
         declare -grix RT_CAPTIONS=1
     fi
 
     # Check for default user image
     if [ -f "${ER_ROOT_DIRECTORY}"/resources/default_user.image ]; then
-        log_info "Using default user image file"
+        log_info "Using default user image file."
         declare -grix RT_DEFAULT_USER_IMAGE=1
     fi
 
     # Check for font file
     if [ -f "${ER_ROOT_DIRECTORY}"/resources/font ]; then
-        log_info "Using provided font file"
+        log_info "Using provided font file."
         declare -grix RT_FONT_FILE=1
     fi
 
     # Check for background image
     if [ -f "${ER_ROOT_DIRECTORY}"/resources/background.image ]; then
-        log_info "Using background image file"
+        log_info "Using background image file."
         declare -grix RT_BACKGROUND_IMAGE=1
     fi
 
@@ -153,7 +155,7 @@ parse_configs()
             log_error "Error: ImageMagick failed to convert the supplied logo file. Please check image file passed or convert to another format."
             exit 1
         else
-            log_success "Success. Using logo file"
+            log_success "Success. Using logo file."
             declare -grix RT_LOGO=1
         fi
     fi
@@ -282,8 +284,8 @@ start_httpd()
         curl_exit_code=$?
     done
     if (( SECONDS - watch_start > _HTTPD_TIMEOUT )); then
-        log_error "Timeout: httpd failed to start after ${_HTTPD_TIMEOUT} seconds. Observed error code ${curl_exit_code}."
-        stop_process "${_HTTPD_PID}"
+        log_error "Timeout: httpd failed to start after ${_HTTPD_TIMEOUT} seconds. Observed error code [${curl_exit_code}]."
+        stop_process ${_HTTPD_PID}
         exit 1
     fi
     log_success "httpd started successfully."
@@ -304,9 +306,9 @@ start_xvfb()
         xdpy_exit_code=$?
     done
     if (( SECONDS - watch_start > _XVFB_TIMEOUT )); then
-        log_error "Timeout: Xvfb failed to start after ${_XVFB_TIMEOUT} seconds. Observed error code ${xdpy_exit_code}."
-        stop_process "${_HTTPD_PID}"
-        stop_process "${_XVFB_PID}"
+        log_error "Timeout: Xvfb failed to start after ${_XVFB_TIMEOUT} seconds. Observed error code [${xdpy_exit_code}]."
+        stop_process ${_HTTPD_PID}
+        stop_process ${_XVFB_PID}
         exit 1
     fi
     log_success "Xvfb started successfully."
@@ -327,10 +329,13 @@ start_services()
     set -e
 
     # Trap the services so we can shut them down properly later.
-    trap 'stop_process "${_XVFB_PID}";\
-          stop_process "${_HTTPD_PID}";\
-          log_debug "Exiting with code ${EXIT_CODE} ";\
-          exit ${EXIT_CODE};' SIGINT SIGTERM
+    trap 'stop_process ${_XVFB_PID};\
+          stop_process ${_HTTPD_PID};\
+          exit 130;' SIGINT
+    trap 'stop_process ${_XVFB_PID};\
+          stop_process ${_HTTPD_PID};\
+          log_warn "Exiting with code [${EXIT_CODE}].";\
+          exit ${EXIT_CODE};' SIGTERM
     return 0
 }
 readonly -f start_services
@@ -344,17 +349,17 @@ start_render()
     if [ -n "${RUNTIME_TEMPLATE}" ]; then
         case ${RUNTIME_TEMPLATE} in
             border)
-                log_info "Using ${RUNTIME_TEMPLATE} template..."
+                log_info "Using [${RUNTIME_TEMPLATE}] template..."
                 "${ER_ROOT_DIRECTORY}"/runtime/templates/border.sh
                 EXIT_CODE=$?
                 ;;
             standard)
-                log_info "Using ${RUNTIME_TEMPLATE} template..."
+                log_info "Using [${RUNTIME_TEMPLATE}] template..."
                 "${ER_ROOT_DIRECTORY}"/runtime/templates/standard.sh
                 EXIT_CODE=$?
                 ;;
             *)
-                log_error "Unknown template option ${RUNTIME_TEMPLATE}"
+                log_error "Unknown template option [${RUNTIME_TEMPLATE}]."
                 EXIT_CODE=1
                 kill -TERM $$
                 ;;
@@ -366,7 +371,7 @@ start_render()
     fi
 
     # Clean temporary files
-    log_notice "Cleaning temporary files"
+    log_notice "Cleaning temporary files."
     rm -rf "${ER_ROOT_DIRECTORY}"/tmp
 
     (( EXIT_CODE != 0 )) && kill -TERM $$
@@ -391,8 +396,10 @@ handle_output()
     fi
 
     if (( RT_LOCAL_OUTPUT != 1 )); then
+        log_info "Output video file avaliable to download from web interface."
+        log_info "To exit, send SIGINT (Ctrl+C)."
         # Wait for httpd process to end.
-        while kill -0 "${_HTTPD_PID}" >/dev/null 2>&1; do
+        while kill -0 ${_HTTPD_PID} >/dev/null 2>&1; do
             wait
         done
     fi
@@ -439,10 +446,10 @@ main()
 
 
     # Exit
-    stop_process "${_XVFB_PID}"
-    stop_process "${_HTTPD_PID}"
-    log_debug "Exiting at end with code ${EXIT_CODE}"
-    exit "${EXIT_CODE}"
+    stop_process ${_XVFB_PID}
+    stop_process ${_HTTPD_PID}
+    log_debug "Exiting at end with code [${EXIT_CODE}]."
+    exit ${EXIT_CODE}
 }
 readonly -f main
 

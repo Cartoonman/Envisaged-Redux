@@ -31,7 +31,8 @@ What makes **Envisaged Redux** stand out from other similar containerized applic
 
 Head over to link:#_getting_started[Getting Started] for a fast track tutorial.
 
-Official source repository for this project is on https://gitlab.com/Cartoonman/Envisaged-Redux[Gitlab,window=_blank] with a mirror on https://github.com/Cartoonman/Envisaged-Redux[Github,window=_blank].
+Official source repository for this project is on https://gitlab.com/Cartoonman/Envisaged-Redux[GitLab,window=_blank] with a mirror on https://github.com/Cartoonman/Envisaged-Redux[GitHub,window=_blank].
+Docker images avaliable on https://hub.docker.com/r/cartoonman/envisaged-redux[Docker Hub].
 
 
 .Key features include: 

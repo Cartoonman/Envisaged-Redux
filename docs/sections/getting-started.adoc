@@ -24,7 +24,7 @@ Git:: link:https://git-scm.com/book/en/v2/Getting-Started-Installing-Git[Install
 
 [source,shell]
 ----
-docker pull cartoonman/envisaged_redux:latest
+docker pull cartoonman/envisaged-redux:latest
 ----
 
 --

@@ -13,8 +13,8 @@ source "${CUR_DIR_PATH}/../common/common_templates.bash"
 exit_handler()
 {
     # Exit Gource if still alive.
-    stop_process "${_G_PID}"
-    stop_process "${_F_PID}"
+    stop_process ${_G_PID}
+    stop_process ${_F_PID}
     log_debug "Render process returning with code ${EXIT_CODE}"
     exit "${EXIT_CODE}"
 }
@@ -61,18 +61,18 @@ gen_gource_args
 
 declare -ig _G_PID _F_PID
 
-trap 'stop_process "${_G_PID}";\
-      stop_process "${_F_PID}";\
+trap 'stop_process ${_G_PID};\
+      stop_process ${_F_PID};\
       log_error "Error occured during render stage.";\
       exit 1;' SIGTRAP
 
-trap 'stop_process "${_G_PID}";\
-      stop_process "${_F_PID}";\
-      log_notice "Received SIGINT";\
+trap 'stop_process ${_G_PID};\
+      stop_process ${_F_PID};\
+      log_notice "Received SIGINT.";\
       exit 1;' SIGINT
 
 
-log_notice "Starting Gource primary with title [${GOURCE_TITLE}]"
+log_notice "Starting Gource primary with title [${GOURCE_TITLE}]."
 g_cmd_tmp=( \
         "${RT_GOURCE_EXEC}" \
         --"${gource_res}" \
@@ -104,11 +104,12 @@ if (( RT_NO_RUN != 1 )); then
 fi
 
 # Start ffmpeg
-log_notice "Rendering video pipe.."
+log_notice "Rendering video pipe..."
 mkdir -p "${ER_ROOT_DIRECTORY}"/video
 # [0:v]: gource, [1:v]: logo
 f_cmd_tmp=( \
-        ffmpeg -y -f image2pipe -probesize 100M -thread_queue_size 512 -framerate "${RENDER_FPS}" -i ./tmp/gource.pipe \
+        ffmpeg -hide_banner -nostats "${ffmpeg_progress[@]}" -loglevel "${ffmpeg_verbosity}" -y \
+        -f image2pipe -probesize 100M -thread_queue_size 512 -framerate "${RENDER_FPS}" -i ./tmp/gource.pipe \
         "${logo_input[@]}" \
         -filter_complex "[0:v]select${invert_filter}[default]${logo_filter_graph}${live_preview_splitter}" \
         -map "${primary_map_label}" -vcodec "${ffmpeg_codec}" -pix_fmt yuv420p -crf "${RENDER_H265_CRF}" "${ffmpeg_profile[@]}" \
@@ -130,12 +131,25 @@ if (( RT_NO_RUN != 1 )); then
         "${f_cmd[@]}"
         f_exit_code=$?
         if (( f_exit_code != 0 )); then
-            log_error "FFmpeg encountered an error"
+            log_error "FFmpeg encountered an error."
             kill -s SIGTRAP $$
         fi
     ) &
     _F_PID=$!
-    wait "${_F_PID}" "${_G_PID}"
+    # Handle live progress if required.
+    if [ "${RENDER_NO_PROGRESS}" != "1" ]; then
+        while [ -e "/proc/${_F_PID}" ] && [ -e "/proc/${_G_PID}" ]; do
+            while read -r -u ${fd_in} line; do
+                ffmpeg_progress_display "${line}"
+            done
+            sleep 0.25
+        done
+        # Close file descriptors
+        exec {fd_out}>&-
+        exec {fd_in}<&-
+        printf "\n"
+    fi
+    wait ${_F_PID} ${_G_PID}
 fi
 
 if (( EXIT_CODE != 0 )); then

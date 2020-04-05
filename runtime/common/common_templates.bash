@@ -182,8 +182,49 @@ gen_ffmpeg_flags()
                 -hls_time 1 -hls_list_size 10 -start_number 0 ./html/preview.m3u8 \
         )
     fi
-
     readonly primary_map_label
+
+    if [ "${RENDER_NO_PROGRESS}" != "1" ]; then
+        if (( RT_TEST == 1 )); then # Test fixture since I don't know if Bash autoallocation of fd is determinstic.
+            fd_out=10
+            fd_in=11
+        else
+            exec {fd_out}> "${ER_ROOT_DIRECTORY}"/tmp/ffmpeg_progress
+            exec {fd_in}< "${ER_ROOT_DIRECTORY}"/tmp/ffmpeg_progress
+        fi
+        typeset -gr fd_out fd_in
+        declare -gar ffmpeg_progress=("-progress" "pipe:${fd_out}")
+    fi
+    [ "${RENDER_VERBOSE}" = "1" ] && ffmpeg_verbosity="info" || ffmpeg_verbosity="warning"
+    typeset -gr ffmpeg_verbosity
+
     return 0
 }
 readonly -f gen_ffmpeg_flags
+
+ffmpeg_progress_display()
+{
+    #declare line_to_process="$( printf "$1" | awk '{printf("%s",$0);}' )"
+    declare -gA fpd_stats
+    readarray -d '=' -t line_tuple <<< "$1"
+    line_tuple[1]="${line_tuple[1]//[$'\n ']}"
+    fpd_stats[${line_tuple[0]}]="${line_tuple[1]}"
+    case ${line_tuple[0]} in
+        progress)
+            fpd_stats[total_size]="$( numfmt --to=iec ${fpd_stats[total_size]} )"
+            declare tmp_var
+            readarray -d '.' -t tmp_var <<< "${fpd_stats[out_time]}"
+            fpd_stats[out_time]="${tmp_var[0]}"
+            printf "%b  Frame %-4s (%8s) | %5sfps (%6s) | Size %-6s (%13s)\r" \
+                "${_ER_INFO_STRING}" \
+                "${fpd_stats[frame]}" \
+                "${fpd_stats[out_time]}" \
+                "${fpd_stats[fps]}" \
+                "${fpd_stats[speed]}" \
+                "${fpd_stats[total_size]}" \
+                "${fpd_stats[bitrate]}"
+            ;;
+    esac
+    return 0
+}
+readonly -f ffmpeg_progress_display
