@@ -65,3 +65,4 @@ docker run --rm -it \
     "${env_vars[@]}" \
     "${args[@]}" \
     cartoonman/envisaged-redux:latest
+exit $?

@@ -13,7 +13,7 @@ readonly -f print_help
 
 parse_args()
 {
-    declare -ag args=()
+    args=()
     while (( $# > 0 )); do
         key="$1"
 
@@ -74,7 +74,7 @@ readonly -f print_help
 
 env_vars_declare()
 {
-    declare -ga env_vars=()
+    env_vars=()
     while [[ $# -gt 0 ]]; do
         env_vars+=("-e")
         env_vars+=("$1=$2")

@@ -13,11 +13,11 @@ source "${CUR_DIR_PATH}/../common/common_templates.bash"
 exit_handler()
 {
     # Exit Processes if still alive.
-    stop_process "${_G1_PID}"
-    stop_process "${_G2_PID}"
-    stop_process "${_F_PID}"
-    log_debug "Render process returning with code ${EXIT_CODE}"
-    exit "${EXIT_CODE}"
+    stop_process ${_G1_PID}
+    stop_process ${_G2_PID}
+    stop_process ${_F_PID}
+    log_debug "Render process returning with code [${EXIT_CODE}]."
+    exit ${EXIT_CODE}
 }
 readonly -f exit_handler
 
@@ -136,20 +136,20 @@ GOURCE_FOLLOW_USER="${gource_follow_user_backup}"
 
 declare -ig _G1_PID _G2_PID _F_PID
 
-trap 'stop_process "${_G1_PID}";\
-      stop_process "${_G2_PID}";\
-      stop_process "${_F_PID}";\
+trap 'stop_process ${_G1_PID};\
+      stop_process ${_G2_PID};\
+      stop_process ${_F_PID};\
       log_error "Error occured during render stage.";\
       exit 1;' SIGTRAP
 
-trap 'stop_process "${_G1_PID}";\
-      stop_process "${_G2_PID}";\
-      stop_process "${_F_PID}";\
-      log_notice "Received SIGINT";\
-      exit 1;' SIGINT
+trap 'stop_process ${_G1_PID};\
+      stop_process ${_G2_PID};\
+      stop_process ${_F_PID};\
+      log_notice "Received SIGINT.";\
+      exit 130;' SIGINT
 
 # Start Gource for visualization.
-log_notice "Starting Gource primary with title [${GOURCE_TITLE}]"
+log_notice "Starting Gource primary with title [${GOURCE_TITLE}]."
 g1_cmd_tmp=( \
         "${RT_GOURCE_EXEC}" \
         --"${gource_res}" \
@@ -173,7 +173,7 @@ if (( RT_NO_RUN != 1 )); then
         "${g1_cmd[@]}" - >"${ER_ROOT_DIRECTORY}"/tmp/gource.pipe
         g1_exit_code=$?
         if (( g1_exit_code != 0 )); then
-            log_error "Gource encountered an error. ${g1_exit_code}"
+            log_error "Gource encountered an error. Exit code: [${g1_exit_code}]."
             kill -s SIGTRAP $$
         fi
     ) &
@@ -181,7 +181,7 @@ if (( RT_NO_RUN != 1 )); then
 fi
 
 # Start Gource for the overlay elements.
-log_notice "Starting Gource secondary for overlay components"
+log_notice "Starting Gource secondary for overlay components."
 g2_cmd_tmp=( \
         "${RT_GOURCE_EXEC}" \
         --"${overlay_res}" \
@@ -206,7 +206,7 @@ if (( RT_NO_RUN != 1 )); then
         "${g2_cmd[@]}" - >"${ER_ROOT_DIRECTORY}"/tmp/overlay.pipe
         g2_exit_code=$?
         if (( g2_exit_code != 0 )); then
-            log_error "Gource overlay encountered an error. ${g2_exit_code}"
+            log_error "Gource overlay encountered an error. Exit code: [${g2_exit_code}]."
             kill -s SIGTRAP $$
         fi
     ) &
@@ -227,8 +227,10 @@ f_filter_complex="$( \
         "[key][center]hstack[with_key];" \
         "[date][with_key]vstack[default]${logo_filter_graph}${live_preview_splitter}" \
 )"
+# -hide_banner -nostats <<- maintain forever. -progress pipe:${fd_out} <<- Enable progress --> adjust this verbocity. -loglevel warning/info
 f_cmd_tmp=( \
-        ffmpeg -y -f image2pipe -probesize 100M -thread_queue_size 512 -framerate "${RENDER_FPS}" -i "${ER_ROOT_DIRECTORY}"/tmp/gource.pipe \
+        ffmpeg -hide_banner -nostats "${ffmpeg_progress[@]}" -loglevel "${ffmpeg_verbosity}" -y \
+        -f image2pipe -probesize 100M -thread_queue_size 512 -framerate "${RENDER_FPS}" -i "${ER_ROOT_DIRECTORY}"/tmp/gource.pipe \
         -f image2pipe -probesize 100M -thread_queue_size 512 -framerate "${RENDER_FPS}" -i "${ER_ROOT_DIRECTORY}"/tmp/overlay.pipe \
         "${logo_input[@]}" \
         -filter_complex "${f_filter_complex}" -map "${primary_map_label}" \
@@ -252,12 +254,25 @@ if (( RT_NO_RUN != 1 )); then
         "${f_cmd[@]}"
         f_exit_code=$?
         if (( f_exit_code != 0 )); then
-            log_error "FFmpeg encountered an error"
+            log_error "FFmpeg encountered an error. Exit code: [${f_exit_code}]."
             kill -s SIGTRAP $$
         fi
     ) &
     _F_PID=$!
-    wait "${_F_PID}" "${_G1_PID}" "${_G2_PID}"
+    # Handle live progress if required.
+    if [ "${RENDER_NO_PROGRESS}" != "1" ]; then
+        while [ -e "/proc/${_F_PID}" ] && [ -e "/proc/${_G1_PID}" ] && [ -e "/proc/${_G2_PID}" ]; do
+            while read -r -u ${fd_in} line; do
+                ffmpeg_progress_display "${line}"
+            done
+            sleep 0.25
+        done
+        # Close file descriptors
+        exec {fd_out}>&-
+        exec {fd_in}<&-
+        printf "\n"
+    fi
+    wait ${_F_PID} ${_G1_PID} ${_G2_PID}
 fi
 
 if (( EXIT_CODE != 0 )); then

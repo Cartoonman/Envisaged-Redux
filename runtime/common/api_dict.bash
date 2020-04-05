@@ -20,6 +20,8 @@ _tmp_api_dict+=( \
     RENDER_VIDEO_RESOLUTION \
     RENDER_PROFILE \
     RENDER_LEVEL \
+    RENDER_VERBOSE \
+    RENDER_NO_PROGRESS \
 )
 # Preview Args
 _tmp_api_dict+=( \

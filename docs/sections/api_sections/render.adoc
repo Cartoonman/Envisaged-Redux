@@ -141,3 +141,34 @@ a| `1`
 | **<<Description>>**
 | Applies a color inversion filter on the video output.
 |===
+
+[discrete]
+===== RENDER_VERBOSE
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>**
+| Enables verbose output from FFmpeg render step.
+|===
+
+[discrete]
+===== RENDER_NO_PROGRESS
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>**
+| When set to true, this disables the live progress bar during FFmpeg render step. 
+Should be used on headless (non-interactive) renders to avoid output log spam.
+|===

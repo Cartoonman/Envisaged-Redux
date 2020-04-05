@@ -10,6 +10,16 @@ readonly CUR_DIR_PATH
 
 set -e
 
+print_help ()
+{
+    cat <<-"EOF"
+Args:
+--test-args [ARG [ARG...]] --
+Propagates the given ARG's to the test shellscript command.
+EOF
+}
+readonly -f print_help
+
 test_flag=0
 
 while [[ $# -gt 0 ]]; do
@@ -20,6 +30,14 @@ while [[ $# -gt 0 ]]; do
             ;;
         --)
             test_flag=0
+            ;;
+        --help)
+            print_help
+            exit 1
+            ;;
+        -h)
+            print_help
+            exit 1
             ;;
         *)
             if (( test_flag == 1 )); then
