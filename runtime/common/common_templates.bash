@@ -10,8 +10,6 @@ source "${inc_dir_path}/common.bash"
 unset inc_dir_path
 
 # Assign defaults if not set
-: "${RENDER_H265_PRESET:=medium}"
-: "${RENDER_H265_CRF:=21}"
 : "${RENDER_VIDEO_RESOLUTION:=1080p}"
 : "${RENDER_FPS:=30}"
 : "${RENDER_CODEC:=h264}"
@@ -113,25 +111,10 @@ readonly -f gen_gource_args
 
 # gen_ffmpeg_flags
 # Sets a number of variables and flags used by the ffmepg execution step.
-#
-#
-# Consumes:
-#   RENDER_INVERT_COLORS
-#   LOGO
-#   LIVE_PREVIEW
-#   PREVIEW_SLOWDOWN_FACTOR (optional)
-#   RENDER_FPS
-#   logo_ffmpeg_label
-# Arguments:
-#   none
-# Outputs:
-#   invert_filter (depend -> RENDER_INVERT_COLORS)
-#   primary_map_label
-#   logo_filter_graph (depend -> LOGO)
-#   live_preview_args (depend -> LIVE_PREVIEW)
-#   live_preview_splitter (depend -> LIVE_PREVIEW)
 gen_ffmpeg_flags()
 {
+    # Filter Section
+    # This section handles variables that modify the filtering routine in FFmpeg. 
     if [ "${RENDER_INVERT_COLORS}" == "1" ]; then
         declare -gr invert_filter=",lutrgb=r=negval:g=negval:b=negval"
     fi
@@ -148,18 +131,7 @@ gen_ffmpeg_flags()
         declare -gr logo_input=("-i" "${ER_ROOT_DIRECTORY}/resources/logo_txfrmed.image")
     fi
 
-    [ -n "${RENDER_PROFILE}" ]    && declare -gr ffmpeg_profile=("-profile:v" "${RENDER_PROFILE}")
-    [ -n "${RENDER_LEVEL}" ]      && declare -gr ffmpeg_level=("-level" "${RENDER_LEVEL}")
-
-    case ${RENDER_CODEC} in
-        h264)
-            declare -gr ffmpeg_codec="libx264"
-            ;;
-        h265)
-            declare -gr ffmpeg_codec="libx265"
-            ;;
-    esac
-
+    # Handling of Live Preview variables.    
     if (( RT_LIVE_PREVIEW == 1 )); then
         declare -g live_preview_splitter live_preview_args
         : "${PREVIEW_SLOWDOWN_FACTOR:=1}"
@@ -182,8 +154,29 @@ gen_ffmpeg_flags()
                 -hls_time 1 -hls_list_size 10 -start_number 0 ./html/preview.m3u8 \
         )
     fi
+    # This is the end of modification to the primary_map_label.
     readonly primary_map_label
 
+    # Handling of general FFmpeg render varaibles
+    [ -n "${RENDER_PROFILE}" ]    && declare -gr ffmpeg_profile=("-profile:v" "${RENDER_PROFILE}")
+    [ -n "${RENDER_LEVEL}" ]      && declare -gr ffmpeg_level=("-level" "${RENDER_LEVEL}")
+
+    # Selection of RENDER_CODEC and associated options therein.
+    declare -ga ffmpeg_codec_options=()
+    case ${RENDER_CODEC} in
+        h264)
+            declare -gr ffmpeg_codec="libx264"
+            [ -n "${RENDER_H264_PRESET}" ]      && ffmpeg_codec_options+=("-preset" "${RENDER_H264_PRESET}")
+            [ -n "${RENDER_H264_CRF}" ]         && ffmpeg_codec_options+=("-crf" "${RENDER_H264_CRF}")
+            ;;
+        h265)
+            declare -gr ffmpeg_codec="libx265"
+            [ -n "${RENDER_H265_PRESET}" ]      && ffmpeg_codec_options+=("-preset" "${RENDER_H265_PRESET}")
+            [ -n "${RENDER_H265_CRF}" ]         && ffmpeg_codec_options+=("-crf" "${RENDER_H265_CRF}")
+            ;;
+    esac
+
+    # Handling Progress file descriptors for FFmpeg.
     if [ "${RENDER_NO_PROGRESS}" != "1" ]; then
         if (( RT_TEST == 1 )); then # Test fixture since I don't know if Bash autoallocation of fd is determinstic.
             fd_out=10
@@ -195,6 +188,7 @@ gen_ffmpeg_flags()
         typeset -gr fd_out fd_in
         declare -gar ffmpeg_progress=("-progress" "pipe:${fd_out}")
     fi
+    # Verbosity of FFmpeg output
     [ "${RENDER_VERBOSE}" = "1" ] && ffmpeg_verbosity="info" || ffmpeg_verbosity="warning"
     typeset -gr ffmpeg_verbosity
 

@@ -2,6 +2,7 @@
 :uri-gource-docs: https://github.com/acaudwell/Gource/blob/master/README
 :uri-gource: https://github.com/acaudwell/Gource
 :uri-ffmpeg-h265: https://trac.ffmpeg.org/wiki/Encode/H.265
+:uri-ffmpeg-h264: https://trac.ffmpeg.org/wiki/Encode/H.264
 :xrefstyle: basic
 
 

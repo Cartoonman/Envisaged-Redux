@@ -14,7 +14,9 @@ _tmp_api_dict+=( \
 _tmp_api_dict+=( \
     RENDER_CODEC \
     RENDER_FPS \
+    RENDER_H264_CRF \
     RENDER_H265_CRF \
+    RENDER_H264_PRESET \
     RENDER_H265_PRESET \
     RENDER_INVERT_COLORS \
     RENDER_VIDEO_RESOLUTION \
