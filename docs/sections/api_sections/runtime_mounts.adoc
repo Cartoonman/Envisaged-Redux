@@ -22,11 +22,14 @@ a| `--mount type=bind,src=#/path/to/vcs_source(s)_dir#,dst=/visualization/resour
 
 | **<<Description>>**
 a| Mounts the path to a single VCS repo, or a directory of multiple VCS repos in subdirectories for multi-repo visualizations.
+--
 Currently **Envisaged Redux** only supports Git repositories.
 
 TIP: When running a multi-repo scenario, add `root` to <<_gource_hide_items,GOURCE_HIDE_ITEMS>> to visually separate multiple repos.
+--
 |===
 
+[discrete]
 ===== Custom Log
 [cols="15h,~", stripes=even, width=100%, grid=rows]
 |===
@@ -43,7 +46,6 @@ a| `--mount type=bind,src=#/path/to/custom.log#,dst=/visualization/resources/gou
 | **<<Description>>**
 a| **Envisaged Redux** will skip checks for a source repo and use the provided log file as the input to Gource.
 See https://github.com/acaudwell/Gource/wiki/Custom-Log-Format[Gource's Custom Log Format Page] for more details on the file format, as well as examples.
-
 |===
 
 [discrete]
@@ -133,9 +135,10 @@ a| `--mount type=bind,src=#/path/to/image.png#,dst=/visualization/resources/back
 a| `--mount type=bind,src=#/path/to/image.png#,dst=/visualization/resources/default_user.image,readonly`
 
 | **<<Description>>**
-a| Gource will try given image file to use as the default user image for all users in the visualization scene.
-
+a|Gource will try given image file to use as the default user image for all users in the visualization scene.
+--
 TIP: Add <<_gource_color_images,GOURCE_COLOR_IMAGES>> to have Gource apply a random color fill to each user with the given default image.
+--
 |===
 
 [discrete]
@@ -155,7 +158,6 @@ a| `--mount type=bind,src=#/path/to/font.ttf#,dst=/visualization/resources/font,
 | **<<Description>>**
 | Gource will use the provided font file as the text font used in the visualization.
 Compatible with most font types supported by FreeType, including `.ttf` and `.odf` formats.
-
 |===
 
 [discrete]

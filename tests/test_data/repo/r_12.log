@@ -1,0 +1,60 @@
+1358795000|John Doe|A|/repo1/Makefile|227CFF
+1358795000|John Doe|A|/repo1/README.md|227CFF
+1358798258|John Doe|A|/repo1/include/test1.hpp|227CFF
+1358798258|John Doe|A|/repo1/include/test2.hpp|227CFF
+1358798258|John Doe|A|/repo1/include/test3.hpp|227CFF
+1358798258|John Doe|A|/repo1/src/test1.cpp|227CFF
+1358798258|John Doe|A|/repo1/src/test2.cpp|227CFF
+1358798258|John Doe|A|/repo1/src/test3.cpp|227CFF
+1358801237|John Doe|M|/repo1/include/test1.hpp|227CFF
+1358801237|John Doe|M|/repo1/include/test2.hpp|227CFF
+1358801237|John Doe|M|/repo1/include/test3.hpp|227CFF
+1358801237|John Doe|M|/repo1/src/test1.cpp|227CFF
+1358801237|John Doe|M|/repo1/src/test2.cpp|227CFF
+1358801237|John Doe|M|/repo1/src/test3.cpp|227CFF
+1358808146|John Doe|M|/repo1/README.md|227CFF
+1358838062|OtherPerson|M|/repo1/README.md|227CFF
+1358856455|Third|M|/repo1/src/test1.cpp|227CFF
+1358856455|Third|M|/repo1/src/test3.cpp|227CFF
+1358860896|John Doe|M|/repo1/src/test1.cpp|227CFF
+1358860896|John Doe|M|/repo1/src/test2.cpp|227CFF
+1358860896|John Doe|M|/repo1/src/test3.cpp|227CFF
+1358864761|OtherPerson|A|/repo1/src/p1/test1.cpp|227CFF
+1358893633|John Doe|A|/repo2/Makefile|F81146
+1358893633|John Doe|A|/repo2/README.md|F81146
+1358897691|John Doe|A|/repo2/include/test1.hpp|F81146
+1358897691|John Doe|A|/repo2/include/test2.hpp|F81146
+1358897691|John Doe|A|/repo2/include/test3.hpp|F81146
+1358897691|John Doe|A|/repo2/src/test1.cpp|F81146
+1358897691|John Doe|A|/repo2/src/test2.cpp|F81146
+1358897691|John Doe|A|/repo2/src/test3.cpp|F81146
+1358917484|Jane Doe|A|/repo3/Makefile|F3058A
+1358917484|Jane Doe|A|/repo3/README.md|F3058A
+1358919687|Jane Doe|A|/repo3/include/test1.hpp|F3058A
+1358919687|Jane Doe|A|/repo3/include/test2.hpp|F3058A
+1358919687|Jane Doe|A|/repo3/include/test3.hpp|F3058A
+1358919687|Jane Doe|A|/repo3/src/test1.cpp|F3058A
+1358919687|Jane Doe|A|/repo3/src/test2.cpp|F3058A
+1358919687|Jane Doe|A|/repo3/src/test3.cpp|F3058A
+1358925170|John Doe|M|/repo3/include/test1.hpp|F3058A
+1358925170|John Doe|M|/repo3/include/test2.hpp|F3058A
+1358925170|John Doe|M|/repo3/include/test3.hpp|F3058A
+1358925170|John Doe|M|/repo3/src/test1.cpp|F3058A
+1358925170|John Doe|M|/repo3/src/test2.cpp|F3058A
+1358925170|John Doe|M|/repo3/src/test3.cpp|F3058A
+1358944296|John Doe|M|/repo3/README.md|F3058A
+1358949365|OtherPerson|M|/repo2/README.md|F81146
+1358955766|Third|M|/repo3/src/test1.cpp|F3058A
+1358955766|Third|M|/repo3/src/test3.cpp|F3058A
+1358971587|John Doe|M|/repo2/src/test1.cpp|F81146
+1358971587|John Doe|M|/repo2/src/test2.cpp|F81146
+1358971587|John Doe|M|/repo2/src/test3.cpp|F81146
+1358974737|OtherPerson|A|/repo3/src/p1/test1.cpp|F3058A
+1359015912|John Doe|A|/repo1/.gitmodules|227CFF
+1359015912|John Doe|A|/repo1/src/submod1|227CFF
+1359033082|OtherPerson|A|/repo1/LICENSE|227CFF
+1359033082|OtherPerson|M|/repo1/README.md|227CFF
+1359085257|John Doe|M|/repo1/README.md|227CFF
+1359085257|John Doe|M|/repo1/src/submod1|227CFF
+1359167873|John Doe|M|/repo1/LICENSE|227CFF
+1359167873|John Doe|M|/repo1/src/submod1|227CFF

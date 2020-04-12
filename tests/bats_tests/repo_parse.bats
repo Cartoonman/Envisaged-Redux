@@ -15,16 +15,24 @@ load common/bats_common
     # Baseline Recurse
     repo_run 
     repo_run RUNTIME_RECURSE_SUBMODULES=1
+    repo_run RUNTIME_COLOR_GROUPS=1 COLOR_GROUPS_SEED=577
+    repo_run RUNTIME_COLOR_GROUPS=1 COLOR_GROUPS_SEED=577 RUNTIME_RECURSE_SUBMODULES=1
+
     # Control
     rm "${ER_ROOT_DIRECTORY}"/resources/vcs_source
     ln -sf "${ER_ROOT_DIRECTORY}"/git_sandbox/repo2 "${ER_ROOT_DIRECTORY}"/resources/vcs_source
     repo_run 
     repo_run RUNTIME_RECURSE_SUBMODULES=1
+    repo_run RUNTIME_COLOR_GROUPS=1 COLOR_GROUPS_SEED=577 
+    repo_run RUNTIME_COLOR_GROUPS=1 COLOR_GROUPS_SEED=577 COLOR_GROUPS_CENTER_COLOR="F0C000"
+    repo_run RUNTIME_COLOR_GROUPS=1 COLOR_GROUPS_SEED=577 RUNTIME_RECURSE_SUBMODULES=1
     # Multi Setting
     rm "${ER_ROOT_DIRECTORY}"/resources/vcs_source
     ln -sf "${ER_ROOT_DIRECTORY}"/git_sandbox "${ER_ROOT_DIRECTORY}"/resources/vcs_source
     repo_run 
     repo_run RUNTIME_RECURSE_SUBMODULES=1
+    repo_run RUNTIME_COLOR_GROUPS=1 COLOR_GROUPS_SEED=577
+    repo_run RUNTIME_COLOR_GROUPS=1 COLOR_GROUPS_SEED=577 RUNTIME_RECURSE_SUBMODULES=1
 
     rm "${ER_ROOT_DIRECTORY}"/resources/vcs_source
     mv "${ER_ROOT_DIRECTORY}"/old_vcs_source "${ER_ROOT_DIRECTORY}"/resources/vcs_source

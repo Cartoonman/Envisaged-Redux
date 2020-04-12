@@ -173,99 +173,159 @@ readonly -f parse_configs
 
 process_single_repo()
 {
-    declare -i submod_count=0
+    if [ -n "$1" ]; then
+        declare dir="$1"
+        declare dir_slash_suffix="${dir}/"
+        declare dir_slash_prefix="/${dir}"
+        log_notice "Checking ${dir}... "
+        if [ ! -d "${ER_ROOT_DIRECTORY}"/resources/vcs_source/"${dir}"/.git ]; then
+            log_warn "${ER_ROOT_DIRECTORY}/vcs_source/${dir} is not a git repo, Skipping..."
+            return 0
+        fi
+    fi
     if [[ "${RUNTIME_RECURSE_SUBMODULES}" == "1" ]]; then
-        log_info "Recursing through submodules."
+        [ -z "${dir}" ] && log_info "Recursing through submodules." || log_info "Recursing through submodules in ${dir}"
         declare -a submod_paths=()
-        git -C "${ER_ROOT_DIRECTORY}"/resources/vcs_source submodule foreach --recursive '( echo "submod_paths+=($displaypath)" >> '"${ER_ROOT_DIRECTORY}"'/submods.bash )'
+        git -C "${ER_ROOT_DIRECTORY}"/resources/vcs_source/"${dir}" submodule foreach --recursive '( echo "submod_paths+=($displaypath)" >> '"${ER_ROOT_DIRECTORY}"'/submods.bash )'
         if [ ! -f "${ER_ROOT_DIRECTORY}"/submods.bash ]; then
-            log_warn "No submodules found. Continuing..."
+            [ -z "${dir}" ] && log_warn "No submodules found. Continuing..." || log_warn "No submodules found in ${dir}. Continuing..."
         else
             source submods.bash
-            rm  submods.bash
+            rm submods.bash
         fi
-        declare -a logs=()
         submod_paths+=('') # include parent of course
         for submod_path in "${submod_paths[@]}"; do
-            ((++submod_count))
-            "${RT_GOURCE_EXEC}" --output-custom-log "${ER_ROOT_DIRECTORY}"/tmp/gource"${submod_count}".log "${ER_ROOT_DIRECTORY}"/resources/vcs_source/"${submod_path}"
+            ((++total_count))
+            "${RT_GOURCE_EXEC}" --output-custom-log "${ER_ROOT_DIRECTORY}"/tmp/gource"${total_count}".log "${ER_ROOT_DIRECTORY}"/resources/vcs_source/"${dir}"/"${submod_path}"
             if [ -n "${submod_path}" ]; then
-                sed -i -r "s#(.+)\|#\1|/${submod_path}#" "${ER_ROOT_DIRECTORY}"/tmp/gource"${submod_count}".log
+                sed -i -r "s#(.+)\|#\1|/${dir_slash_suffix}${submod_path}#" "${ER_ROOT_DIRECTORY}"/tmp/gource"${total_count}".log
+                ((++submod_count))
+            else
+                sed -i -r "s#(.+)\|#\1|${dir_slash_prefix}#" "${ER_ROOT_DIRECTORY}"/tmp/gource${total_count}.log
             fi
-            logs+=("${ER_ROOT_DIRECTORY}/tmp/gource${submod_count}.log")
+            logs+=("${ER_ROOT_DIRECTORY}/tmp/gource${total_count}.log")
         done
-        ((submod_count--)) # Account for repo itself
-        sort -n "${logs[@]}" > "${ER_ROOT_DIRECTORY}"/tmp/gource.log
-        rm "${logs[@]}"
     else
         # Single repo no submods - simple case.
-        "${RT_GOURCE_EXEC}" --output-custom-log "${ER_ROOT_DIRECTORY}"/tmp/gource.log "${ER_ROOT_DIRECTORY}"/resources/vcs_source
+        ((++total_count))
+        "${RT_GOURCE_EXEC}" --output-custom-log "${ER_ROOT_DIRECTORY}"/tmp/gource"${total_count}".log "${ER_ROOT_DIRECTORY}"/resources/vcs_source/"${dir}"
+        sed -i -r "s#(.+)\|#\1|${dir_slash_prefix}#" "${ER_ROOT_DIRECTORY}"/tmp/gource${total_count}.log
+        logs+=("${ER_ROOT_DIRECTORY}/tmp/gource${total_count}.log")
     fi
-    log_success "Processed 1 repo and ${submod_count} submodules."
     return 0
 }
 readonly -f process_single_repo
 
-process_multi_repo()
+multi_color_generator()
 {
-    declare -i total_count=0
-    declare -i submod_count=0
-    declare -a logs=()
-    while read -r dir; do
-        log_notice "Checking ${dir}... "
-        if [ ! -d "${ER_ROOT_DIRECTORY}"/resources/vcs_source/"${dir}"/.git ]; then
-            log_warn "${ER_ROOT_DIRECTORY}/vcs_source/${dir} is not a git repo, Skipping..."
-            continue
-        fi
-        if [[ "${RUNTIME_RECURSE_SUBMODULES}" == "1" ]]; then
-            log_info "Recursing through submodules in ${dir}"
-            declare -a submod_paths=()
-            git -C "${ER_ROOT_DIRECTORY}"/resources/vcs_source/"${dir}" submodule foreach --recursive '( echo "submod_paths+=($displaypath)" >> '"${ER_ROOT_DIRECTORY}"'/submods.bash )'
-            if [ ! -f "${ER_ROOT_DIRECTORY}"/submods.bash ]; then
-                log_warn "No submodules found in ${dir}. Continuing..."
-            else
-                source submods.bash
-                rm submods.bash
-            fi
-            submod_paths+=('') # include parent of course
-            for submod_path in "${submod_paths[@]}"; do
-                ((++total_count))
-                "${RT_GOURCE_EXEC}" --output-custom-log "${ER_ROOT_DIRECTORY}"/tmp/gource"${total_count}".log "${ER_ROOT_DIRECTORY}"/resources/vcs_source/"${dir}"/"${submod_path}"
-                if [ -n "${submod_path}" ]; then
-                    sed -i -r "s#(.+)\|#\1|/${dir}/${submod_path}#" "${ER_ROOT_DIRECTORY}"/tmp/gource${total_count}.log
-                    ((++submod_count))
-                else
-                    sed -i -r "s#(.+)\|#\1|/${dir}#" "${ER_ROOT_DIRECTORY}"/tmp/gource${total_count}.log
-                fi
-                logs+=("${ER_ROOT_DIRECTORY}/tmp/gource${total_count}.log")
-            done
+    log_info "Multi-color directory generator enabled."
+    [ -n "${COLOR_GROUPS_SEED}" ] && RANDOM=${COLOR_GROUPS_SEED}
+    declare -i mc_red mc_green mc_blue
+    declare str_red str_green str_blue str_hex
+    declare -i diff_a diff_b diff_c max_val min_val
+    declare default_hex_color="#FFFFFF"
+    declare -a dir_list parent_dir_list
+
+    [ -n "${COLOR_GROUPS_CENTER_COLOR}" ] && default_hex_color="#${COLOR_GROUPS_CENTER_COLOR}"
+
+    readarray -d $'\n' -t dir_list <<< "$( pcregrep -o '(?<=\\|/).*(?=/)' "${ER_ROOT_DIRECTORY}"/tmp/gource.log | sort | uniq )"
+    for dir in ${dir_list[@]}; do
+        [[ "${dir}" == *'/'* ]] && continue
+        parent_dir_list+=("${dir}")
+    done
+
+    for dir in ${parent_dir_list[@]}; do
+        # Generate a random hex
+        log_debug "   dir: ${dir}"
+        if [ -z "${COLOR_GROUPS_SEED}" ]; then
+            mc_red=$(( $( od -A n -t d -N 1 /dev/urandom | tr -d ' \n' ) % 256 ))
+            mc_green=$(( $( od -A n -t d -N 1 /dev/urandom | tr -d ' \n' ) % 256 ))
+            mc_blue=$(( $( od -A n -t d -N 1 /dev/urandom | tr -d ' \n' ) % 256 ))
         else
-            ((++total_count))
-            "${RT_GOURCE_EXEC}" --output-custom-log "${ER_ROOT_DIRECTORY}"/tmp/gource"${total_count}".log "${ER_ROOT_DIRECTORY}"/resources/vcs_source/"${dir}"
-            sed -i -r "s#(.+)\|#\1|/${dir}#" "${ER_ROOT_DIRECTORY}"/tmp/gource${total_count}.log
-            logs+=("${ER_ROOT_DIRECTORY}/tmp/gource${total_count}.log")
+            mc_red=$(( RANDOM % 256 ))
+            mc_green=$(( RANDOM % 256 ))
+            mc_blue=$(( RANDOM % 256 ))
         fi
-    done <<< "$(find "${ER_ROOT_DIRECTORY}"/resources/vcs_source/ -maxdepth 1 -mindepth 1 -type d -printf '%f\n')"
-    (( ${#logs[@]} == 0 )) && log_error "Error: No suitable repos found in "${ER_ROOT_DIRECTORY}"/resources/vcs_source." && exit 1
-    sort -n "${logs[@]}" > "${ER_ROOT_DIRECTORY}"/tmp/gource.log
-    log_success "Processed $((total_count-submod_count)) repos and ${submod_count} submodules."
-    rm "${logs[@]}"
-    return 0
+        log_debug "red: ${mc_red}"
+        log_debug "green: ${mc_green}"
+        log_debug "blue: ${mc_blue}"
+
+        # Check if all 3 are below a threshold. If so, invert and use as value of color.
+        if (( mc_red < 128 )) && (( mc_green < 128 )) && (( mc_blue < 128 )); then
+            mc_red=$(( 256 - mc_red ))
+            mc_green=$(( 256 - mc_green ))
+            mc_blue=$(( 256 - mc_blue ))
+        fi
+
+        # If the colors are too close to grey/white, perform color vibrance enhancement.
+        diff_a=$(( mc_red - mc_green ))
+        diff_b=$(( mc_green - mc_blue ))
+        diff_c=$(( mc_red - mc_blue ))
+        # Perform abs()
+        diff_a=${diff_a#-}
+        diff_b=${diff_b#-}
+        diff_c=${diff_c#-}
+        if (( $(( diff_a + diff_b + diff_c )) < 256 )); then
+            max_val=$(( mc_red > mc_green ? mc_red : mc_green ))
+            max_val=$(( max_val > mc_blue ? max_val : mc_blue ))
+            min_val=$(( mc_red < mc_green ? mc_red : mc_green ))
+            min_val=$(( min_val < mc_blue ? min_val : mc_blue ))
+            (( mc_red == max_val )) && mc_red=$(( $(( mc_red + 70 )) < 255 ? $(( mc_red + 70 )) : 255 ))
+            (( mc_green == max_val )) && mc_green=$(( $(( mc_green + 70 )) < 255 ? $(( mc_green + 70 )) : 255 ))
+            (( mc_blue == max_val )) && mc_blue=$(( $(( mc_blue + 70 )) < 255 ? $(( mc_blue + 70 )) : 255 ))
+            (( mc_red == min_val )) && mc_red=$(( mc_red / 3 ))
+            (( mc_green == min_val )) && mc_green=$(( mc_green / 3 ))
+            (( mc_blue == min_val )) && mc_blue=$(( mc_blue / 3 ))
+        fi
+        log_debug "red_final: ${mc_red}"
+        log_debug "green_final: ${mc_green}"
+        log_debug "blue_final: ${mc_blue}"
+        str_red="$( printf '%.2x' "${mc_red}" | awk '{ print toupper($0) }' )"
+        str_green="$( printf '%.2x' "${mc_green}" | awk '{ print toupper($0) }' )"
+        str_blue="$( printf '%.2x' "${mc_blue}" | awk '{ print toupper($0) }' )"
+
+        str_hex="#${str_red}${str_green}${str_blue}"
+        log_debug "hex: ${str_hex}"
+
+        # Append str_hex on lines with directory name 
+        sed -i -r "/\|\/${dir}\// { s@\$@|${str_hex}@ }" "${ER_ROOT_DIRECTORY}"/tmp/gource.log
+    done
+
+    # Append default_hex_color on lines that do not have an existing |# pattern already set
+    sed -i -r "/\|#/! { s@\$@|${default_hex_color}@ }" "${ER_ROOT_DIRECTORY}"/tmp/gource.log
+
+    # Remove all pound symbols from the file to finish it off
+    sed -i -r "s/#//g" "${ER_ROOT_DIRECTORY}"/tmp/gource.log
 }
-readonly -f process_multi_repo
+readonly -f multi_color_generator
 
 process_repos()
 {
+    declare -ig total_count=0
+    declare -ig submod_count=0
+    declare -ag logs=()
     # Check if this is a single or multi repo
     if [ ! -d "${ER_ROOT_DIRECTORY}"/resources/vcs_source/.git ]; then
         log_info "Detected potential multi-repo git input. Assuming this is a multi-repo directory."
-        process_multi_repo
+        while read -r dir; do 
+            process_single_repo "${dir}"
+        done <<< "$(find "${ER_ROOT_DIRECTORY}"/resources/vcs_source/ -maxdepth 1 -mindepth 1 -type d -printf '%f\n')"
     else
         log_info "Detected single-repo git repository input."
         process_single_repo
     fi
+    # Check if numlogs = 0 
+    (( ${#logs[@]} == 0 )) && log_error "Error: No suitable repos found in "${ER_ROOT_DIRECTORY}"/resources/vcs_source." && exit 1
+
+    # Sort all logs
+    sort -n "${logs[@]}" > "${ER_ROOT_DIRECTORY}"/tmp/gource.log
+    rm "${logs[@]}"
+    log_success "Processed $((total_count-submod_count)) repos and ${submod_count} submodules."
+
+    [ "${RUNTIME_COLOR_GROUPS}" = "1" ] && multi_color_generator
+
     (( RT_TEST == 1 )) && cp "${ER_ROOT_DIRECTORY}"/tmp/gource.log "${ER_ROOT_DIRECTORY}"/save/gource.log
-    log_info "Gource logs parsed."
+    log_info "Gource log generated."
     return 0
 }
 readonly -f process_repos

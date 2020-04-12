@@ -1,0 +1,36 @@
+=== Color Groups Environment Variables
+
+These are general settings that configure the <<_color_groups,Color Groups>> feature in *Envisaged Redux*.
+
+[discrete]
+===== COLOR_GROUPS_CENTER_COLOR
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<Hexadecimal>>
+
+| **<<ExampleValue>>**
+a| `FFFFFF`
+
+| **<<Description>>**
+a| Override the default color (`FFFFFF`) for files at the root (center) of the visualization.
+|===
+
+[discrete]
+===== COLOR_GROUPS_SEED
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+
+| **<<Type>>**
+| <<Integer>>
+
+| **<<ExampleValue>>**
+a| `577`
+
+| **<<Description>>**
+a| Seed value to provide as the input to the random color generator.
+The value MUST be a positive integer between `0` and `32768`.
+
+If unset, the Color Groups will generate true random colors.
+|===
