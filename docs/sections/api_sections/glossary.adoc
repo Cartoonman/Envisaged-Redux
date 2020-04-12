@@ -125,11 +125,6 @@ An example of the syntax to have docker mount a directory to a specified locatio
 It is important that the mount points within the container match the given example. *Envisaged Redux* will perform checks for these directory or file paths and will only enable functionality if the mount points are made at the right paths.
 --
 
-[#Required]
-[reftext="Required"]
-Required::
-Whether or not the mount point is required in order to run *Envisaged Redux*.
-
 [#Default]
 [reftext="Default"]
 Default::

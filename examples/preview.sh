@@ -30,6 +30,7 @@ docker run --rm -i -t \
     --name envisaged-redux \
     "${vcs_source_uri[@]}" \
     "${custom_log_uri[@]}" \
+    "${log_output_uri[@]}" \
     "${local_output_uri[@]}" \
     "${caption_uri[@]}" \
     "${avatars_uri[@]}" \

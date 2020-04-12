@@ -6,6 +6,10 @@ This section will describe some of the mounts that *Envisaged Redux* supports, a
 For safety reasons, all mounts that provide data to *Envisaged Redux* should be marked as `readonly` when using the `--mount` directive in Docker. 
 This will be reflected in the examples.
 
+==== Required
+
+One of the following mounts must be provided when running *Envisaged Redux*. 
+
 [discrete]
 ===== Single/Multi Repos
 [cols="15h,~", stripes=even, width=100%, grid=rows]
@@ -13,9 +17,6 @@ This will be reflected in the examples.
 
 | **<<MountType>>**
 | <<Read>>
-
-| **<<Required>>**
-| Yes
 
 | **<<MountExample>>**
 a| `--mount type=bind,src=#/path/to/vcs_source(s)_dir#,dst=/visualization/resources/vcs_source,readonly`
@@ -37,15 +38,36 @@ TIP: When running a multi-repo scenario, add `root` to <<_gource_hide_items,GOUR
 | **<<MountType>>**
 | <<Read>>
 
-| **<<Required>>**
-| Yes
-
 | **<<MountExample>>**
 a| `--mount type=bind,src=#/path/to/custom.log#,dst=/visualization/resources/gource.log,readonly`
 
 | **<<Description>>**
 a| **Envisaged Redux** will skip checks for a source repo and use the provided log file as the input to Gource.
 See https://github.com/acaudwell/Gource/wiki/Custom-Log-Format[Gource's Custom Log Format Page] for more details on the file format, as well as examples.
+|===
+
+==== Optional
+These runtime mounts are not required, but will either add features, capabilities, or modify the behavior of *Envisaged Redux*.
+
+[discrete]
+===== Save Generated Gource Log
+[cols="15h,~", stripes=even, width=100%, grid=rows]
+|===
+
+| **<<MountType>>**
+| <<Write>>
+
+| **<<MountExample>>**
+a| `--mount type=bind,src=#/path/to/output_dir#,dst=/visualization/output`
+
+| **<<Description>>**
+a| **Envisaged Redux** will generate it's own `gource.log` based on all other options as usual, then save the resulting `gource.log` file into the provided mount directory.
+**Envisaged Redux** will promptly exit afterwards.
+--
+NOTE: Cannot be used when <<_custom_log,Custom Log>> is provided.
+
+WARNING: When this is provided, *Envisaged Redux* will immediately exit upon saving the `gource.log` file into the output directory.
+--
 |===
 
 [discrete]
@@ -55,9 +77,6 @@ See https://github.com/acaudwell/Gource/wiki/Custom-Log-Format[Gource's Custom L
 
 | **<<MountType>>**
 | <<Read>>
-
-| **<<Required>>**
-| No
 
 | **<<MountExample>>**
 a| `--mount type=bind,src=#/path/to/captions.txt#,dst=/visualization/resources/captions.txt,readonly`
@@ -74,9 +93,6 @@ a| `--mount type=bind,src=#/path/to/captions.txt#,dst=/visualization/resources/c
 | **<<MountType>>**
 | <<Read>>
 
-| **<<Required>>**
-| No
-
 | **<<MountExample>>**
 a| `--mount type=bind,src=#/path/to/avatars_dir#,dst=/visualization/resources/avatars,readonly`
 
@@ -91,9 +107,6 @@ a| `--mount type=bind,src=#/path/to/avatars_dir#,dst=/visualization/resources/av
 
 | **<<MountType>>**
 | <<Read>>
-
-| **<<Required>>**
-| No
 
 | **<<MountExample>>**
 a| `--mount type=bind,src=#/path/to/image.png#,dst=/visualization/resources/logo.image,readonly`
@@ -110,9 +123,6 @@ a| `--mount type=bind,src=#/path/to/image.png#,dst=/visualization/resources/logo
 | **<<MountType>>**
 | <<Read>>
 
-| **<<Required>>**
-| No
-
 | **<<MountExample>>**
 a| `--mount type=bind,src=#/path/to/image.png#,dst=/visualization/resources/background.image,readonly`
 
@@ -127,9 +137,6 @@ a| `--mount type=bind,src=#/path/to/image.png#,dst=/visualization/resources/back
 
 | **<<MountType>>**
 | <<Read>>
-
-| **<<Required>>**
-| No
 
 | **<<MountExample>>**
 a| `--mount type=bind,src=#/path/to/image.png#,dst=/visualization/resources/default_user.image,readonly`
@@ -149,9 +156,6 @@ TIP: Add <<_gource_color_images,GOURCE_COLOR_IMAGES>> to have Gource apply a ran
 | **<<MountType>>**
 | <<Read>>
 
-| **<<Required>>**
-| No
-
 | **<<MountExample>>**
 a| `--mount type=bind,src=#/path/to/font.ttf#,dst=/visualization/resources/font,readonly`
 
@@ -167,9 +171,6 @@ Compatible with most font types supported by FreeType, including `.ttf` and `.od
 
 | **<<MountType>>**
 | <<Write>>
-
-| **<<Required>>**
-| No
 
 | **<<MountExample>>**
 a| `--mount type=bind,src=#/path/to/output_dir#,dst=/visualization/video`

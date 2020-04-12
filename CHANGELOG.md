@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Added capability to save the generated gource.log file. 
+
 ## [0.16.0] - 2020-04-12
 
 ### [Documentation](https://envisaged-redux-v0-16-0.now.sh/)

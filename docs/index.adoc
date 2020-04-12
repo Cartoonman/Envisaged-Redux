@@ -41,6 +41,8 @@ Docker images avaliable on https://hub.docker.com/r/cartoonman/envisaged-redux[D
 * Gource API (via Environment Variables)
 * Render Templates
 * Multi-repository Support
+* Color Grouping Feature
+* Save generated Gource log file
 * Recursive Submodule Support
 
 *Envisaged Redux* is a fork of the https://github.com/utensils/Envisaged[Envisaged,window=_blank] project.
