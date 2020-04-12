@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### [Documentation](https://envisaged-redux.now.sh/)
+## [0.16.0] - 2020-04-12
+
+### [Documentation](https://envisaged-redux-v0-16-0.now.sh/)
 
 ### Added
 - Added RENDER_PROFILE and RENDER_LEVEL.
@@ -365,7 +367,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial fork from [Envisaged].
 
-[unreleased]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.15.0...master
+[unreleased]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.16.0...master
+[0.16.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.15.0...v0.16.0
 [0.15.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.14.0...v0.15.0
 [0.14.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.13.0...v0.14.0
 [0.13.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.12.1...v0.13.0
