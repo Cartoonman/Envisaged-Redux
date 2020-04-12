@@ -26,6 +26,10 @@ parse_args()
                 custom_log_uri=("--mount" "type=bind,src=$2,dst=/visualization/resources/gource.log,readonly")
                 shift
                 ;;
+            --log-output-dir)
+                log_output_uri=("--mount" "type=bind,src=$2,dst=/visualization/output")
+                shift
+                ;;
             --caption-file)
                 caption_uri=("--mount" "type=bind,src=$2,dst=/visualization/resources/captions.txt,readonly")
                 shift

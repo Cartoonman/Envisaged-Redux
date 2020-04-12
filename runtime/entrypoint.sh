@@ -116,6 +116,13 @@ parse_configs()
         declare -grix RT_CUSTOM_LOG=1
     fi
 
+    # Check for Gource log output
+    if [ -d "${ER_ROOT_DIRECTORY}"/output ]; then
+        log_info "Saving generated Gource log file."
+        log_warn "Envisaged Redux will exit upon saving Gource Log file."
+        declare -grix RT_SAVE_LOG=1
+    fi
+
     # Check for avatar directory mount.
     if [ -d "${ER_ROOT_DIRECTORY}"/resources/avatars ]; then
         log_info "Using avatars directory."
@@ -325,6 +332,13 @@ process_repos()
     [ "${RUNTIME_COLOR_GROUPS}" = "1" ] && multi_color_generator
 
     (( RT_TEST == 1 )) && cp "${ER_ROOT_DIRECTORY}"/tmp/gource.log "${ER_ROOT_DIRECTORY}"/save/gource.log
+    if (( RT_SAVE_LOG == 1 )); then
+        # Save gource.log file
+        cp "${ER_ROOT_DIRECTORY}"/tmp/gource.log "${ER_ROOT_DIRECTORY}"/output/gource.log
+        chmod 666 "${ER_ROOT_DIRECTORY}"/output/gource.log
+        log_success "Gource log file saved. Exiting."
+        exit 0
+    fi
     log_info "Gource log generated."
     return 0
 }
