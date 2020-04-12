@@ -52,7 +52,7 @@ echo "--Integration Args Tests--"
 bats "${CUR_DIR_PATH}"/bats_tests/integration_args.bats
 
 (( SAVE == 1 )) && mv "${ER_ROOT_DIRECTORY}"/save/cmd_test_data.txt /hostdir/cmd_test_data.txt
-echo "--Integration Args Tests--"
+echo "--Repository Parsing Tests--"
 bats "${CUR_DIR_PATH}"/bats_tests/repo_parse.bats
 
 

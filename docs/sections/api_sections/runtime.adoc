@@ -70,6 +70,23 @@ Otherwise, all following settings for Gource Nightly will be ignored.
 |===
 
 [discrete]
+===== RUNTIME_COLOR_GROUPS
+[cols="15h,~", stripes=odd, width=100%, grid=rows]
+|===
+| **<<Type>>**
+| <<Boolean>>
+
+| **<<ExampleValue>>**
+a| `1`
+
+| **<<Description>>**
+| Flag to enable Color Groups feature. See <<_color_groups,Color Groups>> for details.
+--
+NOTE: Does not apply when using <<_custom_log,Custom Log>> input.
+--
+|===
+
+[discrete]
 ===== RUNTIME_PRINT_VARS
 [cols="15h,~", stripes=odd, width=100%, grid=rows]
 |===

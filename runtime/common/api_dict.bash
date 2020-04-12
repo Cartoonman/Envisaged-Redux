@@ -8,6 +8,7 @@ _tmp_api_dict+=( \
     RUNTIME_PRINT_VARS \
     RUNTIME_RECURSE_SUBMODULES \
     RUNTIME_TEMPLATE \
+    RUNTIME_COLOR_GROUPS \
 )
 
 # Render Args
@@ -25,9 +26,16 @@ _tmp_api_dict+=( \
     RENDER_VERBOSE \
     RENDER_NO_PROGRESS \
 )
+
 # Preview Args
 _tmp_api_dict+=( \
     PREVIEW_SLOWDOWN_FACTOR \
+)
+
+# Color Groups Args
+_tmp_api_dict+=( \
+    COLOR_GROUPS_SEED \
+    COLOR_GROUPS_CENTER_COLOR \
 )
 
 # Gource General Args

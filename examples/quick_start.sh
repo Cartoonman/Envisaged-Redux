@@ -25,7 +25,6 @@ env_vars_declare \
     GOURCE_TITLE                    "Envisaged Redux" \
     GOURCE_CAMERA_MODE              "overview" \
     RENDER_VIDEO_RESOLUTION         "720p" \
-    RUNTIME_TEMPLATE                "border" \
     GOURCE_CAPTION_SIZE             "32" \
     GOURCE_CAPTION_DURATION         "2.5" \
     GOURCE_SECONDS_PER_DAY          "0.09" \
@@ -37,8 +36,7 @@ env_vars_declare \
     GOURCE_MAX_FILES                "0" \
     GOURCE_MAX_FILE_LAG             "5.0" \
     GOURCE_FILENAME_TIME            "5.0" \
-    GOURCE_BORDER_TITLE_SIZE        "36" \
-    GOURCE_BORDER_DATE_SIZE         "42" \
+    GOURCE_FONT_SIZE                "42" \
     GOURCE_BACKGROUND_COLOR         "000000" \
     GOURCE_DATE_FORMAT              "%m/%d/%Y %H:%M:%S" \
     GOURCE_BLOOM_MULTIPLIER         "1.5" \
@@ -47,7 +45,8 @@ env_vars_declare \
     GOURCE_HIGHLIGHT_USERS          "1" \
     GOURCE_MULTI_SAMPLING           "1" \
     RUNTIME_LIVE_PREVIEW            "1" \
-    PREVIEW_SLOWDOWN_FACTOR         "2"
+    PREVIEW_SLOWDOWN_FACTOR         "2" \
+    RUNTIME_COLOR_GROUPS            "1"
 
 # Run Envisaged Redux
 docker run --rm -it \

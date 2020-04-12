@@ -1,0 +1,37 @@
+=== Color Groups
+
+NOTE: This feature does not apply to <<_custom_log,Custom Log>> inputs.
+
+The Color Groups feature of *Envisaged Redux* colors each branch of the Gource tree to a pseudo-random color.
+Each branch will have it's own color, and all sub branches and nodes will share the same color.
+For single-repo cases, each branch represents a parent directory in the repository.
+For multi-repo cases, each branch represents a repository.
+
+TIP: This feature is useful when you wish to highlight multiple groups working on various components of a project or system.
+
+By default, if Color Groups is not enabled, each node in the Gource tree is colored based on the file type.
+Color Groups is enabled by setting the boolean variable <<_runtime_color_groups,`RUNTIME_COLOR_GROUPS`>> to `1`.
+
+Additional variables to configure Color Groups can be found at the <<_color_groups_environment_variables,Color Groups Environment Variables>> section.
+
+****
+[discrete]
+[.text-center]
+===== Color Groups Example
+image::color_groups.jpg[Color Groups Example,align="center"]
+****
+
+==== Modes
+
+There are two modes of operation for Color Groups:
+
+===== Random
+
+By default this is the default mode of operation. This will generate close-to-true random colors to the coloring mechanism.
+
+===== Seeded Random
+
+For some cases, we may want to have the same color assignments for our branches. 
+We can achieve this by providing a seed value to <<_color_groups_seed,COLOR_GROUPS_SEED>>.
+This will mean that if you run the same visualization job with the same <<_color_groups_seed,COLOR_GROUPS_SEED>> provided, you should get the same colors mapped to the same branches every time.
+This can provide a replicable way to have color groups in your visualization.

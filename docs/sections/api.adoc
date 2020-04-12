@@ -25,11 +25,19 @@ include::api_sections/templates.adoc[]
 
 '''
 
+include::api_sections/color_groups.adoc[]
+
+'''
+
 include::api_sections/runtime.adoc[]
 
 '''
 
 include::api_sections/preview_vars.adoc[]
+
+'''
+
+include::api_sections/color_groups_vars.adoc[]
 
 '''
 

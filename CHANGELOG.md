@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added RENDER_CODEC and set default CODEC to h264, with option for h265.
 - Added RENDER_VERBOSE and RENDER_NO_PROGRESS.
 - Added RENDER_H264_CRF and RENDER_H264_PRESET.
+- Added Color Groups feature with RUNTIME_COLOR_GROUPS, COLOR_GROUPS_SEED, and COLOR_GROUPS_CENTER_COLOR variables.
 
 ### Fixed
 - Fix examples not working on bash 3.X.

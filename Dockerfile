@@ -252,6 +252,7 @@ RUN apk --update add --no-cache --virtual .runtime-deps \
         xdpyinfo \
         xvfb \
         git \
+        pcre-tools \
         coreutils \
         imagemagick \
         lighttpd \
