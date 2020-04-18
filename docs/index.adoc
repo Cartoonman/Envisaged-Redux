@@ -83,7 +83,9 @@ include::../Dockerfile[tags=dep_versions]
 
 include::sections/building.adoc[]
 
-include::sections/getting-started.adoc[]
+include::sections/getting_started.adoc[]
+
+include::sections/examples.adoc[]
 
 include::sections/api.adoc[]
 

@@ -3,3 +3,8 @@ docs/*.html
 docs/*.pdf
 node_modules/
 package-lock.json
+*.mp4
+*.avi
+*.mov
+*.ogg
+*.mp3

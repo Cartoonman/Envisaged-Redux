@@ -35,7 +35,7 @@ a| Specify a template to use. The implemented templates are:
 a| `1`
 
 | **<<Description>>**
-| Flag to enable recursing through the repo(s) submodules
+| Flag to enable recursing through the repo(s) submodules.
 |===
 
 [discrete]
@@ -80,10 +80,9 @@ Otherwise, all following settings for Gource Nightly will be ignored.
 a| `1`
 
 | **<<Description>>**
-| Flag to enable Color Groups feature. See <<_color_groups,Color Groups>> for details.
---
+a| Flag to enable Color Groups feature. See <<_color_groups,Color Groups>> for details.
+
 NOTE: Does not apply when using <<_custom_log,Custom Log>> input.
---
 |===
 
 [discrete]

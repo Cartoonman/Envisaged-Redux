@@ -54,15 +54,11 @@ parse_args()
                 font_file_uri=("--mount" "type=bind,src=$2,dst=/visualization/resources/font,readonly")
                 shift
                 ;;
-            --output-dir)
+            --video-output-dir)
                 local_output_uri=("--mount" "type=bind,src=$2,dst=/visualization/video")
                 shift
                 ;;
-            -h)
-                print_help
-                exit 1
-                ;;
-            --help)
+            -h|--help)
                 print_help
                 exit 1
                 ;;

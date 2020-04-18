@@ -1,0 +1,106 @@
+== Examples
+
+Included in the **Envisaged Redux** repository are various example scripts that highlight various features and capabilities of **Envisaged Redux**. 
+Users are encouraged to use these scripts to build off of and experiment with their own runtime configurations.
+
+
+
+
+=== All Examples
+
+Included in the `examples/` directory are a number of scripts that showcase different runtime configuration examples.
+The scripts in `examples/` leverage helper functions and scripts to make it easy to build off of. They all call a common script, `baseline.sh`, and use common arguments and methods.
+
+You can make your own scripts by leveraging the arguments and API of this script.
+By adding `--help` to the calls to these scripts, you will be given the available arguments.
+
+
+.Avaliable Runtime Arguments for Example Scripts:
+[source,txt]
+----
+include::../../examples/common/args.txt[]
+----
+
+[NOTE] 
+====
+For convenience, all example scripts default to using *Envisaged Redux's* own repo as it's selected repository directory. 
+However you can override this by simply providing your own path with the `--vcs-source-dir` argument.
+
+Most scripts also run with `<<_live_preview,LIVE_PREVIEW>>` enabled, so you can view the visualization in real time.
+In addition, all examples run with the `-p 8080:80` docker argument, so your local port `8080` will be accessible to reach the web interface of *Envisaged Redux*.
+====
+
+default_example::
++
+--
+
+This is the bare-bones script that all other Example scripts are based on.
+This runs *Envisaged Redux* with no predefined environment variables.
+This can be considered a clean slate example that users may wish to build on top of as they experiment.
+
+
+TODO: Make the other scripts leverage `default.sh` by calling it and passing it args.
+
+--
+
+quick_start_example::
++
+--
+
+If you followed the section link:#_getting_started[Getting Started], this is the example you ran.
+This showcases a general example of configurations tailored for visualizing *Envisaged Redux*'s development history.
+
+--
+
+alt_preview_example::
++
+--
+
+If for any reason Live Preview does not work for you (e.g. browser not capable of https://en.wikipedia.org/wiki/HTTP_Live_Streaming[HLS,window=_blank]), this is a useful script for optimizing the fastest render time.
+Users can use this to quickly view the effects of their custom runtime configurations on the rendered visualization before scaling up to their target render settings.
+
+--
+
+alt_default_user_image_example::
++
+--
+
+This example exercises the <<_default_user_image,Default User Image>> feature of Gource, with a provided image replacing the default user image.
+
+--
+
+headless_example::
++
+--
+
+For CD/VPS use cases, these will require a headless operation. This gives an example of how to run Envisaged Redux for headless operation mode.
+
+By default it will save the output video file in the `examples/` directory.
+
+NOTE: For proper headless operation, you may wish to remove the `-it` as well as the `-p 8080:80` docker args present in `common/baseline.sh`. 
+
+--
+
+color_groups_example::
++
+--
+
+This example exercises the <<_color_groups,Color Groups>> feature of Gource, where each directory branch is assigned it's own color.
+
+--
+
+border_template_example::
++
+--
+
+This example utilizes the <<template_border,Border Template>> to render the visualization.
+
+--
+
+4k_example::
++
+--
+
+For rendering 4k visualizations, this example sets certain optimal variables to ensure elements like text are properly sized at this scale.
+
+--

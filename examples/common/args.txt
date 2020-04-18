@@ -36,9 +36,9 @@ Args:
             A font file to be used to render the displayed text
             in the Gource visualization.
 
-        --output-dir   [path/to/dir]
+        --video-output-dir   [path/to/dir]
             If given, the video will be saved into this directory
-            instead of avaliable for download through web server.
+            instead of available for download through web server.
 
     Other args will be passed through to docker run command.
         e.g. -e RENDER_H265_CRF="0"
