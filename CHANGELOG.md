@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### [Documentation](https://envisaged-redux.now.sh/)
+
+## [0.17.0] - 2020-04-18
+
+### [Documentation](https://envisaged-redux-v0-17-0.now.sh/)
+
 ### Added
 - Added capability to save the generated gource.log file. 
 - New examples.
@@ -380,7 +386,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial fork from [Envisaged].
 
-[unreleased]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.16.0...master
+[unreleased]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.17.0...master
+[0.17.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.16.0...v0.17.0
 [0.16.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.15.0...v0.16.0
 [0.15.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.14.0...v0.15.0
 [0.14.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.13.0...v0.14.0
