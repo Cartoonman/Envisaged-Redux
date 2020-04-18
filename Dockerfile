@@ -8,14 +8,14 @@
 FROM alpine:3.11 as alpine-base
 # tag::dep_versions[]
 ENV VERSION_STABLE_GOURCE="0.51" \
-    VERSION_MESA="19.2.8" \
+    VERSION_MESA="19.3.5" \
     VERSION_LLVM="llvm9" \
     VERSION_FFMPEG="4.2.2" \
     VERSION_NASM="2.14.02" \
     VERSION_YASM="1.3.0" \
     VERSION_X264="20191217-2245" \
     VERSION_X265="3.2.1" \
-    VERSION_HLS_JS="0.13.1"
+    VERSION_HLS_JS="0.13.2"
 # end::dep_versions[]
 
 FROM alpine-base as gource-builder

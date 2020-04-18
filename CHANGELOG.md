@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 - Examples refactored.
 - Color Grouping vibrance algorithm.
+- hjs.js to 0.13.2.
+- Mesa to 19.3.5
 
 ### Fixed
 - Missing wget in Dockerfile for proxy support.
