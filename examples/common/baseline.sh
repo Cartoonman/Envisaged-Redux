@@ -11,21 +11,15 @@ source "${CUR_DIR_PATH}/common.bash"
 
 parse_args "$@"
 
+# Use env_vars_declare to customize the runtime behavior of Envisaged Redux.
+# Example:
+# env_vars_declare \
+#     GOURCE_TITLE                    "My Software Project" \
+#     GOURCE_CAMERA_MODE              "overview" \
+#     RENDER_VIDEO_RESOLUTION         "1080p" \
+#     RUNTIME_TEMPLATE                "standard"
 
-# Declare Environment Variables to configure Envisaged Redux
-env_vars_declare \
-    GOURCE_STOP_AT_TIME         "5" \
-    RENDER_FPS                  "25" \
-    RUNTIME_TEMPLATE            "standard" \
-    RENDER_VIDEO_RESOLUTION     "480p" \
-    GOURCE_TITLE                "Fast Preview Example" \
-    RENDER_H265_PRESET          "ultrafast" \
-    RENDER_H265_CRF             "0" \
-    GOURCE_FONT_SIZE            "35" \
-    GOURCE_PADDING              "1.5"
-
-
-docker run --rm -i -t \
+docker run --rm -it \
     -p 8080:80 \
     --name envisaged-redux \
     "${vcs_source_uri[@]}" \
@@ -40,5 +34,5 @@ docker run --rm -i -t \
     "${font_file_uri[@]}" \
     "${env_vars[@]}" \
     "${args[@]}" \
-    cartoonman/envisaged-redux:latest
+    cartoonman/envisaged-redux:latest DEBUG
 exit $?

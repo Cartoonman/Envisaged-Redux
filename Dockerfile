@@ -59,6 +59,7 @@ RUN apk add --no-cache --virtual .mesa_build_deps  \
         py-mako \
         xorg-server-dev \
         python-dev \
+        wget \
         zlib-dev
 
 

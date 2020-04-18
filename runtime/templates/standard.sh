@@ -24,23 +24,18 @@ readonly -f exit_handler
 case ${RENDER_VIDEO_RESOLUTION} in
     2160p)
         gource_res="3840x2160"
-        log_info "Using 2160p settings. Output will be 3840x2160 at ${RENDER_FPS}fps."
         ;;
     1440p)
         gource_res="2560x1440"
-        log_info "Using 1440p settings. Output will be 2560x1440 at ${RENDER_FPS}fps."
         ;;
     1080p)
         gource_res="1920x1080"
-        log_info "Using 1080p settings. Output will be 1920x1080 at ${RENDER_FPS}fps."
         ;;
     720p)
         gource_res="1280x720"
-        log_info "Using 720p settings. Output will be 1280x720 at ${RENDER_FPS}fps."
         ;;
     480p)
         gource_res="854x480"
-        log_info "Using 720p settings. Output will be 1280x720 at ${RENDER_FPS}fps."
         ;;
     *)
         log_error "${RENDER_VIDEO_RESOLUTION} is not a valid/supported video resolution."
@@ -48,6 +43,7 @@ case ${RENDER_VIDEO_RESOLUTION} in
         exit_handler
         ;;
 esac
+log_info "Using ${RENDER_VIDEO_RESOLUTION} settings. Output will be ${gource_res} at ${RENDER_FPS}fps."
 
 # Generate ffmpeg flags
 logo_ffmpeg_label="[1:v]" && gen_ffmpeg_flags

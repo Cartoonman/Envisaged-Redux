@@ -32,7 +32,6 @@ case ${RENDER_VIDEO_RESOLUTION} in
         date_crop="3520:200:640:0"
         date_pad="3840:200:320:200:#202021"
         output_res="3840:2160"
-        log_info "Using 2160p settings. Output will be 3840x2160 at ${RENDER_FPS}fps."
         ;;
     1440p)
         gource_res="2333x1293"
@@ -43,7 +42,6 @@ case ${RENDER_VIDEO_RESOLUTION} in
         date_crop="2346:134:426:0"
         date_pad="2560:134:214:134:#202021"
         output_res="2560:1440"
-        log_info "Using 1440p settings. Output will be 2560x1440 at ${RENDER_FPS}fps."
         ;;
     1080p)
         gource_res="1750x970"
@@ -54,7 +52,6 @@ case ${RENDER_VIDEO_RESOLUTION} in
         date_crop="1760:100:320:0"
         date_pad="1920:100:160:100:#202021"
         output_res="1920:1080"
-        log_info "Using 1080p settings. Output will be 1920x1080 at ${RENDER_FPS}fps."
         ;;
     720p)
         gource_res="1116x646"
@@ -65,7 +62,6 @@ case ${RENDER_VIDEO_RESOLUTION} in
         date_crop="1128:67:152:0"
         date_pad="1280:67:152:67:#202021"
         output_res="1280:720"
-        log_info "Using 720p settings. Output will be 1280x720 at ${RENDER_FPS}fps."
         ;;
     480p)
         gource_res="700x410"
@@ -76,7 +72,6 @@ case ${RENDER_VIDEO_RESOLUTION} in
         date_crop="708:60:146:0"
         date_pad="854:60:146:60:#202021"
         output_res="854:480"
-        log_info "Using 480p settings. Output will be 854x480 at ${RENDER_FPS}fps."
         ;;
     *)
         log_error "${RENDER_VIDEO_RESOLUTION} is not a valid/supported video resolution."
@@ -84,7 +79,7 @@ case ${RENDER_VIDEO_RESOLUTION} in
         exit_handler
         ;;
 esac
-
+log_info "Using ${RENDER_VIDEO_RESOLUTION} settings. Output will be ${overlay_res} at ${RENDER_FPS}fps."
 
 # Generate ffmpeg flags
 logo_ffmpeg_label="[2:v]" && gen_ffmpeg_flags

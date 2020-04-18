@@ -47,7 +47,7 @@ See https://github.com/acaudwell/Gource/wiki/Custom-Log-Format[Gource's Custom L
 |===
 
 ==== Optional
-These runtime mounts are not required, but will either add features, capabilities, or modify the behavior of *Envisaged Redux*.
+These runtime mounts are not required, but will add features, capabilities, or modify the behavior of *Envisaged Redux*.
 
 [discrete]
 ===== Save Generated Gource Log
@@ -165,7 +165,7 @@ Compatible with most font types supported by FreeType, including `.ttf` and `.od
 |===
 
 [discrete]
-===== Output
+===== Local Video Output
 [cols="15h,~", stripes=even, width=100%, grid=rows]
 |===
 
@@ -176,5 +176,7 @@ Compatible with most font types supported by FreeType, including `.ttf` and `.od
 a| `--mount type=bind,src=#/path/to/output_dir#,dst=/visualization/video`
 
 | **<<Description>>**
-| If this mount is made, *Envisaged Redux* will save the rendered video in the mounted directory and immediately exit once rendering completes.
+a| If this mount is made, *Envisaged Redux* will save the rendered video in the mounted directory and immediately exit once rendering completes.
+
+TIP: This is a necessary mount for any CD/VPS based headless runs.
 |===

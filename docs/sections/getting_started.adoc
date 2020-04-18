@@ -1,12 +1,10 @@
 == Getting Started
 
 This section will fast track users to run a local instance of *Envisaged Redux* to experiment with. 
-We will leverage example scripts designed to showcase the features of *Envisaged Redux*.
+We will leverage one of the many example scripts designed to showcase the features of *Envisaged Redux*.
 The *Envisaged Redux* git repository itself will be our example repository.
-Users are encouraged to use these scripts to build off of and experiment with their own runtime configurations.
 
 === Installation
-
 
 ==== Dependancies
 [horizontal]
@@ -47,7 +45,7 @@ git clone https://gitlab.com/Cartoonman/Envisaged-Redux.git
 --
 
 ----
-examples/quick_start.sh
+examples/quick_start_example.sh
 ----
 
 --  
@@ -67,50 +65,3 @@ The Live Preview window will automatically show the live preview when available 
 
 NOTE: &#8224; Certain visual compression artifacts present/absent in output file will not be present/absent in the Live Preview display. 
 See link:#_live_preview[Live Preview] for more details regarding these caveats.
-
-=== All Examples
-
-Included in the `examples/` directory are a number of scripts that showcase different runtime configuration examples. 
-
-quick_start::
-+
---
-
-If you followed the section link:#_Getting_Started[Getting Started], this is the example you ran.
-This showcases a general example of configurations tailored for visualizing *Envisaged Redux*'s development history.
-This enables the Live Preview functionality, as well as provides an example of using the Captions feature.
-
-By default if the `--vcs-source-dir` argument is not provided, it will use the *Envisaged Redux* repository, as well as add in the provided captions file to the render process. Adding a `--vcs-source-dir` argument overrides this.
-
---
-
-default::
-+
---
-
-This runs *Envisaged Redux* with no predefined environment variables.
-This can be considered a clean slate example that users may wish to build on top of as they experiment.
-
---
-
-preview::
-+
---
-
-If for any reason Live Preview does not work for you (e.g. browser not capable of https://en.wikipedia.org/wiki/HTTP_Live_Streaming[HLS,window=_blank]), this is a useful script for running very short renders quickly.
-Users can use this to quickly view the effects of their custom runtime configurations on the rendered visualization.
-
---
-
-
-All of the included example scripts have a common API for interfacing with. 
-They are easily extendable, and can be used out of the box for general experimentation.
-
-CAUTION: All example scripts source functions from `examples/common.bash`. If you wish to move the scripts elsewhere, make sure you copy `common.bash` and place it in the same directory as the scripts.
-
-
-.Avaliable Runtime Arguments for Example Scripts:
-[source,txt]
-----
-include::../../examples/args.txt[]
-----

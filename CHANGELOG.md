@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Added capability to save the generated gource.log file. 
+- New examples.
+
+### Updated
+- Examples refactored.
+- Color Grouping vibrance algorithm.
+
+### Fixed
+- Missing wget in Dockerfile for proxy support.
 
 ## [0.16.0] - 2020-04-12
 

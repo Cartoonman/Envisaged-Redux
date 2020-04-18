@@ -1,7 +1,7 @@
 == Troubleshooting
 
 [discrete]
-=== Logo 
+=== Logo Error
 If you receive this error:
 
 ----
@@ -10,3 +10,14 @@ If you receive this error:
 ----
 
 This means the image file passed into *Envisaged Redux* is not readable by the image converter onboard (ImageMagick). Try using another format or image.
+
+[discrete]
+=== Video can't be played because the file is corrupt
+If you receive this error or something similar during a live preview playback:
+
+----
+  Video can't be played because the file is corrupt
+----
+
+This is a known issue. Refreshing the page brings you right back to the latest live preview, and is the current workaround for this issue.
+

@@ -7,7 +7,6 @@ By selecting a template, *Envisaged Redux* will use it to render the output vide
 Templates are configured through the <<_runtime_template,RUNTIME_TEMPLATE>> Environment Variable.
 
 [#template_standard]
-[discrete]
 ==== Standard
 
 This is the default template. The standard template is the simplest template. It does not employ any overlays or filters, and renders the Gource environment in full.
@@ -20,7 +19,6 @@ image::standard.jpg[Standard Template Example,align="center"]
 ****
 
 [#template_border]
-[discrete]
 ==== Border
 
 The border template adds a border overlay with a dedicated left panel for the Gource file extension key. Due to the overlay, the user can individually set the Title and Date font sizes and colors.

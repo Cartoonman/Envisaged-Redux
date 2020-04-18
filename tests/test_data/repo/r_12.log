@@ -20,14 +20,14 @@
 1358860896|John Doe|M|/repo1/src/test2.cpp|227CFF
 1358860896|John Doe|M|/repo1/src/test3.cpp|227CFF
 1358864761|OtherPerson|A|/repo1/src/p1/test1.cpp|227CFF
-1358893633|John Doe|A|/repo2/Makefile|F81146
-1358893633|John Doe|A|/repo2/README.md|F81146
-1358897691|John Doe|A|/repo2/include/test1.hpp|F81146
-1358897691|John Doe|A|/repo2/include/test2.hpp|F81146
-1358897691|John Doe|A|/repo2/include/test3.hpp|F81146
-1358897691|John Doe|A|/repo2/src/test1.cpp|F81146
-1358897691|John Doe|A|/repo2/src/test2.cpp|F81146
-1358897691|John Doe|A|/repo2/src/test3.cpp|F81146
+1358893633|John Doe|A|/repo2/Makefile|DE1146
+1358893633|John Doe|A|/repo2/README.md|DE1146
+1358897691|John Doe|A|/repo2/include/test1.hpp|DE1146
+1358897691|John Doe|A|/repo2/include/test2.hpp|DE1146
+1358897691|John Doe|A|/repo2/include/test3.hpp|DE1146
+1358897691|John Doe|A|/repo2/src/test1.cpp|DE1146
+1358897691|John Doe|A|/repo2/src/test2.cpp|DE1146
+1358897691|John Doe|A|/repo2/src/test3.cpp|DE1146
 1358917484|Jane Doe|A|/repo3/Makefile|F3058A
 1358917484|Jane Doe|A|/repo3/README.md|F3058A
 1358919687|Jane Doe|A|/repo3/include/test1.hpp|F3058A
@@ -43,12 +43,12 @@
 1358925170|John Doe|M|/repo3/src/test2.cpp|F3058A
 1358925170|John Doe|M|/repo3/src/test3.cpp|F3058A
 1358944296|John Doe|M|/repo3/README.md|F3058A
-1358949365|OtherPerson|M|/repo2/README.md|F81146
+1358949365|OtherPerson|M|/repo2/README.md|DE1146
 1358955766|Third|M|/repo3/src/test1.cpp|F3058A
 1358955766|Third|M|/repo3/src/test3.cpp|F3058A
-1358971587|John Doe|M|/repo2/src/test1.cpp|F81146
-1358971587|John Doe|M|/repo2/src/test2.cpp|F81146
-1358971587|John Doe|M|/repo2/src/test3.cpp|F81146
+1358971587|John Doe|M|/repo2/src/test1.cpp|DE1146
+1358971587|John Doe|M|/repo2/src/test2.cpp|DE1146
+1358971587|John Doe|M|/repo2/src/test3.cpp|DE1146
 1358974737|OtherPerson|A|/repo3/src/p1/test1.cpp|F3058A
 1359015912|John Doe|A|/repo1/.gitmodules|227CFF
 1359015912|John Doe|A|/repo1/src/submod1|227CFF
