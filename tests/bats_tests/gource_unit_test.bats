@@ -67,11 +67,6 @@ load common/bats_common
     gource_test_entrypoint_2 "var" "GOURCE_CAPTION_OFFSET" "--caption-offset" "${CTRL_ARGS_STD[@]}"
 }
 
-@test "Test Gource Args Nightly" {
-    local -r CTRL_ARGS_STD=("RT_NIGHTLY")
-    # gource_test_entrypoint_2 
-}
-
 @test "Test Gource Args Avatars" {
     local -r CTRL_ARGS_STD=("RT_AVATARS" "--user-image-dir" "${ER_ROOT_DIRECTORY}/resources/avatars")
     gource_test_mount_args "${CTRL_ARGS_STD[@]}"

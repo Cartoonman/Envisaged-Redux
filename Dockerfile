@@ -21,21 +21,14 @@ ENV VERSION_STABLE_GOURCE="0.51" \
 FROM alpine-base as gource-builder
 
 RUN apk add --update --no-cache --virtual .build-deps alpine-sdk git sdl2-dev sdl2_image-dev pcre-dev freetype-dev glew-dev glm-dev boost-dev libpng-dev tinyxml-dev autoconf automake pcre2-dev \
-    && mkdir -p /opt/gource_nightly /opt/gource_stable /sources \
+    && mkdir -p /opt/gource /sources \
     && git clone --branch master https://github.com/acaudwell/Gource.git \
     && cd Gource \
-    && git archive -9 --format=tar.gz -o /sources/gource-nightly.tar.gz --prefix=gource-nightly/ master \
-    && git archive -9 --format=tar.gz -o /sources/gource-"${VERSION_STABLE_GOURCE}".tar.gz --prefix=gource-"${VERSION_STABLE_GOURCE}"/ gource-"${VERSION_STABLE_GOURCE}" \
+    && [ "${VERSION_STABLE_GOURCE}" = "nightly" ] && gource_version="master" || gource_version="gource-${VERSION_STABLE_GOURCE}" \
+    && git archive -9 --format=tar.gz -o /sources/gource-"${gource_version}".tar.gz --prefix=gource-"${gource_version}"/ "${gource_version}" \
+    && git checkout "${gource_version}" \
     && ./autogen.sh \
-    && ./configure --prefix=/opt/gource_nightly \
-    && make -j"$(nproc)" \
-    && make install \
-    && mv /opt/gource_nightly/bin/gource /opt/gource_nightly/bin/gource_nightly \
-    && rm -rf * \
-    && git checkout gource-"${VERSION_STABLE_GOURCE}" \
-    && git checkout . \
-    && ./autogen.sh \
-    && ./configure -prefix=/opt/gource_stable \
+    && ./configure -prefix=/opt/gource \
     && make -j"$(nproc)" \
     && make install \
     && cd .. \
@@ -238,13 +231,12 @@ RUN mkdir -p ffmpeg \
 FROM alpine-base
 
 COPY --from=mesa-builder /usr/local /usr/local
-COPY --from=gource-builder /opt/gource_nightly /opt/gource_nightly
-COPY --from=gource-builder /opt/gource_stable /opt/gource_stable
+COPY --from=gource-builder /opt/gource /opt/gource
 COPY --from=gource-builder /sources /gpl_sources
 COPY --from=ffmpeg-builder /opt/install /usr/local
 COPY --from=ffmpeg-builder /sources /gpl_sources
 
-ENV PATH="/opt/gource_stable/bin:/opt/gource_nightly/bin:${PATH}"
+ENV PATH="/opt/gource/bin:${PATH}"
 
 RUN apk --update add --no-cache --virtual .runtime-deps \
         boost-filesystem freetype glew glu libgcc libpng libstdc++ mesa-gl musl pcre sdl2 sdl2_image \

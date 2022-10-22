@@ -70,12 +70,6 @@ load common/bats_common
     integration_run RENDER_VERBOSE="1"
     integration_run RUNTIME_TEMPLATE="border" RENDER_VERBOSE="1"
 
-    # Gource Nightly
-    integration_run RUNTIME_GOURCE_NIGHTLY=0
-    integration_run RUNTIME_GOURCE_NIGHTLY=1
-    integration_run RUNTIME_TEMPLATE="border" RUNTIME_GOURCE_NIGHTLY=0
-    integration_run RUNTIME_TEMPLATE="border" RUNTIME_GOURCE_NIGHTLY=1
-
     # Border Template Specific Testing
     integration_run RUNTIME_TEMPLATE="border" GOURCE_FONT_SIZE="55" GOURCE_FONT_COLOR="0F0F0F" GOURCE_SHOW_KEY="1"
     integration_run RUNTIME_TEMPLATE="border" GOURCE_BORDER_TITLE_SIZE="90" GOURCE_BORDER_DATE_SIZE="91" \

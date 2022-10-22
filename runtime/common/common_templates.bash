@@ -100,10 +100,6 @@ gen_gource_args()
     # Font File
     (( RT_FONT_FILE == 1 ))                     && gource_arg_array+=("--font-file" "${ER_ROOT_DIRECTORY}/resources/font")
 
-    # Nightly
-    if (( RT_NIGHTLY == 1 )); then
-        :
-    fi
     return 0
 }
 readonly -f gen_gource_args

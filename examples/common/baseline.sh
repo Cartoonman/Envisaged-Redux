@@ -34,5 +34,5 @@ docker run --rm -it \
     "${font_file_uri[@]}" \
     "${env_vars[@]}" \
     "${args[@]}" \
-    cartoonman/envisaged-redux:latest DEBUG
+    cartoonman/envisaged-redux:latest
 exit $?

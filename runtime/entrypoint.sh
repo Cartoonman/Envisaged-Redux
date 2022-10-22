@@ -99,15 +99,12 @@ parse_configs()
         mkdir -p "${ER_ROOT_DIRECTORY}"/video
     fi
 
-    # Check which Gource release was chosed
-    if [[ "${RUNTIME_GOURCE_NIGHTLY}" == "1" ]]; then
-        declare -grx RT_GOURCE_EXEC='gource_nightly'
-        log_notice "Using $("${RT_GOURCE_EXEC}" -h | head -n 1) Nightly Release."
-        declare -grix RT_NIGHTLY=1
-    else
-        declare -grx RT_GOURCE_EXEC='gource'
-        log_info "Using $("${RT_GOURCE_EXEC}" -h | head -n 1) Stable Release."
-    fi
+    # Print which Gource release is being used
+    # RT_GOURCE_EXEC remains here from deprecation of gource_nightly option,
+    # in case of future use with multiple gource subtypes.
+    # For now, only one subtype is supported (gource)
+    declare -grx RT_GOURCE_EXEC='gource'
+    log_info "Using runtime ${RT_GOURCE_EXEC}: $("${RT_GOURCE_EXEC}" -h | head -n 1)."
 
     # Check for custom Gource log input
     if [ -f "${ER_ROOT_DIRECTORY}"/resources/gource.log ]; then
@@ -203,7 +200,7 @@ process_single_repo()
         submod_paths+=('') # include parent of course
         for submod_path in "${submod_paths[@]}"; do
             ((++total_count))
-            "${RT_GOURCE_EXEC}" --output-custom-log "${ER_ROOT_DIRECTORY}"/tmp/gource"${total_count}".log "${ER_ROOT_DIRECTORY}"/resources/vcs_source/"${dir}"/"${submod_path}"
+            gource --output-custom-log "${ER_ROOT_DIRECTORY}"/tmp/gource"${total_count}".log "${ER_ROOT_DIRECTORY}"/resources/vcs_source/"${dir}"/"${submod_path}"
             if [ -n "${submod_path}" ]; then
                 sed -i -r "s#(.+)\|#\1|/${dir_slash_suffix}${submod_path}#" "${ER_ROOT_DIRECTORY}"/tmp/gource"${total_count}".log
                 ((++submod_count))
@@ -215,7 +212,7 @@ process_single_repo()
     else
         # Single repo no submods - simple case.
         ((++total_count))
-        "${RT_GOURCE_EXEC}" --output-custom-log "${ER_ROOT_DIRECTORY}"/tmp/gource"${total_count}".log "${ER_ROOT_DIRECTORY}"/resources/vcs_source/"${dir}"
+        gource --output-custom-log "${ER_ROOT_DIRECTORY}"/tmp/gource"${total_count}".log "${ER_ROOT_DIRECTORY}"/resources/vcs_source/"${dir}"
         sed -i -r "s#(.+)\|#\1|${dir_slash_prefix}#" "${ER_ROOT_DIRECTORY}"/tmp/gource${total_count}.log
         logs+=("${ER_ROOT_DIRECTORY}/tmp/gource${total_count}.log")
     fi
