@@ -3,7 +3,6 @@ declare -a tmp_api_dict=()
 
 # Runtime Args
 _tmp_api_dict+=( \
-    RUNTIME_GOURCE_NIGHTLY \
     RUNTIME_LIVE_PREVIEW \
     RUNTIME_PRINT_VARS \
     RUNTIME_RECURSE_SUBMODULES \
@@ -96,9 +95,6 @@ _tmp_api_dict+=( \
     GOURCE_CAPTION_OFFSET \
     GOURCE_CAPTION_SIZE \
 )
-
-# Nightly
-_tmp_api_dict+=()
 
 # Border Gource Args
 _tmp_api_dict+=( \

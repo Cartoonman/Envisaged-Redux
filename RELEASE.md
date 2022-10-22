@@ -5,5 +5,5 @@
     * Also add documentation URL at top of the changelog based on expected domain in step 6 for the given tag.
 3. Push changes and tag.
 4. Create temporary Branch of same name as Tag.
-5. On Zeit, create temp hook and build doc for hook. Remove immediately afterwards.
-6. On resultant website, assign domain with `envisaged-redux-vXX-XX-XX.now.sh`. 
+5. On Vercel, create temp hook and build doc for hook. Remove immediately afterwards.
+6. On resultant website, assign domain with `envisaged-redux-vXX-XX-XX.vercel.app`.

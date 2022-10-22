@@ -9,7 +9,6 @@ These are the subgroups of Gource Variables:
 
 * <<_general_api,General API>>
 * <<_caption_api,Caption API>>
-* <<_nightly_api,Nightly API>>
 * <<_templated_api_border,Templated API: Border>>
 
 ==== General API
@@ -937,17 +936,6 @@ a| `3`
 | **<<Description>>**
 | Caption horizontal offset. 0 centers the captions.
 |===
-'''
-
-==== Nightly API
-
-These are features that have been added to the master branch of Gource, but has either not been made a new release, or is not yet supported by Envisaged as a stable version of Gource.
-These will only have an effect if <<_runtime_gource_nightly, RUNTIME_GOURCE_NIGHTLY>> is _true_.
-
-WARNING: These variables are highly subject to change, and variables may come and go. This particular API is considered *strictly* experimental and cannot ever be considered stable.
-
-**There are no Nightly Gource functionalities at this time.**
-
 '''
 
 ==== Templated API: Border

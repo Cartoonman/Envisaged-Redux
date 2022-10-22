@@ -54,22 +54,6 @@ a| `1`
 |===
 
 [discrete]
-===== RUNTIME_GOURCE_NIGHTLY
-[cols="15h,~", stripes=odd, width=100%, grid=rows]
-|===
-| **<<Type>>**
-| <<Boolean>>
-
-| **<<ExampleValue>>**
-a| `1`
-
-| **<<Description>>**
-| Flag to use nightly (master branch) {uri-gource}[gource,window=_blank]. Enables pre-release configs in this table.
-It is required that this be set to 1 for all following settings to have any effect.
-Otherwise, all following settings for Gource Nightly will be ignored.
-|===
-
-[discrete]
 ===== RUNTIME_COLOR_GROUPS
 [cols="15h,~", stripes=odd, width=100%, grid=rows]
 |===

@@ -7,11 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### [Documentation](https://envisaged-redux.now.sh/)
+## Updated
+- Documentation referencing Zeit to reflect Vercel.
+- URL's in documentation referrencing the old `.now.sh` suffix to the new `.vercel.app` suffix.
+
+## Removed
+- Nightly Gource option, which was added in [0.7.0].
+- DEBUG flag in example scripts (was unnecessary).
+
+### [Documentation](https://envisaged-redux.vercel.app/)
 
 ## [0.17.0] - 2020-04-18
 
-### [Documentation](https://envisaged-redux-v0-17-0.now.sh/)
+### [Documentation](https://envisaged-redux-v0-17-0.vercel.app/)
 
 ### Added
 - Added capability to save the generated gource.log file. 
@@ -28,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.16.0] - 2020-04-12
 
-### [Documentation](https://envisaged-redux-v0-16-0.now.sh/)
+### [Documentation](https://envisaged-redux-v0-16-0.vercel.app/)
 
 ### Added
 - Added RENDER_PROFILE and RENDER_LEVEL.
@@ -49,7 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.15.0] - 2020-02-22
 
-### [Documentation](https://envisaged-redux-v0-15-0.now.sh/)
+### [Documentation](https://envisaged-redux-v0-15-0.vercel.app/)
 
 ### Added
 - Added Font File Functionality.
@@ -71,7 +79,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.14.0] - 2020-02-20
 
-### [Documentation](https://envisaged-redux-v0-14-0.now.sh/)
+### [Documentation](https://envisaged-redux-v0-14-0.vercel.app/)
 
 ### Added
 - GOURCE_REALTIME added.
@@ -100,7 +108,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.13.0] - 2020-02-12
 
-### [Documentation](https://envisaged-redux-v0-13-0.now.sh/)
+### [Documentation](https://envisaged-redux-v0-13-0.vercel.app/)
 
 ### Added
 - RUNTIME_PRINT_VARS added to print variables.
@@ -121,7 +129,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.12.1] - 2020-02-07
 
-### [Documentation](https://envisaged-redux-v0-12-1.now.sh/)
+### [Documentation](https://envisaged-redux-v0-12-1.vercel.app/)
 
 ### Added
 - Adding tests for Border Template variable handling.
@@ -138,7 +146,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.12.0] - 2020-02-01
 
-### [Documentation](https://envisaged-redux-v0-12-0.now.sh/)
+### [Documentation](https://envisaged-redux-v0-12-0.vercel.app/)
 
 ### Added
 
