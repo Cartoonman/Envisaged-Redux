@@ -20,7 +20,7 @@ ENV VERSION_STABLE_GOURCE="0.51" \
 
 FROM alpine-base as gource-builder
 
-RUN apk add --update --no-cache --virtual .build-deps alpine-sdk git sdl2-dev sdl2_image-dev pcre-dev freetype-dev glew-dev glm-dev boost-dev libpng-dev tinyxml-dev autoconf automake \
+RUN apk add --update --no-cache --virtual .build-deps alpine-sdk git sdl2-dev sdl2_image-dev pcre-dev freetype-dev glew-dev glm-dev boost-dev libpng-dev tinyxml-dev autoconf automake pcre2-dev \
     && mkdir -p /opt/gource_nightly /opt/gource_stable /sources \
     && git clone --branch master https://github.com/acaudwell/Gource.git \
     && cd Gource \
