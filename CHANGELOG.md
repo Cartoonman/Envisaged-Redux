@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.18.0] - 2022-10-22
 
-### [Documentation](https://envisaged-redux-v0-18-0.vercel.app/)
+### [Documentation](https://envisaged-redux-git-v0180-cartoonman.vercel.app/)
 
 ## Updated
 - Documentation referencing Zeit to reflect Vercel.
