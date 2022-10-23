@@ -7,15 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### [Documentation](https://envisaged-redux.vercel.app/)
+
+## [0.18.0] - 2022-10-22
+
+### [Documentation](https://envisaged-redux-v0-18-0.vercel.app/)
+
 ## Updated
 - Documentation referencing Zeit to reflect Vercel.
+- Cleaned 'TODO' statement from docs.
 - URL's in documentation referrencing the old `.now.sh` suffix to the new `.vercel.app` suffix.
 
 ## Removed
 - Nightly Gource option, which was added in [0.7.0].
 - DEBUG flag in example scripts (was unnecessary).
 
-### [Documentation](https://envisaged-redux.vercel.app/)
+## Fixed
+- Build missing pcre2-dev added (@tschaffter)
+
 
 ## [0.17.0] - 2020-04-18
 
@@ -394,7 +403,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial fork from [Envisaged].
 
-[unreleased]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.17.0...master
+[unreleased]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.18.0...master
+[0.18.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.17.0...v0.18.0
 [0.17.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.16.0...v0.17.0
 [0.16.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.15.0...v0.16.0
 [0.15.0]: https://gitlab.com/Cartoonman/Envisaged-Redux/compare/v0.14.0...v0.15.0
