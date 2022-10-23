@@ -38,9 +38,6 @@ This is the bare-bones script that all other Example scripts are based on.
 This runs *Envisaged Redux* with no predefined environment variables.
 This can be considered a clean slate example that users may wish to build on top of as they experiment.
 
-
-TODO: Make the other scripts leverage `default.sh` by calling it and passing it args.
-
 --
 
 quick_start_example::
