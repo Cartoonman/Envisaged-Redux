@@ -1,0 +1,22 @@
+build-and-test:
+  stage: build
+  script:
+    - ./dev-tools/build_script.sh
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        paths:
+          - Dockerfile
+          - runtime/**/*
+          - tests/**/*
+  tags:
+    - ER-VM
+
+build-and-test-master:
+  stage: build
+  script:
+    - ./dev-tools/build_script.sh
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+  tags:
+    - ER-VM

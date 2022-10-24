@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### [Documentation](https://envisaged-redux.vercel.app/)
 
+## Added
+- Added GitLab CI Integration for docker build and testing.
+
 ## [0.18.0] - 2022-10-22
 
 ### [Documentation](https://envisaged-redux-git-v0180-cartoonman.vercel.app/)
